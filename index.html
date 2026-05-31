@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MUNDIAL — Back Your Nation. On-Chain.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #060709;
+      --surface: #0c0e12;
+      --surface2: #12151c;
+      --border: rgba(255,255,255,0.06);
+      --gold: #f5c518;
+      --gold2: #e8a900;
+      --green: #00e676;
+      --red: #ff1744;
+      --text: #f0f2f5;
+      --muted: #5a6070;
+      --muted2: #8892a4;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 1000;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: rgba(6,7,9,0.85);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo-ball { font-size: 1.2rem; }
+
+    .nav-links {
+      display: flex; gap: 32px; list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted2);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-right { display: flex; gap: 12px; align-items: center; }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #000;
+      border: none; cursor: pointer;
+      padding: 10px 22px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .btn-gold:hover { background: var(--gold2); transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--muted2);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      padding: 9px 20px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Pitch lines background */
+    .pitch-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,230,118,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 120% 80% at 50% 110%, rgba(0,0,0,0.8) 0%, transparent 60%);
+    }
+
+    .pitch-lines {
+      position: absolute; inset: 0;
+      opacity: 0.04;
+      background-image:
+        /* Centre circle */
+        radial-gradient(circle 120px at 50% 52%, transparent 118px, rgba(255,255,255,0.8) 120px, transparent 122px),
+        /* Centre spot */
+        radial-gradient(circle 3px at 50% 52%, rgba(255,255,255,0.8) 3px, transparent 4px),
+        /* Halfway line */
+        linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 2px;
+      background-position: 0 0, 0 0, 0 52%;
+    }
+
+    /* Big pitch arc at bottom */
+    .pitch-arc {
+      position: absolute;
+      bottom: -200px; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 500px;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .pitch-arc2 {
+      bottom: -350px;
+      width: 1400px; height: 700px;
+      border-color: rgba(255,255,255,0.03);
+    }
+
+    /* Animated glow */
+    .hero-glow {
+      position: absolute;
+      width: 800px; height: 400px;
+      background: radial-gradient(ellipse, rgba(245,197,24,0.06) 0%, transparent 70%);
+      top: 20%; left: 50%; transform: translateX(-50%);
+      animation: glowPulse 6s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+      50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+    }
+
+    .hero-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+      position: relative;
+    }
+    .eyebrow-line {
+      width: 40px; height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 14vw, 13rem);
+      line-height: 0.88;
+      letter-spacing: 0.02em;
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .hero h1 .outline {
+      -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+      color: transparent;
+    }
+    .hero h1 .gold { color: var(--gold); }
+
+    .hero-sub-row {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-top: 32px; flex-wrap: wrap; gap: 32px;
+      position: relative;
+    }
+    .hero-tagline {
+      font-size: 1.1rem;
+      color: var(--muted2);
+      max-width: 420px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+    .hero-tagline strong { color: var(--text); font-weight: 600; }
+
+    .hero-stats {
+      display: flex; gap: 40px;
+    }
+    .h-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--gold);
+    }
+    .h-stat-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--muted);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 600;
+      animation: scrollBounce 2s ease-in-out infinite;
+    }
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* TICKER */
+    .ticker-wrap {
+      background: var(--gold);
+      overflow: hidden;
+      padding: 10px 0;
+    }
+    .ticker {
+      display: flex; width: max-content;
+      animation: ticker 40s linear infinite;
+    }
+    .ticker-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 24px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #000;
+      white-space: nowrap;
+    }
+    .ticker-flag { font-size: 1rem; }
+    .ticker-sep { opacity: 0.3; margin: 0 4px; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* HOW IT WORKS */
+    .section {
+      padding: 120px 48px;
+      max-width: 1280px;
+      margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+
+    .section-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-tag::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--gold); opacity: 0.6;
+    }
+
+    .section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      letter-spacing: 0.03em;
+      line-height: 1;
+      margin-bottom: 64px;
+    }
+
+    /* HOW cards */
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .how-card {
+      background: var(--surface);
+      padding: 40px 28px;
+      position: relative;
+      transition: background 0.3s;
+    }
+    .how-card:hover { background: var(--surface2); }
+
+    .how-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      color: rgba(245,197,24,0.08);
+      line-height: 1;
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+    .how-icon { font-size: 1.8rem; margin-bottom: 16px; display: block; }
+    .how-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .how-card p {
+      color: var(--muted2);
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+
+    /* GROUPS */
+    .groups-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 120px 48px;
+    }
+    .groups-inner { max-width: 1280px; margin: 0 auto; }
+
+    .groups-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 56px; flex-wrap: wrap; gap: 24px;
+    }
+    .groups-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+    .pool-total {
+      text-align: right;
+    }
+    .pool-total-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+    .pool-total-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+    }
+
+    .groups-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .group-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .group-card:hover {
+      border-color: rgba(245,197,24,0.25);
+      transform: translateY(-2px);
+    }
+
+    .group-header {
+      background: rgba(245,197,24,0.06);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .group-letter {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+    }
+    .group-pool {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--muted2);
+    }
+
+    .group-teams { padding: 8px 0; }
+    .team-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    .team-row:last-child { border-bottom: none; }
+    .team-row:hover { background: rgba(255,255,255,0.03); }
+    .team-flag { font-size: 1.3rem; flex-shrink: 0; }
+    .team-name {
+      flex: 1;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .team-ticker {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .team-odds {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .odds-up { color: var(--green); }
+    .odds-down { color: var(--red); }
+    .odds-flat { color: var(--muted2); }
+
+    /* TOKENOMICS */
+    .token-section {
+      padding: 120px 48px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .token-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .token-left h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 5vw, 4.5rem);
+      letter-spacing: 0.03em;
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+    .token-left p {
+      color: var(--muted2);
+      line-height: 1.7;
+      font-size: 0.95rem;
+      margin-bottom: 40px;
+    }
+
+    .fee-breakdown {
+      display: flex; flex-direction: column; gap: 3px;
+      margin-bottom: 40px;
+    }
+    .fee-row {
+      display: flex; align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      height: 52px;
+    }
+    .fee-bar {
+      height: 100%;
+      display: flex; align-items: center;
+      padding: 0 14px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+    .fee-label {
+      flex: 1;
+      padding: 0 16px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted2);
+    }
+    .fee-desc {
+      padding: 0 16px 0 0;
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* Payout table */
+    .payout-table {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .payout-header {
+      background: rgba(245,197,24,0.06);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .payout-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .payout-row:last-child { border-bottom: none; }
+    .payout-stage {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .stage-icon { font-size: 1.2rem; }
+    .stage-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .stage-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .payout-mult {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* MUNDIAL token */
+    .mundial-token {
+      background: linear-gradient(135deg, rgba(245,197,24,0.08) 0%, rgba(245,197,24,0.02) 100%);
+      border: 1px solid rgba(245,197,24,0.15);
+      border-radius: 12px;
+      padding: 32px;
+      margin-top: 32px;
+    }
+    .mundial-token-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 20px;
+    }
+    .mundial-logo {
+      width: 52px; height: 52px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: grid; place-items: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: #000;
+      flex-shrink: 0;
+    }
+    .mundial-token-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .mundial-token-sub {
+      font-size: 0.78rem;
+      color: var(--muted2);
+      margin-top: 4px;
+    }
+    .mundial-token p {
+      font-size: 0.88rem;
+      color: var(--muted2);
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
+    /* FLYWHEEL */
+    .flywheel-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 120px 48px;
+    }
+    .flywheel-inner {
+      max-width: 1280px; margin: 0 auto;
+      text-align: center;
+    }
+    .flywheel-inner h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      letter-spacing: 0.03em;
+      margin-bottom: 16px;
+    }
+    .flywheel-inner > p {
+      color: var(--muted2); font-size: 1rem;
+      max-width: 480px; margin: 0 auto 72px;
+      line-height: 1.7;
+    }
+
+    .flywheel-nodes {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+    .fw-node {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 24px;
+      width: 200px;
+      text-align: center;
+      position: relative;
+    }
+    .fw-node-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+    .fw-node h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .fw-node p { font-size: 0.78rem; color: var(--muted2); line-height: 1.5; }
+
+    .fw-arrow {
+      font-size: 1.4rem;
+      color: var(--gold);
+      opacity: 0.5;
+      padding: 0 8px;
+      animation: arrowPulse 2s ease-in-out infinite;
+    }
+    .fw-arrow:nth-child(2) { animation-delay: 0.3s; }
+    .fw-arrow:nth-child(4) { animation-delay: 0.6s; }
+    .fw-arrow:nth-child(6) { animation-delay: 0.9s; }
+    .fw-arrow:nth-child(8) { animation-delay: 1.2s; }
+    @keyframes arrowPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+
+    /* TIMELINE */
+    .timeline-section {
+      padding: 120px 48px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .timeline-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      letter-spacing: 0.03em;
+      margin-bottom: 64px;
+    }
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      background: var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .tl-item {
+      background: var(--surface);
+      padding: 28px 20px;
+      position: relative;
+    }
+    .tl-day {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: rgba(245,197,24,0.15);
+      line-height: 1;
+      margin-bottom: 12px;
+      letter-spacing: 0.04em;
+    }
+    .tl-item h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--gold);
+    }
+    .tl-item p {
+      font-size: 0.78rem;
+      color: var(--muted2);
+      line-height: 1.6;
+    }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 120px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse, rgba(245,197,24,0.06) 0%, transparent 70%);
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      pointer-events: none;
+    }
+    .cta-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      letter-spacing: 0.03em;
+      line-height: 1;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .cta-section h2 .gold { color: var(--gold); }
+    .cta-section p {
+      color: var(--muted2); font-size: 1rem;
+      max-width: 400px; margin: 0 auto 40px;
+      line-height: 1.7; position: relative;
+    }
+    .cta-btns {
+      display: flex; gap: 12px; justify-content: center;
+      flex-wrap: wrap; position: relative;
+    }
+    .btn-gold-lg {
+      background: var(--gold); color: #000;
+      border: none; cursor: pointer;
+      padding: 16px 40px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+    .btn-gold-lg:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(245,197,24,0.25); }
+    .btn-outline-lg {
+      background: transparent; color: var(--muted2);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      padding: 15px 36px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .btn-outline-lg:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+    }
+    .footer-links {
+      display: flex; gap: 24px; list-style: none;
+    }
+    .footer-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-disclaimer {
+      font-size: 0.7rem; color: var(--muted);
+      max-width: 400px; line-height: 1.5;
+    }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .how-grid { grid-template-columns: 1fr 1fr; }
+      .groups-grid { grid-template-columns: 1fr 1fr; }
+      .token-layout { grid-template-columns: 1fr; gap: 48px; }
+      .timeline { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 0 24px 60px; }
+      .how-grid { grid-template-columns: 1fr; }
+      .groups-grid { grid-template-columns: 1fr; }
+      .section, .token-section, .timeline-section { padding: 80px 24px; }
+      .groups-section, .flywheel-section { padding: 80px 24px; }
+      .flywheel-nodes { flex-direction: column; }
+      .fw-arrow { transform: rotate(90deg); }
+      .timeline { grid-template-columns: 1fr 1fr; }
+      footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <span class="nav-logo-ball">⚽</span>
+      MUNDIAL
+    </div>
+    <ul class="nav-links">
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#groups">Groups</a></li>
+      <li><a href="#tokenomics">Tokenomics</a></li>
+      <li><a href="#timeline">Launch</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="btn-outline">Connect Wallet</button>
+      <button class="btn-gold">Buy $MUNDIAL</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="pitch-bg"></div>
+    <div class="pitch-lines"></div>
+    <div class="pitch-arc"></div>
+    <div class="pitch-arc pitch-arc2"></div>
+    <div class="hero-glow"></div>
+
+    <div class="hero-eyebrow">
+      <span class="eyebrow-line"></span>
+      World Cup 2026 · On Solana · 48 Nations
+    </div>
+
+    <h1>
+      BACK<br>
+      YOUR<br>
+      <span class="gold">NATION.</span>
+    </h1>
+
+    <div class="hero-sub-row">
+      <p class="hero-tagline">
+        <strong>48 country tokens. One tournament. Real payouts.</strong><br>
+        Buy your nation's token on pump.fun, hold through the group stage, cash out when they lift the trophy — or watch the losers fund your winnings.
+      </p>
+      <div class="hero-stats">
+        <div>
+          <div class="h-stat-num">48</div>
+          <div class="h-stat-label">Nations</div>
+        </div>
+        <div>
+          <div class="h-stat-num">64</div>
+          <div class="h-stat-label">Matches</div>
+        </div>
+        <div>
+          <div class="h-stat-num">32</div>
+          <div class="h-stat-label">Days</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Scroll</span>
+      <span>↓</span>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <div class="ticker-item"><span class="ticker-flag">🇧🇷</span> $BRA <span class="ticker-sep">·</span> +18%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇦🇷</span> $ARG <span class="ticker-sep">·</span> +24%</div>
+      <div class="ticker-item"><span class="ticker-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span> $ENG <span class="ticker-sep">·</span> +9%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇫🇷</span> $FRA <span class="ticker-sep">·</span> +14%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇩🇪</span> $GER <span class="ticker-sep">·</span> −3%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇪🇸</span> $ESP <span class="ticker-sep">·</span> +31%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇵🇹</span> $POR <span class="ticker-sep">·</span> +7%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇳🇱</span> $NED <span class="ticker-sep">·</span> +12%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇺🇸</span> $USA <span class="ticker-sep">·</span> +44%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇯🇵</span> $JPN <span class="ticker-sep">·</span> +19%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇦🇺</span> $AUS <span class="ticker-sep">·</span> −8%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇲🇽</span> $MEX <span class="ticker-sep">·</span> +22%</div>
+      <!-- Repeat -->
+      <div class="ticker-item"><span class="ticker-flag">🇧🇷</span> $BRA <span class="ticker-sep">·</span> +18%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇦🇷</span> $ARG <span class="ticker-sep">·</span> +24%</div>
+      <div class="ticker-item"><span class="ticker-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span> $ENG <span class="ticker-sep">·</span> +9%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇫🇷</span> $FRA <span class="ticker-sep">·</span> +14%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇩🇪</span> $GER <span class="ticker-sep">·</span> −3%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇪🇸</span> $ESP <span class="ticker-sep">·</span> +31%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇵🇹</span> $POR <span class="ticker-sep">·</span> +7%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇳🇱</span> $NED <span class="ticker-sep">·</span> +12%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇺🇸</span> $USA <span class="ticker-sep">·</span> +44%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇯🇵</span> $JPN <span class="ticker-sep">·</span> +19%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇦🇺</span> $AUS <span class="ticker-sep">·</span> −8%</div>
+      <div class="ticker-item"><span class="ticker-flag">🇲🇽</span> $MEX <span class="ticker-sep">·</span> +22%</div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="section reveal" id="how">
+    <div class="section-tag">How It Works</div>
+    <h2>Simple.<br>On-chain.<br>Ruthless.</h2>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">01</div>
+        <span class="how-icon">🪙</span>
+        <h3>Buy Your Nation</h3>
+        <p>Every one of the 48 World Cup nations has a token on pump.fun, identified by its 3-letter FIFA code and flag. Buy $BRA, $ARG, $ENG — whoever you believe in. Early buyers get cheaper entry on the bonding curve.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">02</div>
+        <span class="how-icon">📊</span>
+        <h3>Group Stage Pools</h3>
+        <p>All 4 teams in each group share a prize pool. Token purchases feed the pool. At the end of the group stage, it pays out by finishing position — 1st takes the lion's share. 4th place gets nothing, their share rolls to $MUNDIAL.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">03</div>
+        <span class="how-icon">⚔️</span>
+        <h3>Knockout Match Pools</h3>
+        <p>From the Round of 32 onwards, every match has its own pool. Buy before kickoff, trade right up to the whistle. Winners claim the full combined pool. Losers' unclaimed tokens go to the $MUNDIAL treasury within 48 hours.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">04</div>
+        <span class="how-icon">🏆</span>
+        <h3>Champion Bonus</h3>
+        <p>Holders of the winning nation at the final whistle receive their match pool payout plus a $MUNDIAL airdrop from the tournament treasury — rewarding those who backed the right team from the start.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUPS -->
+  <div class="groups-section" id="groups">
+    <div class="groups-inner">
+      <div class="groups-header reveal">
+        <div>
+          <div class="section-tag">2026 Groups</div>
+          <h2>12 Groups.<br>48 Nations.</h2>
+        </div>
+        <div class="pool-total">
+          <div class="pool-total-num">$0.00</div>
+          <div class="pool-total-label">Total Pools (pre-launch)</div>
+        </div>
+      </div>
+
+      <div class="groups-grid reveal">
+
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-letter">GROUP A</span>
+            <span class="group-pool">Pool: —</span>
+          </div>
+          <div class="group-teams">
+            <div class="team-row">
+              <span class="team-flag">🇺🇸</span>
+              <span class="team-name">USA</span>
+              <span class="team-ticker">$USA</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇲🇽</span>
+              <span class="team-name">Mexico</span>
+              <span class="team-ticker">$MEX</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇨🇦</span>
+              <span class="team-name">Canada</span>
+              <span class="team-ticker">$CAN</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇳🇿</span>
+              <span class="team-name">New Zealand</span>
+              <span class="team-ticker">$NZL</span>
+              <span class="team-odds odds-down">Long</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-letter">GROUP B</span>
+            <span class="group-pool">Pool: —</span>
+          </div>
+          <div class="group-teams">
+            <div class="team-row">
+              <span class="team-flag">🇧🇷</span>
+              <span class="team-name">Brazil</span>
+              <span class="team-ticker">$BRA</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇦🇷</span>
+              <span class="team-name">Argentina</span>
+              <span class="team-ticker">$ARG</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇨🇴</span>
+              <span class="team-name">Colombia</span>
+              <span class="team-ticker">$COL</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇪🇨</span>
+              <span class="team-name">Ecuador</span>
+              <span class="team-ticker">$ECU</span>
+              <span class="team-odds odds-down">Long</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-letter">GROUP C</span>
+            <span class="group-pool">Pool: —</span>
+          </div>
+          <div class="group-teams">
+            <div class="team-row">
+              <span class="team-flag">🇫🇷</span>
+              <span class="team-name">France</span>
+              <span class="team-ticker">$FRA</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇩🇪</span>
+              <span class="team-name">Germany</span>
+              <span class="team-ticker">$GER</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇨🇭</span>
+              <span class="team-name">Switzerland</span>
+              <span class="team-ticker">$SUI</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇸🇳</span>
+              <span class="team-name">Senegal</span>
+              <span class="team-ticker">$SEN</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-letter">GROUP D</span>
+            <span class="group-pool">Pool: —</span>
+          </div>
+          <div class="group-teams">
+            <div class="team-row">
+              <span class="team-flag">🇪🇸</span>
+              <span class="team-name">Spain</span>
+              <span class="team-ticker">$ESP</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇵🇹</span>
+              <span class="team-name">Portugal</span>
+              <span class="team-ticker">$POR</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇲🇦</span>
+              <span class="team-name">Morocco</span>
+              <span class="team-ticker">$MAR</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇹🇷</span>
+              <span class="team-name">Turkey</span>
+              <span class="team-ticker">$TUR</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-letter">GROUP E</span>
+            <span class="group-pool">Pool: —</span>
+          </div>
+          <div class="group-teams">
+            <div class="team-row">
+              <span class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+              <span class="team-name">England</span>
+              <span class="team-ticker">$ENG</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇳🇱</span>
+              <span class="team-name">Netherlands</span>
+              <span class="team-ticker">$NED</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇺🇸</span>
+              <span class="team-name">USA</span>
+              <span class="team-ticker">$USA</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇮🇷</span>
+              <span class="team-name">Iran</span>
+              <span class="team-ticker">$IRN</span>
+              <span class="team-odds odds-down">Long</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-letter">GROUP F</span>
+            <span class="group-pool">Pool: —</span>
+          </div>
+          <div class="group-teams">
+            <div class="team-row">
+              <span class="team-flag">🇯🇵</span>
+              <span class="team-name">Japan</span>
+              <span class="team-ticker">$JPN</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇰🇷</span>
+              <span class="team-name">South Korea</span>
+              <span class="team-ticker">$KOR</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇦🇺</span>
+              <span class="team-name">Australia</span>
+              <span class="team-ticker">$AUS</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇸🇦</span>
+              <span class="team-name">Saudi Arabia</span>
+              <span class="team-ticker">$KSA</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-letter">GROUP G</span>
+            <span class="group-pool">Pool: —</span>
+          </div>
+          <div class="group-teams">
+            <div class="team-row">
+              <span class="team-flag">🇧🇪</span>
+              <span class="team-name">Belgium</span>
+              <span class="team-ticker">$BEL</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇭🇷</span>
+              <span class="team-name">Croatia</span>
+              <span class="team-ticker">$CRO</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇺🇾</span>
+              <span class="team-name">Uruguay</span>
+              <span class="team-ticker">$URU</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇨🇲</span>
+              <span class="team-name">Cameroon</span>
+              <span class="team-ticker">$CMR</span>
+              <span class="team-odds odds-down">Long</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-letter">GROUP H</span>
+            <span class="group-pool">Pool: —</span>
+          </div>
+          <div class="group-teams">
+            <div class="team-row">
+              <span class="team-flag">🇩🇰</span>
+              <span class="team-name">Denmark</span>
+              <span class="team-ticker">$DEN</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇵🇱</span>
+              <span class="team-name">Poland</span>
+              <span class="team-ticker">$POL</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇹🇳</span>
+              <span class="team-name">Tunisia</span>
+              <span class="team-ticker">$TUN</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇬🇭</span>
+              <span class="team-name">Ghana</span>
+              <span class="team-ticker">$GHA</span>
+              <span class="team-odds odds-down">Long</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-letter">GROUP I</span>
+            <span class="group-pool">Pool: —</span>
+          </div>
+          <div class="group-teams">
+            <div class="team-row">
+              <span class="team-flag">🇮🇹</span>
+              <span class="team-name">Italy</span>
+              <span class="team-ticker">$ITA</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇦🇹</span>
+              <span class="team-name">Austria</span>
+              <span class="team-ticker">$AUT</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇨🇱</span>
+              <span class="team-name">Chile</span>
+              <span class="team-ticker">$CHI</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇨🇬</span>
+              <span class="team-name">Congo DR</span>
+              <span class="team-ticker">$COD</span>
+              <span class="team-odds odds-down">Long</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-letter">GROUP J</span>
+            <span class="group-pool">Pool: —</span>
+          </div>
+          <div class="group-teams">
+            <div class="team-row">
+              <span class="team-flag">🇷🇸</span>
+              <span class="team-name">Serbia</span>
+              <span class="team-ticker">$SRB</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇨🇿</span>
+              <span class="team-name">Czech Republic</span>
+              <span class="team-ticker">$CZE</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇵🇪</span>
+              <span class="team-name">Peru</span>
+              <span class="team-ticker">$PER</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇳🇬</span>
+              <span class="team-name">Nigeria</span>
+              <span class="team-ticker">$NGA</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-letter">GROUP K</span>
+            <span class="group-pool">Pool: —</span>
+          </div>
+          <div class="group-teams">
+            <div class="team-row">
+              <span class="team-flag">🇺🇾</span>
+              <span class="team-name">Uruguay</span>
+              <span class="team-ticker">$URU</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇪🇬</span>
+              <span class="team-name">Egypt</span>
+              <span class="team-ticker">$EGY</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇸🇰</span>
+              <span class="team-name">Slovakia</span>
+              <span class="team-ticker">$SVK</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇿🇦</span>
+              <span class="team-name">South Africa</span>
+              <span class="team-ticker">$RSA</span>
+              <span class="team-odds odds-down">Long</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-letter">GROUP L</span>
+            <span class="group-pool">Pool: —</span>
+          </div>
+          <div class="group-teams">
+            <div class="team-row">
+              <span class="team-flag">🇬🇷</span>
+              <span class="team-name">Greece</span>
+              <span class="team-ticker">$GRE</span>
+              <span class="team-odds odds-up">Fav</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇷🇴</span>
+              <span class="team-name">Romania</span>
+              <span class="team-ticker">$ROU</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇵🇦</span>
+              <span class="team-name">Panama</span>
+              <span class="team-ticker">$PAN</span>
+              <span class="team-odds odds-flat">—</span>
+            </div>
+            <div class="team-row">
+              <span class="team-flag">🇧🇫</span>
+              <span class="team-name">Burkina Faso</span>
+              <span class="team-ticker">$BFA</span>
+              <span class="team-odds odds-down">Long</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TOKENOMICS -->
+  <div class="token-section reveal" id="tokenomics">
+    <div class="section-tag">Tokenomics</div>
+    <div class="token-layout">
+      <div class="token-left">
+        <h2>Every trade.<br>Every match.<br>Every elimination.</h2>
+        <p>Mundial is a closed-loop system. Every transaction flows through a smart contract that distributes value to holders, burns $MUNDIAL, and accumulates a growing tournament treasury.</p>
+
+        <div class="section-tag" style="margin-bottom: 16px;">Fee breakdown — every purchase</div>
+        <div class="fee-breakdown">
+          <div class="fee-row">
+            <div class="fee-bar" style="background: rgba(245,197,24,0.15); color: var(--gold); width: 80px;">2%</div>
+            <div class="fee-label">$MUNDIAL Buyback & Burn</div>
+            <div class="fee-desc">Deflationary</div>
+          </div>
+          <div class="fee-row">
+            <div class="fee-bar" style="background: rgba(0,230,118,0.1); color: var(--green); width: 60px;">1%</div>
+            <div class="fee-label">$MUNDIAL Staker Yield</div>
+            <div class="fee-desc">Paid in SOL</div>
+          </div>
+          <div class="fee-row">
+            <div class="fee-bar" style="background: rgba(255,255,255,0.05); color: var(--muted2); width: 40px;">1%</div>
+            <div class="fee-label">Platform Treasury</div>
+            <div class="fee-desc">Ops & champion airdrop</div>
+          </div>
+        </div>
+
+        <div class="mundial-token">
+          <div class="mundial-token-header">
+            <div class="mundial-logo">MUN<br>DIAL</div>
+            <div>
+              <div class="mundial-token-name">$MUNDIAL</div>
+              <div class="mundial-token-sub">Launched on pump.fun · Trades on Raydium</div>
+            </div>
+          </div>
+          <p>The overarching platform token. Every country token purchase burns $MUNDIAL and rewards stakers. 64 matches, 48 tokens trading simultaneously — every moment of the tournament applies buy pressure. Champion token holders receive a $MUNDIAL airdrop at full time.</p>
+        </div>
+      </div>
+
+      <div class="token-right">
+        <div class="section-tag" style="margin-bottom: 16px;">Payout structure</div>
+        <div class="payout-table">
+          <div class="payout-header">Stage → Pool distribution</div>
+
+          <div class="payout-row">
+            <div class="payout-stage">
+              <span class="stage-icon">🏅</span>
+              <div>
+                <div class="stage-name">Group 1st Place</div>
+                <div class="stage-sub">Per group pool</div>
+              </div>
+            </div>
+            <div class="payout-mult" style="color: var(--gold)">45%</div>
+          </div>
+          <div class="payout-row">
+            <div class="payout-stage">
+              <span class="stage-icon">🥈</span>
+              <div>
+                <div class="stage-name">Group 2nd Place</div>
+                <div class="stage-sub">Per group pool</div>
+              </div>
+            </div>
+            <div class="payout-mult" style="color: var(--muted2)">30%</div>
+          </div>
+          <div class="payout-row">
+            <div class="payout-stage">
+              <span class="stage-icon">🔄</span>
+              <div>
+                <div class="stage-name">Group 3rd Place</div>
+                <div class="stage-sub">May still progress</div>
+              </div>
+            </div>
+            <div class="payout-mult" style="color: var(--muted2)">10%</div>
+          </div>
+          <div class="payout-row">
+            <div class="payout-stage">
+              <span class="stage-icon">💀</span>
+              <div>
+                <div class="stage-name">Group 4th Place</div>
+                <div class="stage-sub">Eliminated</div>
+              </div>
+            </div>
+            <div class="payout-mult" style="color: var(--red)">→ $MUNDIAL</div>
+          </div>
+          <div class="payout-row">
+            <div class="payout-stage">
+              <span class="stage-icon">⚔️</span>
+              <div>
+                <div class="stage-name">Knockout Winner</div>
+                <div class="stage-sub">R32 through Final</div>
+              </div>
+            </div>
+            <div class="payout-mult" style="color: var(--green)">100%</div>
+          </div>
+          <div class="payout-row">
+            <div class="payout-stage">
+              <span class="stage-icon">💀</span>
+              <div>
+                <div class="stage-name">Knockout Loser</div>
+                <div class="stage-sub">Unclaimed 48hr window</div>
+              </div>
+            </div>
+            <div class="payout-mult" style="color: var(--red)">→ $MUNDIAL</div>
+          </div>
+          <div class="payout-row">
+            <div class="payout-stage">
+              <span class="stage-icon">🏆</span>
+              <div>
+                <div class="stage-name">World Cup Champions</div>
+                <div class="stage-sub">Final pool + bonus</div>
+              </div>
+            </div>
+            <div class="payout-mult" style="color: var(--gold)">100% + 🪂</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLYWHEEL -->
+  <div class="flywheel-section reveal">
+    <div class="flywheel-inner">
+      <div class="section-tag" style="justify-content: center;">The Flywheel</div>
+      <h2>Why $MUNDIAL Only Goes One Way</h2>
+      <p>Every match is a catalyst. Every elimination is a treasury event. Every day of the World Cup applies compounding pressure.</p>
+
+      <div class="flywheel-nodes">
+        <div class="fw-node">
+          <span class="fw-node-icon">🌍</span>
+          <h4>Fans buy tokens</h4>
+          <p>48 country tokens, unlimited buyers, bonding curve entry</p>
+        </div>
+        <div class="fw-arrow">→</div>
+        <div class="fw-node">
+          <span class="fw-node-icon">🔥</span>
+          <h4>Fees burn $MUNDIAL</h4>
+          <p>2% of every purchase buys and burns $MUNDIAL</p>
+        </div>
+        <div class="fw-arrow">→</div>
+        <div class="fw-node">
+          <span class="fw-node-icon">📈</span>
+          <h4>$MUNDIAL rises</h4>
+          <p>Reduced supply + staker yield = price appreciation</p>
+        </div>
+        <div class="fw-arrow">→</div>
+        <div class="fw-node">
+          <span class="fw-node-icon">💀</span>
+          <h4>Teams eliminated</h4>
+          <p>Loser pools roll to treasury — 4 times per group stage alone</p>
+        </div>
+        <div class="fw-arrow">→</div>
+        <div class="fw-node">
+          <span class="fw-node-icon">🏆</span>
+          <h4>Champion airdrop</h4>
+          <p>Treasury distributes $MUNDIAL to winning nation holders</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline-section reveal" id="timeline">
+    <div class="section-tag">7-Day Build Plan</div>
+    <h2>Launch in a Week.</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-day">01</div>
+        <h4>Website Live</h4>
+        <p>Landing page, concept, group display, wallet connect</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-day">02</div>
+        <h4>Group Pools UI</h4>
+        <p>Live pool trackers, country pages, match schedule</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-day">03</div>
+        <h4>Smart Contract</h4>
+        <p>Payout contract on Solana/Anchor, oracle integration</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-day">04</div>
+        <h4>Claim Interface</h4>
+        <p>Connect wallet, view holdings, claim winnings on-chain</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-day">05</div>
+        <h4>$MUNDIAL Staking</h4>
+        <p>Stake UI, yield display, lock/unlock flow</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-day">06</div>
+        <h4>Token Launch</h4>
+        <p>All 48 country tokens + $MUNDIAL live on pump.fun</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-day">07</div>
+        <h4>Go Live</h4>
+        <p>Marketing push, socials, World Cup countdown begins</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section reveal">
+    <h2>THE WORLD CUP<br>IS <span class="gold">ON-CHAIN.</span></h2>
+    <p>48 nations. One tournament. Your money where your flag is. Join the waitlist before the tokens launch.</p>
+    <div class="cta-btns">
+      <button class="btn-gold-lg">Join Waitlist →</button>
+      <button class="btn-outline-lg">Read the Docs</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">⚽ MUNDIAL</div>
+    <ul class="footer-links">
+      <li><a href="#">Twitter / X</a></li>
+      <li><a href="#">Telegram</a></li>
+      <li><a href="#">Docs</a></li>
+      <li><a href="#">pump.fun</a></li>
+    </ul>
+    <div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA or any football association. Country tokens are speculative assets. Participate responsibly.</div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    reveals.forEach(el => obs.observe(el));
+
+    // Filter tabs
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
