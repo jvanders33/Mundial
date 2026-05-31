@@ -24,74 +24,58 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; overflow-x: hidden; }
-
-    body::after {
-      content: ''; position: fixed; inset: 0; z-index: 1000;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none; opacity: 0.4;
-    }
+    body::after { content:''; position:fixed; inset:0; z-index:1000; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events:none; opacity:0.4; }
 
     /* NAV */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 48px; height: 64px;
-      background: rgba(6,7,9,0.9); backdrop-filter: blur(24px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.08em; color: var(--gold); display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .nav-links { display: flex; gap: 32px; list-style: none; }
-    .nav-links a { color: var(--muted2); text-decoration: none; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; cursor: pointer; }
-    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
-    .nav-right { display: flex; gap: 12px; align-items: center; }
-    .btn-gold { background: var(--gold); color: #000; border: none; cursor: pointer; padding: 10px 22px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 4px; transition: all 0.15s; }
-    .btn-gold:hover { background: var(--gold2); transform: translateY(-1px); }
-    .btn-outline { background: transparent; color: var(--muted2); border: 1px solid var(--border); cursor: pointer; padding: 9px 20px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 4px; transition: all 0.2s; }
-    .btn-outline:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+    nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; justify-content:space-between; padding:0 48px; height:64px; background:rgba(6,7,9,0.9); backdrop-filter:blur(24px); border-bottom:1px solid var(--border); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.08em; color:var(--gold); display:flex; align-items:center; gap:10px; cursor:pointer; }
+    .nav-links { display:flex; gap:32px; list-style:none; }
+    .nav-links a { color:var(--muted2); text-decoration:none; font-size:0.82rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; transition:color 0.2s; cursor:pointer; }
+    .nav-links a:hover, .nav-links a.active { color:var(--gold); }
+    .nav-right { display:flex; gap:12px; align-items:center; }
+    .btn-gold { background:var(--gold); color:#000; border:none; cursor:pointer; padding:10px 22px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.9rem; letter-spacing:0.06em; text-transform:uppercase; border-radius:4px; transition:all 0.15s; }
+    .btn-gold:hover { background:var(--gold2); transform:translateY(-1px); }
+    .btn-outline { background:transparent; color:var(--muted2); border:1px solid var(--border); cursor:pointer; padding:9px 20px; font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:0.9rem; letter-spacing:0.06em; text-transform:uppercase; border-radius:4px; transition:all 0.2s; }
+    .btn-outline:hover { border-color:rgba(255,255,255,0.2); color:var(--text); }
 
     /* PAGES */
-    .page { display: none; }
-    .page.active { display: block; }
+    .page { display:none; }
+    .page.active { display:block; }
 
-    /* ===================== HOME PAGE ===================== */
-    .hero {
-      min-height: 100vh; display: flex; flex-direction: column;
-      justify-content: flex-end; padding: 0 48px 80px; position: relative; overflow: hidden;
-    }
-    .pitch-bg {
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,230,118,0.04) 0%, transparent 70%),
-                  radial-gradient(ellipse 120% 80% at 50% 110%, rgba(0,0,0,0.8) 0%, transparent 60%);
-    }
-    .pitch-lines {
-      position: absolute; inset: 0; opacity: 0.04;
-      background-image:
-        radial-gradient(circle 120px at 50% 52%, transparent 118px, rgba(255,255,255,0.8) 120px, transparent 122px),
-        linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 2px;
-      background-position: 0 0, 0 52%;
-    }
-    .pitch-arc { position: absolute; bottom: -200px; left: 50%; transform: translateX(-50%); width: 900px; height: 500px; border: 1px solid rgba(255,255,255,0.05); border-radius: 50%; pointer-events: none; }
-    .pitch-arc2 { bottom: -350px; width: 1400px; height: 700px; border-color: rgba(255,255,255,0.03); }
-    .hero-glow { position: absolute; width: 800px; height: 400px; background: radial-gradient(ellipse, rgba(245,197,24,0.06) 0%, transparent 70%); top: 20%; left: 50%; transform: translateX(-50%); animation: glowPulse 6s ease-in-out infinite; }
+    /* FLAG CIRCLE — the token identity shape */
+    .flag-circle { border-radius:50%; overflow:hidden; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; font-size:inherit; line-height:1; border:2px solid rgba(255,255,255,0.08); }
+    .flag-circle.sm { width:36px; height:36px; font-size:1.3rem; }
+    .flag-circle.md { width:52px; height:52px; font-size:2rem; }
+    .flag-circle.lg { width:80px; height:80px; font-size:3rem; }
+    .flag-circle.xl { width:100px; height:100px; font-size:3.8rem; }
+
+    /* BUY PILL — inline buy button next to any code */
+    .buy-pill { display:inline-flex; align-items:center; gap:6px; background:rgba(245,197,24,0.12); border:1px solid rgba(245,197,24,0.25); color:var(--gold); font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:3px 10px; border-radius:100px; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+    .buy-pill:hover { background:rgba(245,197,24,0.22); border-color:rgba(245,197,24,0.5); }
+
+    /* COUNTRY CODE BADGE */
+    .code-badge { font-family:'Bebas Neue',sans-serif; letter-spacing:0.08em; color:var(--gold); }
+
+    /* ===================== HERO ===================== */
+    .hero { min-height:100vh; display:flex; flex-direction:column; justify-content:flex-end; padding:0 48px 80px; position:relative; overflow:hidden; }
+    .pitch-bg { position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(0,230,118,0.04) 0%,transparent 70%),radial-gradient(ellipse 120% 80% at 50% 110%,rgba(0,0,0,0.8) 0%,transparent 60%); }
+    .pitch-lines { position:absolute; inset:0; opacity:0.04; background-image:radial-gradient(circle 120px at 50% 52%,transparent 118px,rgba(255,255,255,0.8) 120px,transparent 122px),linear-gradient(rgba(255,255,255,0.8) 1px,transparent 1px); background-size:100% 100%,100% 2px; background-position:0 0,0 52%; }
+    .pitch-arc { position:absolute; bottom:-200px; left:50%; transform:translateX(-50%); width:900px; height:500px; border:1px solid rgba(255,255,255,0.05); border-radius:50%; pointer-events:none; }
+    .pitch-arc2 { bottom:-350px; width:1400px; height:700px; border-color:rgba(255,255,255,0.03); }
+    .hero-glow { position:absolute; width:800px; height:400px; background:radial-gradient(ellipse,rgba(245,197,24,0.06) 0%,transparent 70%); top:20%; left:50%; transform:translateX(-50%); animation:glowPulse 6s ease-in-out infinite; }
     @keyframes glowPulse { 0%,100%{opacity:0.5;transform:translateX(-50%) scale(1)} 50%{opacity:1;transform:translateX(-50%) scale(1.1)} }
-
     .hero-eyebrow { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:24px; display:flex; align-items:center; gap:12px; position:relative; }
     .eyebrow-line { width:40px; height:1px; background:var(--gold); opacity:0.5; }
-
-    /* COUNTDOWN */
     .hero-countdown { position:relative; margin-bottom:24px; display:flex; align-items:center; gap:20px; }
     .countdown-label { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); }
     .countdown-units { display:flex; gap:8px; }
     .countdown-unit { text-align:center; }
     .countdown-num { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--gold); line-height:1; letter-spacing:0.04em; background:rgba(245,197,24,0.08); border:1px solid rgba(245,197,24,0.15); padding:4px 12px; border-radius:4px; min-width:56px; display:block; }
     .countdown-sub { font-family:'Barlow Condensed',sans-serif; font-size:0.6rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-top:3px; }
-
     .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(5rem,14vw,13rem); line-height:0.88; letter-spacing:0.02em; margin-bottom:8px; position:relative; }
-    .hero h1 .outline { -webkit-text-stroke:1px rgba(255,255,255,0.2); color:transparent; }
     .hero h1 .gold { color:var(--gold); }
     .hero-sub-row { display:flex; align-items:flex-end; justify-content:space-between; margin-top:32px; flex-wrap:wrap; gap:32px; position:relative; }
-    .hero-tagline { font-size:1.1rem; color:var(--muted2); max-width:420px; line-height:1.6; font-weight:400; }
+    .hero-tagline { font-size:1.1rem; color:var(--muted2); max-width:420px; line-height:1.6; }
     .hero-tagline strong { color:var(--text); font-weight:600; }
     .hero-stats { display:flex; gap:40px; }
     .h-stat-num { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; letter-spacing:0.04em; line-height:1; color:var(--gold); }
@@ -99,9 +83,9 @@
 
     /* TICKER */
     .ticker-wrap { background:var(--gold); overflow:hidden; padding:10px 0; }
-    .ticker { display:flex; width:max-content; animation:ticker 40s linear infinite; }
-    .ticker-item { display:flex; align-items:center; gap:8px; padding:0 24px; font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#000; white-space:nowrap; }
-    .ticker-sep { opacity:0.3; margin:0 4px; }
+    .ticker { display:flex; width:max-content; animation:ticker 50s linear infinite; }
+    .ticker-item { display:inline-flex; align-items:center; gap:8px; padding:0 20px; font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#000; white-space:nowrap; }
+    .ticker-sep { opacity:0.3; }
     @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
     /* SECTIONS */
@@ -110,50 +94,31 @@
     .section-tag::before { content:''; width:24px; height:1px; background:var(--gold); opacity:0.6; }
     .section h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,6vw,5.5rem); letter-spacing:0.03em; line-height:1; margin-bottom:64px; }
 
-    /* HOW IT WORKS */
+    /* HOW */
     .how-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
     .how-card { background:var(--surface); padding:40px 28px; transition:background 0.3s; }
     .how-card:hover { background:var(--surface2); }
-    .how-num { font-family:'Bebas Neue',sans-serif; font-size:5rem; color:rgba(245,197,24,0.08); line-height:1; margin-bottom:16px; letter-spacing:0.02em; }
+    .how-num { font-family:'Bebas Neue',sans-serif; font-size:5rem; color:rgba(245,197,24,0.08); line-height:1; margin-bottom:16px; }
     .how-icon { font-size:1.8rem; margin-bottom:16px; display:block; }
     .how-card h3 { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1.2rem; letter-spacing:0.04em; text-transform:uppercase; margin-bottom:12px; }
     .how-card p { color:var(--muted2); font-size:0.88rem; line-height:1.7; }
 
-    /* WAITLIST */
-    .waitlist-section { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:80px 48px; }
-    .waitlist-inner { max-width:640px; margin:0 auto; text-align:center; }
-    .waitlist-inner h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,5vw,4rem); letter-spacing:0.03em; margin-bottom:16px; }
-    .waitlist-inner p { color:var(--muted2); font-size:1rem; line-height:1.7; margin-bottom:32px; }
-    .waitlist-form { display:flex; gap:8px; max-width:480px; margin:0 auto; }
-    .waitlist-input { flex:1; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:14px 18px; border-radius:4px; font-family:'Barlow',sans-serif; font-size:0.95rem; outline:none; transition:border-color 0.2s; }
-    .waitlist-input:focus { border-color:rgba(245,197,24,0.4); }
-    .waitlist-input::placeholder { color:var(--muted); }
-    .waitlist-count { margin-top:16px; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; color:var(--muted); letter-spacing:0.06em; text-transform:uppercase; }
-    .waitlist-count span { color:var(--gold); font-weight:700; }
-
-    /* GROUPS SECTION on home */
+    /* GROUPS HOME PREVIEW */
     .groups-section { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:120px 48px; }
     .groups-inner { max-width:1280px; margin:0 auto; }
-    .groups-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:56px; flex-wrap:wrap; gap:24px; }
+    .groups-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:48px; flex-wrap:wrap; gap:24px; }
     .groups-header h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,5vw,5rem); letter-spacing:0.03em; line-height:1; }
-    .pool-total { text-align:right; }
-    .pool-total-num { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; color:var(--gold); letter-spacing:0.04em; }
-    .pool-total-label { font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; font-weight:600; }
     .groups-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
     .group-card { background:var(--bg); border:1px solid var(--border); border-radius:8px; overflow:hidden; transition:border-color 0.2s,transform 0.2s; cursor:pointer; }
     .group-card:hover { border-color:rgba(245,197,24,0.25); transform:translateY(-2px); }
-    .group-header { background:rgba(245,197,24,0.06); border-bottom:1px solid var(--border); padding:12px 16px; display:flex; justify-content:space-between; align-items:center; }
-    .group-letter { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:0.1em; color:var(--gold); }
-    .group-pool { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; font-weight:700; letter-spacing:0.06em; color:var(--muted2); }
-    .group-teams { padding:8px 0; }
-    .team-row { display:flex; align-items:center; gap:10px; padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.03); transition:background 0.15s; cursor:pointer; }
+    .group-header-bar { background:rgba(245,197,24,0.06); border-bottom:1px solid var(--border); padding:10px 14px; display:flex; justify-content:space-between; align-items:center; }
+    .group-letter { font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:0.1em; color:var(--gold); }
+    .group-pool-amt { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; color:var(--muted2); }
+    .team-row { display:flex; align-items:center; gap:10px; padding:9px 14px; border-bottom:1px solid rgba(255,255,255,0.03); transition:background 0.15s; }
     .team-row:last-child { border-bottom:none; }
     .team-row:hover { background:rgba(255,255,255,0.03); }
-    .team-flag { font-size:1.3rem; flex-shrink:0; }
-    .team-name { flex:1; font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:0.9rem; letter-spacing:0.04em; text-transform:uppercase; }
-    .team-ticker { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; font-weight:700; color:var(--muted); letter-spacing:0.06em; }
-    .team-odds { font-family:'Barlow Condensed',sans-serif; font-size:0.78rem; font-weight:700; letter-spacing:0.04em; }
-    .odds-up { color:var(--green); } .odds-down { color:var(--red); } .odds-flat { color:var(--muted2); }
+    .team-code { font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:0.06em; color:var(--gold); flex:1; }
+    .team-name-sm { font-family:'Barlow Condensed',sans-serif; font-size:0.78rem; color:var(--muted2); flex:2; }
 
     /* TOKENOMICS */
     .token-layout { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
@@ -166,167 +131,139 @@
     .fee-desc { padding:0 16px 0 0; font-size:0.75rem; color:var(--muted); font-style:italic; }
     .payout-table { background:var(--surface); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
     .payout-header { background:rgba(245,197,24,0.06); border-bottom:1px solid var(--border); padding:16px 24px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); }
-    .payout-row { display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-bottom:1px solid rgba(255,255,255,0.03); }
+    .payout-row { display:flex; align-items:center; justify-content:space-between; padding:14px 24px; border-bottom:1px solid rgba(255,255,255,0.03); }
     .payout-row:last-child { border-bottom:none; }
     .payout-stage { display:flex; align-items:center; gap:12px; }
-    .stage-icon { font-size:1.2rem; }
     .stage-name { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:0.9rem; letter-spacing:0.04em; text-transform:uppercase; }
     .stage-sub { font-size:0.72rem; color:var(--muted); margin-top:2px; }
     .payout-mult { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:0.04em; }
-    .mundial-token { background:linear-gradient(135deg,rgba(245,197,24,0.08) 0%,rgba(245,197,24,0.02) 100%); border:1px solid rgba(245,197,24,0.15); border-radius:12px; padding:32px; margin-top:32px; }
-    .mundial-token-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
-    .mundial-logo { width:52px; height:52px; background:var(--gold); border-radius:50%; display:grid; place-items:center; font-family:'Bebas Neue',sans-serif; font-size:0.65rem; letter-spacing:0.06em; color:#000; flex-shrink:0; text-align:center; line-height:1.2; }
+    .mundial-token { background:linear-gradient(135deg,rgba(245,197,24,0.08) 0%,rgba(245,197,24,0.02) 100%); border:1px solid rgba(245,197,24,0.15); border-radius:12px; padding:28px; margin-top:28px; }
+    .mundial-token-header { display:flex; align-items:center; gap:16px; margin-bottom:16px; }
+    .mundial-logo { width:52px; height:52px; background:var(--gold); border-radius:50%; display:grid; place-items:center; font-family:'Bebas Neue',sans-serif; font-size:0.62rem; letter-spacing:0.05em; color:#000; flex-shrink:0; text-align:center; line-height:1.2; }
     .mundial-token-name { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:0.06em; color:var(--gold); line-height:1; }
     .mundial-token-sub { font-size:0.78rem; color:var(--muted2); margin-top:4px; }
     .mundial-token p { font-size:0.88rem; color:var(--muted2); line-height:1.7; }
 
     /* FLYWHEEL */
-    .flywheel-section { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:120px 48px; }
+    .flywheel-section { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:100px 48px; }
     .flywheel-inner { max-width:1280px; margin:0 auto; text-align:center; }
     .flywheel-inner h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,5vw,5rem); letter-spacing:0.03em; margin-bottom:16px; }
-    .flywheel-inner > p { color:var(--muted2); font-size:1rem; max-width:480px; margin:0 auto 72px; line-height:1.7; }
-    .flywheel-nodes { display:flex; justify-content:center; align-items:center; gap:0; flex-wrap:wrap; }
-    .fw-node { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:28px 24px; width:180px; text-align:center; }
-    .fw-node-icon { font-size:2rem; margin-bottom:12px; display:block; }
-    .fw-node h4 { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.85rem; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px; }
-    .fw-node p { font-size:0.78rem; color:var(--muted2); line-height:1.5; }
-    .fw-arrow { font-size:1.4rem; color:var(--gold); opacity:0.5; padding:0 8px; animation:arrowPulse 2s ease-in-out infinite; }
-    @keyframes arrowPulse { 0%,100%{opacity:0.3} 50%{opacity:0.8} }
+    .flywheel-inner > p { color:var(--muted2); font-size:1rem; max-width:480px; margin:0 auto 64px; line-height:1.7; }
+    .flywheel-nodes { display:flex; justify-content:center; align-items:center; flex-wrap:wrap; }
+    .fw-node { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:24px 20px; width:170px; text-align:center; }
+    .fw-node-icon { font-size:1.8rem; margin-bottom:10px; display:block; }
+    .fw-node h4 { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.82rem; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:6px; }
+    .fw-node p { font-size:0.75rem; color:var(--muted2); line-height:1.5; }
+    .fw-arrow { font-size:1.2rem; color:var(--gold); opacity:0.5; padding:0 6px; animation:arrowPulse 2s ease-in-out infinite; }
+    @keyframes arrowPulse { 0%,100%{opacity:0.25} 50%{opacity:0.7} }
 
     /* CTA */
-    .cta-section { text-align:center; padding:120px 48px; position:relative; overflow:hidden; }
+    .cta-section { text-align:center; padding:100px 48px; position:relative; overflow:hidden; }
     .cta-section::before { content:''; position:absolute; width:700px; height:500px; background:radial-gradient(ellipse,rgba(245,197,24,0.06) 0%,transparent 70%); top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
-    .cta-section h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3.5rem,8vw,7rem); letter-spacing:0.03em; line-height:1; margin-bottom:24px; position:relative; }
+    .cta-section h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,8vw,7rem); letter-spacing:0.03em; line-height:1; margin-bottom:24px; position:relative; }
     .cta-section h2 .gold { color:var(--gold); }
-    .cta-section p { color:var(--muted2); font-size:1rem; max-width:400px; margin:0 auto 40px; line-height:1.7; position:relative; }
+    .cta-section p { color:var(--muted2); font-size:1rem; max-width:400px; margin:0 auto 36px; line-height:1.7; position:relative; }
     .cta-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; position:relative; }
-    .btn-gold-lg { background:var(--gold); color:#000; border:none; cursor:pointer; padding:16px 40px; font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:1.1rem; letter-spacing:0.08em; text-transform:uppercase; border-radius:4px; transition:all 0.15s; }
+    .btn-gold-lg { background:var(--gold); color:#000; border:none; cursor:pointer; padding:14px 36px; font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:1.1rem; letter-spacing:0.08em; text-transform:uppercase; border-radius:4px; transition:all 0.15s; }
     .btn-gold-lg:hover { background:var(--gold2); transform:translateY(-2px); box-shadow:0 8px 32px rgba(245,197,24,0.25); }
-    .btn-outline-lg { background:transparent; color:var(--muted2); border:1px solid var(--border); cursor:pointer; padding:15px 36px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1.1rem; letter-spacing:0.08em; text-transform:uppercase; border-radius:4px; transition:all 0.2s; }
+    .btn-outline-lg { background:transparent; color:var(--muted2); border:1px solid var(--border); cursor:pointer; padding:13px 32px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1.1rem; letter-spacing:0.08em; text-transform:uppercase; border-radius:4px; transition:all 0.2s; }
     .btn-outline-lg:hover { border-color:rgba(255,255,255,0.2); color:var(--text); }
 
     /* FOOTER */
     footer { border-top:1px solid var(--border); padding:32px 48px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
     .footer-logo { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:0.08em; color:var(--gold); cursor:pointer; }
     .footer-links { display:flex; gap:24px; list-style:none; }
-    .footer-links a { color:var(--muted); text-decoration:none; font-size:0.78rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; transition:color 0.2s; cursor:pointer; }
+    .footer-links a { color:var(--muted); text-decoration:none; font-size:0.78rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; transition:color 0.2s; }
     .footer-links a:hover { color:var(--text); }
     .footer-disclaimer { font-size:0.7rem; color:var(--muted); max-width:400px; line-height:1.5; }
 
     /* ===================== GROUPS PAGE ===================== */
-    .page-hero { padding:120px 48px 60px; max-width:1280px; margin:0 auto; }
+    .page-hero { padding:120px 48px 48px; max-width:1280px; margin:0 auto; }
     .page-hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3.5rem,7vw,7rem); letter-spacing:0.03em; line-height:1; margin-bottom:16px; }
     .page-hero p { color:var(--muted2); font-size:1.05rem; max-width:540px; line-height:1.7; }
-
-    .groups-page-inner { max-width:1280px; margin:0 auto; padding:0 48px 120px; }
-    .group-full-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:24px; }
-    .group-full-header { background:rgba(245,197,24,0.06); border-bottom:1px solid var(--border); padding:20px 28px; display:flex; justify-content:space-between; align-items:center; }
-    .group-full-letter { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:0.1em; color:var(--gold); }
-    .group-full-pool { font-family:'Barlow Condensed',sans-serif; font-size:0.82rem; font-weight:700; color:var(--muted2); letter-spacing:0.06em; }
-    .group-full-pool span { color:var(--gold); }
+    .groups-page-inner { max-width:1280px; margin:0 auto; padding:0 48px 100px; }
+    .group-full-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:20px; }
+    .group-full-header { background:rgba(245,197,24,0.06); border-bottom:1px solid var(--border); padding:16px 24px; display:flex; justify-content:space-between; align-items:center; }
+    .group-full-letter { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.1em; color:var(--gold); }
+    .group-full-meta { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; color:var(--muted2); letter-spacing:0.06em; }
     .group-full-teams { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); }
-    .team-full-card { background:var(--bg); padding:24px 20px; text-align:center; transition:background 0.2s; cursor:pointer; }
+    .team-full-card { background:var(--bg); padding:24px 16px; text-align:center; transition:background 0.2s; }
     .team-full-card:hover { background:var(--surface2); }
-    .team-full-flag { font-size:2.5rem; margin-bottom:10px; display:block; }
-    .team-full-name { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1rem; letter-spacing:0.04em; text-transform:uppercase; margin-bottom:4px; }
-    .team-full-ticker { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; color:var(--gold); letter-spacing:0.06em; margin-bottom:12px; }
-    .team-pool-bar { height:4px; background:rgba(255,255,255,0.05); border-radius:100px; overflow:hidden; margin-bottom:8px; }
-    .team-pool-fill { height:100%; background:var(--gold); border-radius:100px; }
-    .team-pool-pct { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; color:var(--muted); letter-spacing:0.06em; }
-    .group-payout-note { padding:16px 28px; border-top:1px solid var(--border); display:flex; gap:24px; }
-    .payout-pill { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; font-weight:700; letter-spacing:0.06em; padding:4px 12px; border-radius:100px; }
+    .team-full-flag-wrap { margin:0 auto 12px; }
+    .team-full-name { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.9rem; letter-spacing:0.04em; text-transform:uppercase; margin-bottom:4px; color:var(--muted2); }
+    .team-full-code { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:0.08em; color:var(--gold); margin-bottom:12px; display:block; }
+    .team-buy-btn { display:inline-flex; align-items:center; gap:6px; background:var(--gold); color:#000; border:none; cursor:pointer; padding:7px 16px; border-radius:100px; font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; transition:all 0.15s; }
+    .team-buy-btn:hover { background:var(--gold2); transform:translateY(-1px); }
+    .group-payout-bar { padding:12px 24px; border-top:1px solid var(--border); display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .payout-pill { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.06em; padding:3px 10px; border-radius:100px; }
     .pill-1 { background:rgba(245,197,24,0.12); color:var(--gold); }
     .pill-2 { background:rgba(255,255,255,0.05); color:var(--muted2); }
     .pill-3 { background:rgba(255,255,255,0.03); color:var(--muted); }
     .pill-x { background:rgba(255,23,68,0.08); color:var(--red); }
 
     /* ===================== MATCHES PAGE ===================== */
-    .matches-page-inner { max-width:1280px; margin:0 auto; padding:0 48px 120px; }
-    .stage-section { margin-bottom:64px; }
-    .stage-title { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.06em; color:var(--gold); margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid var(--border); }
-    .matches-grid { display:flex; flex-direction:column; gap:8px; }
-    .match-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:20px 24px; display:flex; align-items:center; gap:20px; transition:border-color 0.2s; }
+    .matches-page-inner { max-width:1280px; margin:0 auto; padding:0 48px 100px; }
+    .stage-section { margin-bottom:56px; }
+    .stage-title { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.06em; color:var(--gold); margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+    .match-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:16px 20px; display:flex; align-items:center; gap:16px; margin-bottom:6px; transition:border-color 0.2s; }
     .match-card:hover { border-color:rgba(245,197,24,0.2); }
-    .match-date { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; width:100px; flex-shrink:0; }
-    .match-teams { flex:1; display:flex; align-items:center; gap:16px; justify-content:center; }
-    .match-team { display:flex; align-items:center; gap:10px; }
-    .match-team-flag { font-size:1.8rem; }
-    .match-team-name { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1rem; letter-spacing:0.04em; text-transform:uppercase; }
-    .match-vs { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; color:var(--muted); letter-spacing:0.1em; }
-    .match-pool { text-align:right; width:120px; flex-shrink:0; }
-    .match-pool-num { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; color:var(--gold); letter-spacing:0.04em; }
-    .match-pool-label { font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; color:var(--muted); letter-spacing:0.06em; text-transform:uppercase; }
-    .match-countdown { width:140px; flex-shrink:0; text-align:center; }
-    .match-countdown-num { font-family:'Bebas Neue',sans-serif; font-size:1rem; color:var(--text); letter-spacing:0.04em; }
-    .match-countdown-label { font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; color:var(--muted); letter-spacing:0.06em; text-transform:uppercase; }
-    .match-status { padding:4px 12px; border-radius:100px; font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.06em; }
+    .match-date { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; width:72px; flex-shrink:0; }
+    .match-teams { flex:1; display:flex; align-items:center; gap:12px; justify-content:center; }
+    .match-team { display:flex; align-items:center; gap:8px; }
+    .match-team-right { flex-direction:row-reverse; }
+    .match-team-code { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:0.06em; color:var(--gold); }
+    .match-vs { font-family:'Bebas Neue',sans-serif; font-size:1rem; color:var(--muted); letter-spacing:0.1em; padding:0 4px; }
+    .match-actions { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    .match-pool-lbl { font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; color:var(--muted); letter-spacing:0.06em; text-transform:uppercase; text-align:right; }
+    .match-countdown-num { font-family:'Bebas Neue',sans-serif; font-size:0.9rem; color:var(--text); letter-spacing:0.04em; }
+    .match-status { padding:3px 10px; border-radius:100px; font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.06em; white-space:nowrap; }
     .status-upcoming { background:rgba(255,255,255,0.05); color:var(--muted2); }
     .status-live { background:rgba(255,23,68,0.15); color:var(--red); animation:livePulse 1.5s ease-in-out infinite; }
-    .status-done { background:rgba(0,230,118,0.1); color:var(--green); }
-    @keyframes livePulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    @keyframes livePulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-    /* ===================== TOKEN PAGE ===================== */
-    .token-page-inner { max-width:1280px; margin:0 auto; padding:0 48px 120px; }
-    .token-search-bar { display:flex; gap:12px; align-items:center; margin-bottom:40px; }
-    .token-search { flex:1; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:14px 18px; border-radius:8px; font-family:'Barlow',sans-serif; font-size:0.95rem; outline:none; transition:border-color 0.2s; max-width:400px; }
+    /* ===================== TOKENS PAGE ===================== */
+    .token-page-inner { max-width:1280px; margin:0 auto; padding:0 48px 100px; }
+    .token-search-bar { display:flex; gap:16px; align-items:center; margin-bottom:32px; flex-wrap:wrap; }
+    .token-search { background:var(--surface); border:1px solid var(--border); color:var(--text); padding:12px 18px; border-radius:8px; font-family:'Barlow',sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.2s; width:320px; }
     .token-search:focus { border-color:rgba(245,197,24,0.4); }
     .token-search::placeholder { color:var(--muted); }
-    .tokens-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
-    .token-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:20px; transition:all 0.2s; cursor:pointer; }
+    .tokens-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:10px; }
+    .token-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:20px; transition:all 0.2s; }
     .token-card:hover { border-color:rgba(245,197,24,0.3); transform:translateY(-2px); }
-    .tc-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
-    .tc-info { display:flex; align-items:center; gap:12px; }
-    .tc-flag { font-size:2rem; }
-    .tc-name { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1rem; letter-spacing:0.04em; text-transform:uppercase; }
-    .tc-ticker { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; color:var(--gold); letter-spacing:0.06em; }
-    .tc-group { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; color:var(--muted); letter-spacing:0.06em; padding:3px 8px; background:rgba(255,255,255,0.04); border-radius:4px; }
-    .tc-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
-    .tc-stat-val { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:0.03em; line-height:1; }
-    .tc-stat-key { font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-top:2px; }
-    .tc-buy-btn { width:100%; background:var(--gold); color:#000; border:none; cursor:pointer; padding:10px; border-radius:6px; font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:0.9rem; letter-spacing:0.06em; text-transform:uppercase; transition:all 0.15s; }
+    .tc-top { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+    .tc-meta { flex:1; }
+    .tc-code { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.08em; color:var(--gold); line-height:1; }
+    .tc-name { font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; color:var(--muted2); letter-spacing:0.04em; text-transform:uppercase; margin-top:2px; }
+    .tc-group-badge { font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; color:var(--muted); letter-spacing:0.06em; padding:2px 8px; background:rgba(255,255,255,0.04); border-radius:4px; margin-top:4px; display:inline-block; }
+    .tc-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+    .tc-stat-val { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:0.03em; line-height:1; }
+    .tc-stat-key { font-family:'Barlow Condensed',sans-serif; font-size:0.62rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-top:2px; }
+    .tc-buy-btn { width:100%; background:var(--gold); color:#000; border:none; cursor:pointer; padding:9px; border-radius:6px; font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:0.88rem; letter-spacing:0.06em; text-transform:uppercase; transition:all 0.15s; display:flex; align-items:center; justify-content:center; gap:6px; }
     .tc-buy-btn:hover { background:var(--gold2); }
+
+    /* MODAL */
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:900; display:none; align-items:center; justify-content:center; backdrop-filter:blur(8px); }
+    .modal-overlay.open { display:flex; }
+    .modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:36px; max-width:460px; width:90%; position:relative; }
+    .modal-close { position:absolute; top:14px; right:18px; background:none; border:none; color:var(--muted); font-size:1.4rem; cursor:pointer; line-height:1; }
+    .modal-close:hover { color:var(--text); }
+    .modal-flag-row { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+    .modal-country-code { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; letter-spacing:0.08em; color:var(--gold); line-height:1; }
+    .modal-country-name { font-size:0.9rem; color:var(--muted2); margin-top:4px; }
+    .modal p { color:var(--muted2); font-size:0.88rem; line-height:1.6; margin-bottom:20px; }
+    .modal-note { background:rgba(245,197,24,0.06); border:1px solid rgba(245,197,24,0.15); border-radius:8px; padding:14px 16px; margin-bottom:20px; font-size:0.82rem; color:var(--muted2); line-height:1.6; }
+    .modal-note strong { color:var(--gold); }
 
     /* REVEAL */
     .reveal { opacity:0; transform:translateY(20px); transition:opacity 0.8s ease,transform 0.8s ease; }
     .reveal.visible { opacity:1; transform:translateY(0); }
 
-    /* MODAL */
-    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:900; display:none; align-items:center; justify-content:center; backdrop-filter:blur(8px); }
-    .modal-overlay.open { display:flex; }
-    .modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:40px; max-width:480px; width:90%; position:relative; }
-    .modal-close { position:absolute; top:16px; right:20px; background:none; border:none; color:var(--muted); font-size:1.4rem; cursor:pointer; line-height:1; }
-    .modal-close:hover { color:var(--text); }
-    .modal h3 { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.04em; margin-bottom:8px; color:var(--gold); }
-    .modal p { color:var(--muted2); font-size:0.9rem; line-height:1.6; margin-bottom:24px; }
-    .modal-note { background:rgba(245,197,24,0.06); border:1px solid rgba(245,197,24,0.15); border-radius:8px; padding:16px; margin-bottom:24px; font-size:0.82rem; color:var(--muted2); line-height:1.6; }
-    .modal-note strong { color:var(--gold); }
-
-    /* RESPONSIVE */
-    @media(max-width:1024px) {
-      .how-grid { grid-template-columns:1fr 1fr; }
-      .groups-grid { grid-template-columns:1fr 1fr; }
-      .token-layout { grid-template-columns:1fr; gap:48px; }
-      .group-full-teams { grid-template-columns:1fr 1fr; }
-    }
-    @media(max-width:768px) {
-      nav { padding:0 20px; }
-      .nav-links { display:none; }
-      .hero { padding:0 24px 60px; }
-      .how-grid,.groups-grid { grid-template-columns:1fr; }
-      .section,.token-section,.matches-page-inner,.token-page-inner,.groups-page-inner { padding-left:24px; padding-right:24px; }
-      .groups-section,.flywheel-section,.waitlist-section { padding:80px 24px; }
-      .flywheel-nodes { flex-direction:column; }
-      .fw-arrow { transform:rotate(90deg); }
-      footer { padding:24px; flex-direction:column; align-items:flex-start; }
-      .match-card { flex-wrap:wrap; }
-      .group-full-teams { grid-template-columns:1fr 1fr; }
-      .page-hero { padding:100px 24px 40px; }
-    }
+    @media(max-width:1024px) { .how-grid{grid-template-columns:1fr 1fr} .groups-grid{grid-template-columns:1fr 1fr} .token-layout{grid-template-columns:1fr;gap:48px} .group-full-teams{grid-template-columns:1fr 1fr} }
+    @media(max-width:768px) { nav{padding:0 20px} .nav-links{display:none} .hero{padding:0 24px 60px} .how-grid,.groups-grid{grid-template-columns:1fr} .section{padding:80px 24px} .groups-section,.flywheel-section{padding:80px 24px} .flywheel-nodes{flex-direction:column} .fw-arrow{transform:rotate(90deg)} footer{padding:24px;flex-direction:column;align-items:flex-start} .page-hero{padding:100px 24px 40px} .groups-page-inner,.matches-page-inner,.token-page-inner{padding-left:24px;padding-right:24px} .group-full-teams{grid-template-columns:1fr 1fr} }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
   <nav>
     <div class="nav-logo" onclick="showPage('home')">⚽ MUNDIAL</div>
     <ul class="nav-links">
@@ -336,55 +273,30 @@
       <li><a onclick="showPage('tokens')" id="nav-tokens">Tokens</a></li>
     </ul>
     <div class="nav-right">
-      <button class="btn-outline" onclick="showWalletModal()">Connect Wallet</button>
-      <button class="btn-gold" onclick="showPage('tokens')">Buy $MUNDIAL</button>
+      <button class="btn-outline" onclick="showBuyModal('MUNDIAL','Mundial Platform Token','—')">Connect Wallet</button>
+      <button class="btn-gold" onclick="showBuyModal('MUNDIAL','Mundial Platform Token','—')">Buy $MUNDIAL</button>
     </div>
   </nav>
 
-  <!-- ===================== HOME PAGE ===================== -->
+  <!-- ===================== HOME ===================== -->
   <div class="page active" id="page-home">
-
     <section class="hero">
-      <div class="pitch-bg"></div>
-      <div class="pitch-lines"></div>
-      <div class="pitch-arc"></div>
-      <div class="pitch-arc pitch-arc2"></div>
+      <div class="pitch-bg"></div><div class="pitch-lines"></div>
+      <div class="pitch-arc"></div><div class="pitch-arc pitch-arc2"></div>
       <div class="hero-glow"></div>
-
-      <div class="hero-eyebrow">
-        <span class="eyebrow-line"></span>
-        World Cup 2026 · On Solana · 48 Nations
-      </div>
-
+      <div class="hero-eyebrow"><span class="eyebrow-line"></span>World Cup 2026 · On Solana · 48 Nations</div>
       <div class="hero-countdown">
         <span class="countdown-label">Tournament begins in</span>
         <div class="countdown-units">
-          <div class="countdown-unit">
-            <span class="countdown-num" id="cd-days">--</span>
-            <div class="countdown-sub">Days</div>
-          </div>
-          <div class="countdown-unit">
-            <span class="countdown-num" id="cd-hours">--</span>
-            <div class="countdown-sub">Hrs</div>
-          </div>
-          <div class="countdown-unit">
-            <span class="countdown-num" id="cd-mins">--</span>
-            <div class="countdown-sub">Min</div>
-          </div>
-          <div class="countdown-unit">
-            <span class="countdown-num" id="cd-secs">--</span>
-            <div class="countdown-sub">Sec</div>
-          </div>
+          <div class="countdown-unit"><span class="countdown-num" id="cd-days">--</span><div class="countdown-sub">Days</div></div>
+          <div class="countdown-unit"><span class="countdown-num" id="cd-hours">--</span><div class="countdown-sub">Hrs</div></div>
+          <div class="countdown-unit"><span class="countdown-num" id="cd-mins">--</span><div class="countdown-sub">Min</div></div>
+          <div class="countdown-unit"><span class="countdown-num" id="cd-secs">--</span><div class="countdown-sub">Sec</div></div>
         </div>
       </div>
-
       <h1>BACK<br>YOUR<br><span class="gold">NATION.</span></h1>
-
       <div class="hero-sub-row">
-        <p class="hero-tagline">
-          <strong>48 country tokens. One tournament. Real payouts.</strong><br>
-          Buy your nation's token through Mundial, hold through the group stage, claim SOL when they win — or watch the losers fund your prize pool.
-        </p>
+        <p class="hero-tagline"><strong>48 country tokens. One tournament. Real SOL payouts.</strong><br>Buy your nation's token through Mundial, hold through the groups, claim when they win — or watch the losers fund your prize pool.</p>
         <div class="hero-stats">
           <div><div class="h-stat-num">48</div><div class="h-stat-label">Nations</div></div>
           <div><div class="h-stat-num">64</div><div class="h-stat-label">Matches</div></div>
@@ -395,32 +307,7 @@
 
     <!-- TICKER -->
     <div class="ticker-wrap">
-      <div class="ticker">
-        <div class="ticker-item">🇧🇷 $BRA <span class="ticker-sep">·</span> +18%</div>
-        <div class="ticker-item">🇦🇷 $ARG <span class="ticker-sep">·</span> +24%</div>
-        <div class="ticker-item">🏴󠁧󠁢󠁥󠁮󠁧󠁿 $ENG <span class="ticker-sep">·</span> +9%</div>
-        <div class="ticker-item">🇫🇷 $FRA <span class="ticker-sep">·</span> +14%</div>
-        <div class="ticker-item">🇩🇪 $GER <span class="ticker-sep">·</span> −3%</div>
-        <div class="ticker-item">🇪🇸 $ESP <span class="ticker-sep">·</span> +31%</div>
-        <div class="ticker-item">🇵🇹 $POR <span class="ticker-sep">·</span> +7%</div>
-        <div class="ticker-item">🇳🇱 $NED <span class="ticker-sep">·</span> +12%</div>
-        <div class="ticker-item">🇺🇸 $USA <span class="ticker-sep">·</span> +44%</div>
-        <div class="ticker-item">🇯🇵 $JPN <span class="ticker-sep">·</span> +19%</div>
-        <div class="ticker-item">🇦🇺 $AUS <span class="ticker-sep">·</span> −8%</div>
-        <div class="ticker-item">🇲🇽 $MEX <span class="ticker-sep">·</span> +22%</div>
-        <div class="ticker-item">🇧🇷 $BRA <span class="ticker-sep">·</span> +18%</div>
-        <div class="ticker-item">🇦🇷 $ARG <span class="ticker-sep">·</span> +24%</div>
-        <div class="ticker-item">🏴󠁧󠁢󠁥󠁮󠁧󠁿 $ENG <span class="ticker-sep">·</span> +9%</div>
-        <div class="ticker-item">🇫🇷 $FRA <span class="ticker-sep">·</span> +14%</div>
-        <div class="ticker-item">🇩🇪 $GER <span class="ticker-sep">·</span> −3%</div>
-        <div class="ticker-item">🇪🇸 $ESP <span class="ticker-sep">·</span> +31%</div>
-        <div class="ticker-item">🇵🇹 $POR <span class="ticker-sep">·</span> +7%</div>
-        <div class="ticker-item">🇳🇱 $NED <span class="ticker-sep">·</span> +12%</div>
-        <div class="ticker-item">🇺🇸 $USA <span class="ticker-sep">·</span> +44%</div>
-        <div class="ticker-item">🇯🇵 $JPN <span class="ticker-sep">·</span> +19%</div>
-        <div class="ticker-item">🇦🇺 $AUS <span class="ticker-sep">·</span> −8%</div>
-        <div class="ticker-item">🇲🇽 $MEX <span class="ticker-sep">·</span> +22%</div>
-      </div>
+      <div class="ticker" id="main-ticker"></div>
     </div>
 
     <!-- HOW IT WORKS -->
@@ -428,44 +315,10 @@
       <div class="section-tag">How It Works</div>
       <h2>Simple.<br>On-chain.<br>Ruthless.</h2>
       <div class="how-grid">
-        <div class="how-card">
-          <div class="how-num">01</div>
-          <span class="how-icon">🪙</span>
-          <h3>Buy Your Nation</h3>
-          <p>Every one of the 48 World Cup nations has a token on pump.fun. Buy through Mundial to qualify for pool payouts. Early buyers get the cheapest entry on the bonding curve.</p>
-        </div>
-        <div class="how-card">
-          <div class="how-num">02</div>
-          <span class="how-icon">📊</span>
-          <h3>Group Stage Pools</h3>
-          <p>All 4 teams in each group share a prize pool. 2% of every purchase through Mundial feeds the pool. 1st takes 45%, 2nd takes 30%, 3rd takes 10%. 4th place rolls to $MUNDIAL.</p>
-        </div>
-        <div class="how-card">
-          <div class="how-num">03</div>
-          <span class="how-icon">⚔️</span>
-          <h3>Knockout Match Pools</h3>
-          <p>From the Round of 32 onwards, every match has its own pool. Trade right up to kickoff. Winners claim the full pool. Losers' unclaimed share goes to $MUNDIAL within 48 hours.</p>
-        </div>
-        <div class="how-card">
-          <div class="how-num">04</div>
-          <span class="how-icon">🏆</span>
-          <h3>Champion Bonus</h3>
-          <p>The 0.5% Champion Pool accumulates across all 48 tokens for 32 days. At full time of the final, it all goes to the winning nation's holders — plus a $MUNDIAL airdrop.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- WAITLIST -->
-    <div class="waitlist-section reveal">
-      <div class="waitlist-inner">
-        <div class="section-tag" style="justify-content:center">Early Access</div>
-        <h2>Get In Before<br>Kickoff.</h2>
-        <p>Join the waitlist for early access, pre-launch token prices, and first look at the group draw allocations when FIFA confirms.</p>
-        <div class="waitlist-form">
-          <input type="email" class="waitlist-input" placeholder="your@email.com" id="waitlist-email"/>
-          <button class="btn-gold" onclick="joinWaitlist()">Join →</button>
-        </div>
-        <div class="waitlist-count" id="waitlist-count">⚽ <span>847</span> fans already registered</div>
+        <div class="how-card"><div class="how-num">01</div><span class="how-icon">🪙</span><h3>Buy Your Nation</h3><p>Every nation has a token on pump.fun identified by its official 3-letter FIFA code — ARG, BRA, ENG, AUS. Buy through Mundial to qualify for pool payouts. Early buyers get the cheapest bonding curve price.</p></div>
+        <div class="how-card"><div class="how-num">02</div><span class="how-icon">📊</span><h3>Group Stage Pools</h3><p>All 4 teams in each group share a prize pool. 0.8% of every purchase through Mundial feeds it. 1st takes 45%, 2nd 30%, 3rd 10%. 4th place gets nothing — their share rolls to $MUNDIAL.</p></div>
+        <div class="how-card"><div class="how-num">03</div><span class="how-icon">⚔️</span><h3>Knockout Match Pools</h3><p>From Round of 32 onwards, every match has its own pool. Trade right up to kickoff. Winners claim the full pool. Losers' unclaimed share goes to $MUNDIAL treasury within 48 hours.</p></div>
+        <div class="how-card"><div class="how-num">04</div><span class="how-icon">🏆</span><h3>Champion Bonus</h3><p>The Champion Pool builds across all 48 tokens for 32 days. At the final whistle, it all pays to the winning nation's holders — plus a $MUNDIAL airdrop on top.</p></div>
       </div>
     </div>
 
@@ -473,56 +326,10 @@
     <div class="groups-section reveal">
       <div class="groups-inner">
         <div class="groups-header">
-          <div>
-            <div class="section-tag">2026 Groups</div>
-            <h2>12 Groups.<br>48 Nations.</h2>
-          </div>
-          <div class="pool-total">
-            <div class="pool-total-num">$0.00</div>
-            <div class="pool-total-label">Total Pools (pre-launch)</div>
-          </div>
+          <div><div class="section-tag">2026 Groups</div><h2>12 Groups.<br>48 Nations.</h2></div>
+          <button class="btn-outline-lg" onclick="showPage('groups')">View All Groups →</button>
         </div>
-        <div class="groups-grid">
-          <div class="group-card" onclick="showPage('groups')">
-            <div class="group-header"><span class="group-letter">GROUP A</span><span class="group-pool">Pool: —</span></div>
-            <div class="group-teams">
-              <div class="team-row"><span class="team-flag">🇺🇸</span><span class="team-name">USA</span><span class="team-ticker">$USA</span><span class="team-odds odds-up">Fav</span></div>
-              <div class="team-row"><span class="team-flag">🇲🇽</span><span class="team-name">Mexico</span><span class="team-ticker">$MEX</span><span class="team-odds odds-flat">—</span></div>
-              <div class="team-row"><span class="team-flag">🇨🇦</span><span class="team-name">Canada</span><span class="team-ticker">$CAN</span><span class="team-odds odds-flat">—</span></div>
-              <div class="team-row"><span class="team-flag">🇳🇿</span><span class="team-name">New Zealand</span><span class="team-ticker">$NZL</span><span class="team-odds odds-down">Long</span></div>
-            </div>
-          </div>
-          <div class="group-card" onclick="showPage('groups')">
-            <div class="group-header"><span class="group-letter">GROUP B</span><span class="group-pool">Pool: —</span></div>
-            <div class="group-teams">
-              <div class="team-row"><span class="team-flag">🇧🇷</span><span class="team-name">Brazil</span><span class="team-ticker">$BRA</span><span class="team-odds odds-up">Fav</span></div>
-              <div class="team-row"><span class="team-flag">🇦🇷</span><span class="team-name">Argentina</span><span class="team-ticker">$ARG</span><span class="team-odds odds-up">Fav</span></div>
-              <div class="team-row"><span class="team-flag">🇨🇴</span><span class="team-name">Colombia</span><span class="team-ticker">$COL</span><span class="team-odds odds-flat">—</span></div>
-              <div class="team-row"><span class="team-flag">🇪🇨</span><span class="team-name">Ecuador</span><span class="team-ticker">$ECU</span><span class="team-odds odds-down">Long</span></div>
-            </div>
-          </div>
-          <div class="group-card" onclick="showPage('groups')">
-            <div class="group-header"><span class="group-letter">GROUP C</span><span class="group-pool">Pool: —</span></div>
-            <div class="group-teams">
-              <div class="team-row"><span class="team-flag">🇫🇷</span><span class="team-name">France</span><span class="team-ticker">$FRA</span><span class="team-odds odds-up">Fav</span></div>
-              <div class="team-row"><span class="team-flag">🇩🇪</span><span class="team-name">Germany</span><span class="team-ticker">$GER</span><span class="team-odds odds-flat">—</span></div>
-              <div class="team-row"><span class="team-flag">🇨🇭</span><span class="team-name">Switzerland</span><span class="team-ticker">$SUI</span><span class="team-odds odds-flat">—</span></div>
-              <div class="team-row"><span class="team-flag">🇸🇳</span><span class="team-name">Senegal</span><span class="team-ticker">$SEN</span><span class="team-odds odds-flat">—</span></div>
-            </div>
-          </div>
-          <div class="group-card" onclick="showPage('groups')">
-            <div class="group-header"><span class="group-letter">GROUP D</span><span class="group-pool">Pool: —</span></div>
-            <div class="group-teams">
-              <div class="team-row"><span class="team-flag">🇪🇸</span><span class="team-name">Spain</span><span class="team-ticker">$ESP</span><span class="team-odds odds-up">Fav</span></div>
-              <div class="team-row"><span class="team-flag">🇵🇹</span><span class="team-name">Portugal</span><span class="team-ticker">$POR</span><span class="team-odds odds-up">Fav</span></div>
-              <div class="team-row"><span class="team-flag">🇲🇦</span><span class="team-name">Morocco</span><span class="team-ticker">$MAR</span><span class="team-odds odds-flat">—</span></div>
-              <div class="team-row"><span class="team-flag">🇹🇷</span><span class="team-name">Turkey</span><span class="team-ticker">$TUR</span><span class="team-odds odds-flat">—</span></div>
-            </div>
-          </div>
-        </div>
-        <div style="text-align:center;margin-top:32px">
-          <button class="btn-outline-lg" onclick="showPage('groups')">View All 12 Groups →</button>
-        </div>
+        <div class="groups-grid" id="home-groups-grid"></div>
       </div>
     </div>
 
@@ -532,52 +339,33 @@
       <div class="token-layout">
         <div class="token-left">
           <h2>Every trade.<br>Every match.<br>Every elimination.</h2>
-          <p>Mundial's 2% fee on every transaction through our interface is split four ways automatically — pools, champion fund, $MUNDIAL burn, and platform. No hidden charges.</p>
-          <div class="section-tag" style="margin-bottom:16px">Fee breakdown — every purchase</div>
+          <p>Mundial captures 2% on every purchase through our interface and splits it four ways automatically. No hidden fees. No surprises.</p>
+          <div class="section-tag" style="margin-bottom:16px">Fee split — every purchase</div>
           <div class="fee-breakdown">
-            <div class="fee-row">
-              <div class="fee-bar" style="background:rgba(245,197,24,0.15);color:var(--gold);width:80px">0.8%</div>
-              <div class="fee-label">Match / Group Pool</div>
-              <div class="fee-desc">Paid to winning holders</div>
-            </div>
-            <div class="fee-row">
-              <div class="fee-bar" style="background:rgba(255,23,68,0.1);color:var(--red);width:70px">0.5%</div>
-              <div class="fee-label">Champion Pool</div>
-              <div class="fee-desc">Builds all tournament</div>
-            </div>
-            <div class="fee-row">
-              <div class="fee-bar" style="background:rgba(0,230,118,0.1);color:var(--green);width:55px">0.3%</div>
-              <div class="fee-label">$MUNDIAL Buyback & Burn</div>
-              <div class="fee-desc">Deflationary</div>
-            </div>
-            <div class="fee-row">
-              <div class="fee-bar" style="background:rgba(255,255,255,0.05);color:var(--muted2);width:40px">0.2%</div>
-              <div class="fee-label">Platform</div>
-              <div class="fee-desc">Operations</div>
-            </div>
+            <div class="fee-row"><div class="fee-bar" style="background:rgba(245,197,24,0.15);color:var(--gold);width:80px">0.8%</div><div class="fee-label">Match / Group Pool</div><div class="fee-desc">Paid to winning holders</div></div>
+            <div class="fee-row"><div class="fee-bar" style="background:rgba(255,23,68,0.1);color:var(--red);width:70px">0.5%</div><div class="fee-label">Champion Pool</div><div class="fee-desc">Builds all tournament</div></div>
+            <div class="fee-row"><div class="fee-bar" style="background:rgba(0,230,118,0.1);color:var(--green);width:55px">0.3%</div><div class="fee-label">$MUNDIAL Buyback & Burn</div><div class="fee-desc">Deflationary</div></div>
+            <div class="fee-row"><div class="fee-bar" style="background:rgba(255,255,255,0.05);color:var(--muted2);width:40px">0.2%</div><div class="fee-label">Platform</div><div class="fee-desc">Operations</div></div>
           </div>
           <div class="mundial-token">
             <div class="mundial-token-header">
               <div class="mundial-logo">MUN<br>DIAL</div>
-              <div>
-                <div class="mundial-token-name">$MUNDIAL</div>
-                <div class="mundial-token-sub">Launched on pump.fun · Trades on Raydium</div>
-              </div>
+              <div><div class="mundial-token-name">$MUNDIAL</div><div class="mundial-token-sub">Launched on pump.fun · Trades on Raydium</div></div>
             </div>
-            <p>The overarching platform token. Every country token purchase burns $MUNDIAL. 64 matches, 48 tokens — every moment of the tournament applies buy pressure. Champion holders receive a $MUNDIAL airdrop at full time.</p>
+            <p>The platform token that captures value from every one of the 48 country tokens. Every trade burns $MUNDIAL. Every elimination feeds the treasury. Champion holders receive a $MUNDIAL airdrop at full time.</p>
           </div>
         </div>
-        <div class="token-right">
+        <div>
           <div class="section-tag" style="margin-bottom:16px">Payout structure</div>
           <div class="payout-table">
             <div class="payout-header">Stage → Pool distribution</div>
-            <div class="payout-row"><div class="payout-stage"><span class="stage-icon">🏅</span><div><div class="stage-name">Group 1st Place</div><div class="stage-sub">Per group pool</div></div></div><div class="payout-mult" style="color:var(--gold)">45%</div></div>
-            <div class="payout-row"><div class="payout-stage"><span class="stage-icon">🥈</span><div><div class="stage-name">Group 2nd Place</div><div class="stage-sub">Per group pool</div></div></div><div class="payout-mult" style="color:var(--muted2)">30%</div></div>
-            <div class="payout-row"><div class="payout-stage"><span class="stage-icon">🔄</span><div><div class="stage-name">Group 3rd Place</div><div class="stage-sub">May still progress</div></div></div><div class="payout-mult" style="color:var(--muted2)">10%</div></div>
-            <div class="payout-row"><div class="payout-stage"><span class="stage-icon">💀</span><div><div class="stage-name">Group 4th Place</div><div class="stage-sub">Eliminated</div></div></div><div class="payout-mult" style="color:var(--red)">→ $MUNDIAL</div></div>
-            <div class="payout-row"><div class="payout-stage"><span class="stage-icon">⚔️</span><div><div class="stage-name">Knockout Winner</div><div class="stage-sub">R32 through Final</div></div></div><div class="payout-mult" style="color:var(--green)">100%</div></div>
-            <div class="payout-row"><div class="payout-stage"><span class="stage-icon">💀</span><div><div class="stage-name">Knockout Loser</div><div class="stage-sub">48hr claim window</div></div></div><div class="payout-mult" style="color:var(--red)">→ $MUNDIAL</div></div>
-            <div class="payout-row"><div class="payout-stage"><span class="stage-icon">🏆</span><div><div class="stage-name">World Cup Champions</div><div class="stage-sub">Final pool + champion pool</div></div></div><div class="payout-mult" style="color:var(--gold)">100% + 🪂</div></div>
+            <div class="payout-row"><div class="payout-stage"><span style="font-size:1.2rem">🏅</span><div><div class="stage-name">Group 1st Place</div><div class="stage-sub">Per group pool</div></div></div><div class="payout-mult" style="color:var(--gold)">45%</div></div>
+            <div class="payout-row"><div class="payout-stage"><span style="font-size:1.2rem">🥈</span><div><div class="stage-name">Group 2nd Place</div><div class="stage-sub">Per group pool</div></div></div><div class="payout-mult" style="color:var(--muted2)">30%</div></div>
+            <div class="payout-row"><div class="payout-stage"><span style="font-size:1.2rem">🔄</span><div><div class="stage-name">Group 3rd Place</div><div class="stage-sub">May still progress</div></div></div><div class="payout-mult" style="color:var(--muted2)">10%</div></div>
+            <div class="payout-row"><div class="payout-stage"><span style="font-size:1.2rem">💀</span><div><div class="stage-name">Group 4th Place</div><div class="stage-sub">Eliminated</div></div></div><div class="payout-mult" style="color:var(--red)">→ $MUNDIAL</div></div>
+            <div class="payout-row"><div class="payout-stage"><span style="font-size:1.2rem">⚔️</span><div><div class="stage-name">Knockout Winner</div><div class="stage-sub">R32 through Final</div></div></div><div class="payout-mult" style="color:var(--green)">100%</div></div>
+            <div class="payout-row"><div class="payout-stage"><span style="font-size:1.2rem">💀</span><div><div class="stage-name">Knockout Loser</div><div class="stage-sub">48hr claim window</div></div></div><div class="payout-mult" style="color:var(--red)">→ $MUNDIAL</div></div>
+            <div class="payout-row"><div class="payout-stage"><span style="font-size:1.2rem">🏆</span><div><div class="stage-name">World Cup Champions</div><div class="stage-sub">Final + Champion Pool</div></div></div><div class="payout-mult" style="color:var(--gold)">100% + 🪂</div></div>
           </div>
         </div>
       </div>
@@ -588,7 +376,7 @@
       <div class="flywheel-inner">
         <div class="section-tag" style="justify-content:center">The Flywheel</div>
         <h2>Why $MUNDIAL Only Goes One Way</h2>
-        <p>Every match is a catalyst. Every elimination is a treasury event. Every day compounds.</p>
+        <p>Every match is a catalyst. Every elimination is a treasury event. 32 days of compounding pressure.</p>
         <div class="flywheel-nodes">
           <div class="fw-node"><span class="fw-node-icon">🌍</span><h4>Fans buy tokens</h4><p>48 tokens, unlimited buyers</p></div>
           <div class="fw-arrow">→</div>
@@ -608,19 +396,14 @@
       <h2>THE WORLD CUP<br>IS <span class="gold">ON-CHAIN.</span></h2>
       <p>48 nations. One tournament. Your money where your flag is.</p>
       <div class="cta-btns">
-        <button class="btn-gold-lg" onclick="joinWaitlist()">Join Waitlist →</button>
-        <button class="btn-outline-lg" onclick="showPage('tokens')">View All Tokens</button>
+        <button class="btn-gold-lg" onclick="showPage('tokens')">Pick Your Nation →</button>
+        <button class="btn-outline-lg" onclick="showPage('groups')">View Groups</button>
       </div>
     </div>
 
     <footer>
       <div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div>
-      <ul class="footer-links">
-        <li><a href="#">Twitter / X</a></li>
-        <li><a href="#">Telegram</a></li>
-        <li><a href="#">Docs</a></li>
-        <li><a href="#">pump.fun</a></li>
-      </ul>
+      <ul class="footer-links"><li><a href="#">Twitter / X</a></li><li><a href="#">Telegram</a></li><li><a href="#">pump.fun</a></li></ul>
       <div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Country tokens are speculative assets. Participate responsibly.</div>
     </footer>
   </div>
@@ -629,15 +412,13 @@
   <div class="page" id="page-groups">
     <div class="page-hero">
       <div class="section-tag">2026 World Cup</div>
-      <h1>All 12<br><span style="color:var(--gold)">Groups.</span></h1>
-      <p>Each group has its own prize pool funded by 0.8% of every token purchase through Mundial. Pool pays out by final group standing. Buy through Mundial to qualify.</p>
+      <h1>All 12 <span style="color:var(--gold)">Groups.</span></h1>
+      <p>Each group has its own prize pool funded by 0.8% of every token purchase through Mundial. Pool settles by final group standing. Buy any team to enter.</p>
     </div>
-    <div class="groups-page-inner" id="groups-full-list">
-      <!-- Generated by JS -->
-    </div>
+    <div class="groups-page-inner" id="groups-full-list"></div>
     <footer>
       <div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div>
-      <ul class="footer-links"><li><a href="#">Twitter / X</a></li><li><a href="#">Telegram</a></li><li><a href="#">Docs</a></li></ul>
+      <ul class="footer-links"><li><a href="#">Twitter / X</a></li><li><a href="#">Telegram</a></li><li><a href="#">pump.fun</a></li></ul>
       <div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div>
     </footer>
   </div>
@@ -647,14 +428,12 @@
     <div class="page-hero">
       <div class="section-tag">Match Schedule</div>
       <h1>Every Match.<br><span style="color:var(--gold)">Every Pool.</span></h1>
-      <p>Group stage pools settle at the end of each group's final match. From Round of 32 onwards, every match has its own pool — open from the previous whistle to kickoff.</p>
+      <p>Group pools settle at the end of each group's final game. Knockout pools open after the previous whistle and close at kickoff.</p>
     </div>
-    <div class="matches-page-inner" id="matches-list">
-      <!-- Generated by JS -->
-    </div>
+    <div class="matches-page-inner" id="matches-list"></div>
     <footer>
       <div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div>
-      <ul class="footer-links"><li><a href="#">Twitter / X</a></li><li><a href="#">Telegram</a></li><li><a href="#">Docs</a></li></ul>
+      <ul class="footer-links"><li><a href="#">Twitter / X</a></li><li><a href="#">Telegram</a></li><li><a href="#">pump.fun</a></li></ul>
       <div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div>
     </footer>
   </div>
@@ -663,147 +442,217 @@
   <div class="page" id="page-tokens">
     <div class="page-hero">
       <div class="section-tag">All 48 Tokens</div>
-      <h1>Pick Your<br><span style="color:var(--gold)">Nation.</span></h1>
-      <p>Every token launches on pump.fun. Buy through Mundial to qualify for match pool payouts. Price moves with demand — back your team early for maximum upside.</p>
+      <h1>Pick Your <span style="color:var(--gold)">Nation.</span></h1>
+      <p>Every token uses the official 3-letter FIFA country code. The nation's flag is the token identity. Buy through Mundial to qualify for pool payouts.</p>
     </div>
     <div class="token-page-inner">
       <div class="token-search-bar">
-        <input type="text" class="token-search" placeholder="Search nation or ticker..." id="token-search" oninput="filterTokens()"/>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">48 Nations · Launches on pump.fun</div>
+        <input type="text" class="token-search" placeholder="Search nation or code (e.g. AUS, BRA)..." id="token-search" oninput="filterTokens()"/>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">48 Nations · Official FIFA Codes · Launches on pump.fun</div>
       </div>
-      <div class="tokens-grid" id="tokens-grid">
-        <!-- Generated by JS -->
-      </div>
+      <div class="tokens-grid" id="tokens-grid"></div>
     </div>
     <footer>
       <div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div>
-      <ul class="footer-links"><li><a href="#">Twitter / X</a></li><li><a href="#">Telegram</a></li><li><a href="#">Docs</a></li></ul>
+      <ul class="footer-links"><li><a href="#">Twitter / X</a></li><li><a href="#">Telegram</a></li><li><a href="#">pump.fun</a></li></ul>
       <div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div>
     </footer>
-  </div>
-
-  <!-- WALLET MODAL -->
-  <div class="modal-overlay" id="wallet-modal">
-    <div class="modal">
-      <button class="modal-close" onclick="closeModal('wallet-modal')">✕</button>
-      <h3>Connect Wallet</h3>
-      <p>Connect your Solana wallet to buy country tokens through Mundial and qualify for match pool payouts.</p>
-      <div class="modal-note">
-        <strong>⚠️ Important:</strong> Tokens bought through this interface qualify for pool payouts. Tokens purchased directly on pump.fun, Raydium, or Jupiter give price exposure only — no pool eligibility.
-      </div>
-      <button class="btn-gold-lg" style="width:100%;margin-bottom:12px" onclick="alert('Wallet connect coming at launch!')">🟣 Connect Phantom</button>
-      <button class="btn-outline-lg" style="width:100%" onclick="alert('Wallet connect coming at launch!')">Connect Other Wallet</button>
-    </div>
   </div>
 
   <!-- BUY MODAL -->
   <div class="modal-overlay" id="buy-modal">
     <div class="modal">
       <button class="modal-close" onclick="closeModal('buy-modal')">✕</button>
-      <h3 id="buy-modal-title">Buy $BRA</h3>
-      <p id="buy-modal-desc">Purchase Brazil tokens through Mundial to qualify for Group B pool payouts and all knockout round pools.</p>
-      <div class="modal-note">
-        <strong>Pool eligibility:</strong> Buying here registers your wallet for payout snapshots. 0.8% of your purchase goes to the group pool. <strong>Early buyers get the cheapest bonding curve price.</strong>
+      <div class="modal-flag-row">
+        <div class="flag-circle lg" id="modal-flag"></div>
+        <div>
+          <div class="modal-country-code" id="modal-code"></div>
+          <div class="modal-country-name" id="modal-name"></div>
+        </div>
       </div>
-      <button class="btn-gold-lg" style="width:100%;margin-bottom:12px" onclick="alert('Launches on pump.fun at tournament start!')">Buy on pump.fun via Mundial →</button>
+      <p id="modal-desc"></p>
+      <div class="modal-note"><strong>Pool eligibility:</strong> Buying through Mundial registers your wallet for payout snapshots. 0.8% of your purchase goes to the group pool. <strong>Tokens bought on pump.fun, Raydium or Jupiter directly give price exposure only — no pool payouts.</strong></div>
+      <button class="btn-gold-lg" style="width:100%;margin-bottom:10px" onclick="alert('Launches on pump.fun at tournament start — follow us on X for the date!')">Buy on pump.fun via Mundial →</button>
       <button class="btn-outline-lg" style="width:100%;font-size:0.85rem" onclick="closeModal('buy-modal')">Cancel</button>
     </div>
   </div>
 
   <script>
-    // ---- DATA ----
+    // ===================== DATA =====================
     const groups = [
-      { letter:'A', teams:[{flag:'🇺🇸',name:'USA',ticker:'$USA',share:42},{flag:'🇲🇽',name:'Mexico',ticker:'$MEX',share:28},{flag:'🇨🇦',name:'Canada',ticker:'$CAN',share:18},{flag:'🇳🇿',name:'New Zealand',ticker:'$NZL',share:12}]},
-      { letter:'B', teams:[{flag:'🇧🇷',name:'Brazil',ticker:'$BRA',share:38},{flag:'🇦🇷',name:'Argentina',ticker:'$ARG',share:32},{flag:'🇨🇴',name:'Colombia',ticker:'$COL',share:18},{flag:'🇪🇨',name:'Ecuador',ticker:'$ECU',share:12}]},
-      { letter:'C', teams:[{flag:'🇫🇷',name:'France',ticker:'$FRA',share:40},{flag:'🇩🇪',name:'Germany',ticker:'$GER',share:30},{flag:'🇨🇭',name:'Switzerland',ticker:'$SUI',share:18},{flag:'🇸🇳',name:'Senegal',ticker:'$SEN',share:12}]},
-      { letter:'D', teams:[{flag:'🇪🇸',name:'Spain',ticker:'$ESP',share:36},{flag:'🇵🇹',name:'Portugal',ticker:'$POR',share:34},{flag:'🇲🇦',name:'Morocco',ticker:'$MAR',share:18},{flag:'🇹🇷',name:'Turkey',ticker:'$TUR',share:12}]},
-      { letter:'E', teams:[{flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',name:'England',ticker:'$ENG',share:40},{flag:'🇳🇱',name:'Netherlands',ticker:'$NED',share:28},{flag:'🇨🇷',name:'Costa Rica',ticker:'$CRC',share:18},{flag:'🇮🇷',name:'Iran',ticker:'$IRN',share:14}]},
-      { letter:'F', teams:[{flag:'🇯🇵',name:'Japan',ticker:'$JPN',share:36},{flag:'🇰🇷',name:'South Korea',ticker:'$KOR',share:28},{flag:'🇦🇺',name:'Australia',ticker:'$AUS',share:22},{flag:'🇸🇦',name:'Saudi Arabia',ticker:'$KSA',share:14}]},
-      { letter:'G', teams:[{flag:'🇧🇪',name:'Belgium',ticker:'$BEL',share:38},{flag:'🇭🇷',name:'Croatia',ticker:'$CRO',share:26},{flag:'🇺🇾',name:'Uruguay',ticker:'$URU',share:22},{flag:'🇨🇲',name:'Cameroon',ticker:'$CMR',share:14}]},
-      { letter:'H', teams:[{flag:'🇩🇰',name:'Denmark',ticker:'$DEN',share:36},{flag:'🇵🇱',name:'Poland',ticker:'$POL',share:28},{flag:'🇹🇳',name:'Tunisia',ticker:'$TUN',share:20},{flag:'🇬🇭',name:'Ghana',ticker:'$GHA',share:16}]},
-      { letter:'I', teams:[{flag:'🇮🇹',name:'Italy',ticker:'$ITA',share:40},{flag:'🇦🇹',name:'Austria',ticker:'$AUT',share:26},{flag:'🇨🇱',name:'Chile',ticker:'$CHI',share:20},{flag:'🇨🇬',name:'Congo DR',ticker:'$COD',share:14}]},
-      { letter:'J', teams:[{flag:'🇷🇸',name:'Serbia',ticker:'$SRB',share:34},{flag:'🇨🇿',name:'Czech Rep.',ticker:'$CZE',share:28},{flag:'🇵🇪',name:'Peru',ticker:'$PER',share:22},{flag:'🇳🇬',name:'Nigeria',ticker:'$NGA',share:16}]},
-      { letter:'K', teams:[{flag:'🇺🇾',name:'Uruguay',ticker:'$URU',share:36},{flag:'🇪🇬',name:'Egypt',ticker:'$EGY',share:28},{flag:'🇸🇰',name:'Slovakia',ticker:'$SVK',share:22},{flag:'🇿🇦',name:'South Africa',ticker:'$RSA',share:14}]},
-      { letter:'L', teams:[{flag:'🇬🇷',name:'Greece',ticker:'$GRE',share:36},{flag:'🇷🇴',name:'Romania',ticker:'$ROU',share:28},{flag:'🇵🇦',name:'Panama',ticker:'$PAN',share:22},{flag:'🇧🇫',name:'Burkina Faso',ticker:'$BFA',share:14}]},
+      { letter:'A', teams:[
+        {flag:'🇺🇸',name:'United States',code:'USA'},
+        {flag:'🇲🇽',name:'Mexico',code:'MEX'},
+        {flag:'🇨🇦',name:'Canada',code:'CAN'},
+        {flag:'🇳🇿',name:'New Zealand',code:'NZL'}]},
+      { letter:'B', teams:[
+        {flag:'🇧🇷',name:'Brazil',code:'BRA'},
+        {flag:'🇦🇷',name:'Argentina',code:'ARG'},
+        {flag:'🇨🇴',name:'Colombia',code:'COL'},
+        {flag:'🇪🇨',name:'Ecuador',code:'ECU'}]},
+      { letter:'C', teams:[
+        {flag:'🇫🇷',name:'France',code:'FRA'},
+        {flag:'🇩🇪',name:'Germany',code:'GER'},
+        {flag:'🇨🇭',name:'Switzerland',code:'SUI'},
+        {flag:'🇸🇳',name:'Senegal',code:'SEN'}]},
+      { letter:'D', teams:[
+        {flag:'🇪🇸',name:'Spain',code:'ESP'},
+        {flag:'🇵🇹',name:'Portugal',code:'POR'},
+        {flag:'🇲🇦',name:'Morocco',code:'MAR'},
+        {flag:'🇹🇷',name:'Turkey',code:'TUR'}]},
+      { letter:'E', teams:[
+        {flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',name:'England',code:'ENG'},
+        {flag:'🇳🇱',name:'Netherlands',code:'NED'},
+        {flag:'🇨🇷',name:'Costa Rica',code:'CRC'},
+        {flag:'🇮🇷',name:'Iran',code:'IRN'}]},
+      { letter:'F', teams:[
+        {flag:'🇯🇵',name:'Japan',code:'JPN'},
+        {flag:'🇰🇷',name:'South Korea',code:'KOR'},
+        {flag:'🇦🇺',name:'Australia',code:'AUS'},
+        {flag:'🇸🇦',name:'Saudi Arabia',code:'KSA'}]},
+      { letter:'G', teams:[
+        {flag:'🇧🇪',name:'Belgium',code:'BEL'},
+        {flag:'🇭🇷',name:'Croatia',code:'CRO'},
+        {flag:'🇺🇾',name:'Uruguay',code:'URU'},
+        {flag:'🇨🇲',name:'Cameroon',code:'CMR'}]},
+      { letter:'H', teams:[
+        {flag:'🇩🇰',name:'Denmark',code:'DEN'},
+        {flag:'🇵🇱',name:'Poland',code:'POL'},
+        {flag:'🇹🇳',name:'Tunisia',code:'TUN'},
+        {flag:'🇬🇭',name:'Ghana',code:'GHA'}]},
+      { letter:'I', teams:[
+        {flag:'🇮🇹',name:'Italy',code:'ITA'},
+        {flag:'🇦🇹',name:'Austria',code:'AUT'},
+        {flag:'🇨🇱',name:'Chile',code:'CHI'},
+        {flag:'🇨🇩',name:'DR Congo',code:'COD'}]},
+      { letter:'J', teams:[
+        {flag:'🇷🇸',name:'Serbia',code:'SRB'},
+        {flag:'🇨🇿',name:'Czech Republic',code:'CZE'},
+        {flag:'🇵🇪',name:'Peru',code:'PER'},
+        {flag:'🇳🇬',name:'Nigeria',code:'NGA'}]},
+      { letter:'K', teams:[
+        {flag:'🇺🇾',name:'Uruguay',code:'URU'},
+        {flag:'🇪🇬',name:'Egypt',code:'EGY'},
+        {flag:'🇸🇰',name:'Slovakia',code:'SVK'},
+        {flag:'🇿🇦',name:'South Africa',code:'RSA'}]},
+      { letter:'L', teams:[
+        {flag:'🇬🇷',name:'Greece',code:'GRE'},
+        {flag:'🇷🇴',name:'Romania',code:'ROU'},
+        {flag:'🇵🇦',name:'Panama',code:'PAN'},
+        {flag:'🇧🇫',name:'Burkina Faso',code:'BFA'}]},
     ];
 
-    const allTokens = groups.flatMap(g => g.teams.map(t => ({...t, group: g.letter})));
+    const allTokens = groups.flatMap(g => g.teams.map(t => ({...t, group:g.letter})));
 
     const matches = [
       { stage:'Group Stage', games:[
-        {date:'Jun 11',home:{flag:'🇺🇸',name:'USA'},away:{flag:'🇲🇽',name:'Mexico'},pool:'—',days:'11d 4h'},
-        {date:'Jun 12',home:{flag:'🇧🇷',name:'Brazil'},away:{flag:'🇪🇨',name:'Ecuador'},pool:'—',days:'12d 4h'},
-        {date:'Jun 12',home:{flag:'🇦🇷',name:'Argentina'},away:{flag:'🇨🇴',name:'Colombia'},pool:'—',days:'12d 8h'},
-        {date:'Jun 13',home:{flag:'🇫🇷',name:'France'},away:{flag:'🇸🇳',name:'Senegal'},pool:'—',days:'13d 4h'},
-        {date:'Jun 13',home:{flag:'🇩🇪',name:'Germany'},away:{flag:'🇨🇭',name:'Switzerland'},pool:'—',days:'13d 8h'},
-        {date:'Jun 14',home:{flag:'🇪🇸',name:'Spain'},away:{flag:'🇹🇷',name:'Turkey'},pool:'—',days:'14d 4h'},
-        {date:'Jun 14',home:{flag:'🇵🇹',name:'Portugal'},away:{flag:'🇲🇦',name:'Morocco'},pool:'—',days:'14d 8h'},
-        {date:'Jun 15',home:{flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',name:'England'},away:{flag:'🇮🇷',name:'Iran'},pool:'—',days:'15d 4h'},
+        {date:'Jun 11',hFlag:'🇺🇸',hCode:'USA',aFlag:'🇲🇽',aCode:'MEX'},
+        {date:'Jun 12',hFlag:'🇧🇷',hCode:'BRA',aFlag:'🇪🇨',aCode:'ECU'},
+        {date:'Jun 12',hFlag:'🇦🇷',hCode:'ARG',aFlag:'🇨🇴',aCode:'COL'},
+        {date:'Jun 13',hFlag:'🇫🇷',hCode:'FRA',aFlag:'🇸🇳',aCode:'SEN'},
+        {date:'Jun 13',hFlag:'🇩🇪',hCode:'GER',aFlag:'🇨🇭',aCode:'SUI'},
+        {date:'Jun 14',hFlag:'🇪🇸',hCode:'ESP',aFlag:'🇹🇷',aCode:'TUR'},
+        {date:'Jun 14',hFlag:'🇵🇹',hCode:'POR',aFlag:'🇲🇦',aCode:'MAR'},
+        {date:'Jun 15',hFlag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',hCode:'ENG',aFlag:'🇮🇷',aCode:'IRN'},
+        {date:'Jun 15',hFlag:'🇯🇵',hCode:'JPN',aFlag:'🇸🇦',aCode:'KSA'},
+        {date:'Jun 16',hFlag:'🇦🇺',hCode:'AUS',aFlag:'🇰🇷',aCode:'KOR'},
       ]},
       { stage:'Round of 32', games:[
-        {date:'Jul 1',home:{flag:'🇧🇷',name:'Brazil'},away:{flag:'🇩🇰',name:'Denmark'},pool:'—',days:'31d'},
-        {date:'Jul 1',home:{flag:'🇦🇷',name:'Argentina'},away:{flag:'🇯🇵',name:'Japan'},pool:'—',days:'31d 4h'},
-        {date:'Jul 2',home:{flag:'🇫🇷',name:'France'},away:{flag:'🇧🇪',name:'Belgium'},pool:'—',days:'32d'},
-        {date:'Jul 2',home:{flag:'🇪🇸',name:'Spain'},away:{flag:'🇳🇱',name:'Netherlands'},pool:'—',days:'32d 4h'},
+        {date:'Jul 1',hFlag:'🇧🇷',hCode:'BRA',aFlag:'🇩🇰',aCode:'DEN'},
+        {date:'Jul 1',hFlag:'🇦🇷',hCode:'ARG',aFlag:'🇯🇵',aCode:'JPN'},
+        {date:'Jul 2',hFlag:'🇫🇷',hCode:'FRA',aFlag:'🇧🇪',aCode:'BEL'},
+        {date:'Jul 2',hFlag:'🇪🇸',hCode:'ESP',aFlag:'🇳🇱',aCode:'NED'},
+        {date:'Jul 3',hFlag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',hCode:'ENG',aFlag:'🇵🇹',aCode:'POR'},
+        {date:'Jul 3',hFlag:'🇺🇸',hCode:'USA',aFlag:'🇲🇽',aCode:'MEX'},
       ]},
       { stage:'Quarter-Finals', games:[
-        {date:'Jul 9',home:{flag:'🇧🇷',name:'Brazil'},away:{flag:'🇫🇷',name:'France'},pool:'—',days:'39d'},
-        {date:'Jul 9',home:{flag:'🇦🇷',name:'Argentina'},away:{flag:'🇪🇸',name:'Spain'},pool:'—',days:'39d 4h'},
+        {date:'Jul 9',hFlag:'🇧🇷',hCode:'BRA',aFlag:'🇫🇷',aCode:'FRA'},
+        {date:'Jul 9',hFlag:'🇦🇷',hCode:'ARG',aFlag:'🇪🇸',aCode:'ESP'},
+        {date:'Jul 10',hFlag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',hCode:'ENG',aFlag:'🇳🇱',aCode:'NED'},
+        {date:'Jul 10',hFlag:'🇺🇸',hCode:'USA',aFlag:'🇩🇰',aCode:'DEN'},
       ]},
       { stage:'Semi-Finals', games:[
-        {date:'Jul 14',home:{flag:'🇧🇷',name:'Brazil'},away:{flag:'🇦🇷',name:'Argentina'},pool:'—',days:'44d'},
+        {date:'Jul 14',hFlag:'🇧🇷',hCode:'BRA',aFlag:'🇦🇷',aCode:'ARG'},
+        {date:'Jul 15',hFlag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',hCode:'ENG',aFlag:'🇺🇸',aCode:'USA'},
       ]},
-      { stage:'The Final', games:[
-        {date:'Jul 19',home:{flag:'🇧🇷',name:'Brazil'},away:{flag:'🇫🇷',name:'France'},pool:'—',days:'49d'},
+      { stage:'🏆 The Final', games:[
+        {date:'Jul 19',hFlag:'🇧🇷',hCode:'BRA',aFlag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',aCode:'ENG'},
       ]},
     ];
 
-    // ---- NAVIGATION ----
+    // ===================== NAV =====================
     function showPage(page) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById('page-' + page).classList.add('active');
+      document.getElementById('page-'+page).classList.add('active');
       document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-      const navEl = document.getElementById('nav-' + page);
-      if (navEl) navEl.classList.add('active');
+      const n = document.getElementById('nav-'+page);
+      if(n) n.classList.add('active');
       window.scrollTo(0,0);
-      if (page === 'groups') renderGroups();
-      if (page === 'matches') renderMatches();
-      if (page === 'tokens') renderTokens();
+      if(page==='groups') renderGroups();
+      if(page==='matches') renderMatches();
+      if(page==='tokens') renderTokens();
     }
 
-    // ---- MODALS ----
-    function showWalletModal() { document.getElementById('wallet-modal').classList.add('open'); }
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-    function showBuyModal(name, ticker, group) {
-      document.getElementById('buy-modal-title').textContent = 'Buy ' + ticker;
-      document.getElementById('buy-modal-desc').textContent = 'Purchase ' + name + ' tokens through Mundial to qualify for Group ' + group + ' pool payouts and all knockout round pools.';
+    // ===================== MODAL =====================
+    function showBuyModal(code, name, group) {
+      const t = allTokens.find(x => x.code===code) || {flag:'⚽',code,name,group};
+      document.getElementById('modal-flag').textContent = t.flag;
+      document.getElementById('modal-code').textContent = '$'+code;
+      document.getElementById('modal-name').textContent = name;
+      document.getElementById('modal-desc').textContent =
+        group !== '—'
+          ? 'Purchase '+name+' ('+code+') tokens through Mundial to qualify for Group '+group+' pool payouts and all knockout round pools your team reaches.'
+          : 'The platform token. Stake $MUNDIAL to earn SOL yield from all 48 country token trading fees across the tournament.';
       document.getElementById('buy-modal').classList.add('open');
     }
-    document.querySelectorAll('.modal-overlay').forEach(m => {
-      m.addEventListener('click', e => { if(e.target === m) m.classList.remove('open'); });
-    });
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); }));
 
-    // ---- GROUPS PAGE ----
+    // ===================== TICKER =====================
+    function buildTicker() {
+      const items = allTokens.map(t => `<div class="ticker-item"><span>${t.flag}</span> ${t.code} <span class="ticker-sep">·</span> <button class="buy-pill" onclick="showBuyModal('${t.code}','${t.name}','${t.group}')">Buy</button></div>`).join('');
+      const el = document.getElementById('main-ticker');
+      el.innerHTML = items + items;
+    }
+
+    // ===================== HOME GROUPS =====================
+    function buildHomeGroups() {
+      const grid = document.getElementById('home-groups-grid');
+      grid.innerHTML = groups.slice(0,4).map(g => `
+        <div class="group-card" onclick="showPage('groups')">
+          <div class="group-header-bar"><span class="group-letter">GROUP ${g.letter}</span><span class="group-pool-amt">Pool: Pre-launch</span></div>
+          ${g.teams.map(t => `
+            <div class="team-row">
+              <span class="flag-circle sm">${t.flag}</span>
+              <span class="team-code">${t.code}</span>
+              <span class="team-name-sm">${t.name}</span>
+              <button class="buy-pill" onclick="event.stopPropagation();showBuyModal('${t.code}','${t.name}','${g.letter}')">Buy</button>
+            </div>
+          `).join('')}
+        </div>
+      `).join('') + `<div class="group-card" style="display:flex;align-items:center;justify-content:center;min-height:200px;cursor:pointer" onclick="showPage('groups')"><div style="text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:rgba(245,197,24,0.15);margin-bottom:12px">+8</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:0.82rem;color:var(--muted2);letter-spacing:0.06em;text-transform:uppercase">More Groups</div><div style="margin-top:16px"><span class="buy-pill">View All →</span></div></div></div>`;
+    }
+
+    // ===================== GROUPS PAGE =====================
     function renderGroups() {
       const el = document.getElementById('groups-full-list');
       el.innerHTML = groups.map(g => `
         <div class="group-full-card">
           <div class="group-full-header">
             <span class="group-full-letter">GROUP ${g.letter}</span>
-            <span class="group-full-pool">Pool: <span>Pre-launch</span> &nbsp;·&nbsp; Payouts: 1st 45% / 2nd 30% / 3rd 10% / 4th → $MUNDIAL</span>
+            <span class="group-full-meta">Pool: Pre-launch &nbsp;·&nbsp; 1st 45% / 2nd 30% / 3rd 10% / 4th → $MUNDIAL</span>
           </div>
           <div class="group-full-teams">
-            ${g.teams.map((t,i) => `
-              <div class="team-full-card" onclick="showBuyModal('${t.name}','${t.ticker}','${g.letter}')">
-                <span class="team-full-flag">${t.flag}</span>
+            ${g.teams.map(t => `
+              <div class="team-full-card">
+                <div class="team-full-flag-wrap"><div class="flag-circle xl" style="margin:0 auto">${t.flag}</div></div>
                 <div class="team-full-name">${t.name}</div>
-                <div class="team-full-ticker">${t.ticker}</div>
-                <div class="team-pool-bar"><div class="team-pool-fill" style="width:${t.share}%"></div></div>
-                <div class="team-pool-pct">${t.share}% of pool interest</div>
+                <span class="team-full-code">${t.code}</span>
+                <button class="team-buy-btn" onclick="showBuyModal('${t.code}','${t.name}','${g.letter}')">⚡ Buy $${t.code}</button>
               </div>
             `).join('')}
           </div>
-          <div class="group-payout-note">
+          <div class="group-payout-bar">
             <span class="payout-pill pill-1">🥇 1st → 45%</span>
             <span class="payout-pill pill-2">🥈 2nd → 30%</span>
             <span class="payout-pill pill-3">🥉 3rd → 10%</span>
@@ -813,133 +662,83 @@
       `).join('');
     }
 
-    // ---- MATCHES PAGE ----
+    // ===================== MATCHES PAGE =====================
     function renderMatches() {
       const el = document.getElementById('matches-list');
       el.innerHTML = matches.map(s => `
         <div class="stage-section">
           <div class="stage-title">${s.stage}</div>
-          <div class="matches-grid">
-            ${s.games.map(m => `
-              <div class="match-card">
-                <div class="match-date">${m.date}</div>
-                <div class="match-teams">
-                  <div class="match-team">
-                    <span class="match-team-flag">${m.home.flag}</span>
-                    <span class="match-team-name">${m.home.name}</span>
-                  </div>
-                  <div class="match-vs">VS</div>
-                  <div class="match-team">
-                    <span class="match-team-name">${m.away.name}</span>
-                    <span class="match-team-flag">${m.away.flag}</span>
-                  </div>
+          ${s.games.map(m => `
+            <div class="match-card">
+              <div class="match-date">${m.date}</div>
+              <div class="match-teams">
+                <div class="match-team">
+                  <span class="flag-circle sm">${m.hFlag}</span>
+                  <span class="match-team-code">${m.hCode}</span>
                 </div>
-                <div class="match-pool">
-                  <div class="match-pool-num">${m.pool}</div>
-                  <div class="match-pool-label">Match Pool</div>
+                <div class="match-vs">VS</div>
+                <div class="match-team">
+                  <span class="match-team-code">${m.aCode}</span>
+                  <span class="flag-circle sm">${m.aFlag}</span>
                 </div>
-                <div class="match-countdown">
-                  <div class="match-countdown-num">${m.days}</div>
-                  <div class="match-countdown-label">Until Kickoff</div>
-                </div>
-                <span class="match-status status-upcoming">Upcoming</span>
               </div>
-            `).join('')}
-          </div>
+              <div class="match-actions">
+                <button class="buy-pill" onclick="showBuyModal('${m.hCode}','${m.hCode}','—')">Buy $${m.hCode}</button>
+                <button class="buy-pill" onclick="showBuyModal('${m.aCode}','${m.aCode}','—')">Buy $${m.aCode}</button>
+              </div>
+              <span class="match-status status-upcoming">Upcoming</span>
+            </div>
+          `).join('')}
         </div>
       `).join('');
     }
 
-    // ---- TOKENS PAGE ----
-    function renderTokens() {
-      displayTokens(allTokens);
-    }
+    // ===================== TOKENS PAGE =====================
+    function renderTokens() { displayTokens(allTokens); }
     function displayTokens(tokens) {
-      const grid = document.getElementById('tokens-grid');
-      grid.innerHTML = tokens.map(t => `
-        <div class="token-card" onclick="showBuyModal('${t.name}','${t.ticker}','${t.group}')">
+      document.getElementById('tokens-grid').innerHTML = tokens.map(t => `
+        <div class="token-card">
           <div class="tc-top">
-            <div class="tc-info">
-              <span class="tc-flag">${t.flag}</span>
-              <div>
-                <div class="tc-name">${t.name}</div>
-                <div class="tc-ticker">${t.ticker}</div>
-              </div>
+            <div class="flag-circle lg">${t.flag}</div>
+            <div class="tc-meta">
+              <div class="tc-code">${t.code}</div>
+              <div class="tc-name">${t.name}</div>
+              <span class="tc-group-badge">Group ${t.group}</span>
             </div>
-            <span class="tc-group">Group ${t.group}</span>
           </div>
           <div class="tc-stats">
-            <div>
-              <div class="tc-stat-val" style="color:var(--gold)">TBA</div>
-              <div class="tc-stat-key">Launch Price</div>
-            </div>
-            <div>
-              <div class="tc-stat-val">—</div>
-              <div class="tc-stat-key">Pool Size</div>
-            </div>
-            <div>
-              <div class="tc-stat-val">pump.fun</div>
-              <div class="tc-stat-key">Platform</div>
-            </div>
-            <div>
-              <div class="tc-stat-val" style="color:var(--green)">Open</div>
-              <div class="tc-stat-key">Status</div>
-            </div>
+            <div><div class="tc-stat-val" style="color:var(--gold)">TBA</div><div class="tc-stat-key">Launch Price</div></div>
+            <div><div class="tc-stat-val">—</div><div class="tc-stat-key">Pool Size</div></div>
+            <div><div class="tc-stat-val">pump.fun</div><div class="tc-stat-key">Platform</div></div>
+            <div><div class="tc-stat-val" style="color:var(--green)">Open</div><div class="tc-stat-key">Status</div></div>
           </div>
-          <button class="tc-buy-btn">Buy ${t.ticker} →</button>
+          <button class="tc-buy-btn" onclick="showBuyModal('${t.code}','${t.name}','${t.group}')">⚡ Buy $${t.code}</button>
         </div>
       `).join('');
     }
     function filterTokens() {
       const q = document.getElementById('token-search').value.toLowerCase();
-      const filtered = allTokens.filter(t => t.name.toLowerCase().includes(q) || t.ticker.toLowerCase().includes(q));
-      displayTokens(filtered);
+      displayTokens(allTokens.filter(t => t.name.toLowerCase().includes(q) || t.code.toLowerCase().includes(q)));
     }
 
-    // ---- COUNTDOWN ----
+    // ===================== COUNTDOWN =====================
     function updateCountdown() {
-      const target = new Date('2026-06-11T16:00:00Z');
-      const now = new Date();
-      const diff = target - now;
-      if (diff <= 0) { document.querySelector('.hero-countdown').style.display='none'; return; }
-      const d = Math.floor(diff/86400000);
-      const h = Math.floor((diff%86400000)/3600000);
-      const m = Math.floor((diff%3600000)/60000);
-      const s = Math.floor((diff%60000)/1000);
-      document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
-      document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
-      document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
-      document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
+      const diff = new Date('2026-06-11T16:00:00Z') - new Date();
+      if(diff<=0){document.querySelector('.hero-countdown').style.display='none';return;}
+      document.getElementById('cd-days').textContent = String(Math.floor(diff/86400000)).padStart(2,'0');
+      document.getElementById('cd-hours').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+      document.getElementById('cd-mins').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+      document.getElementById('cd-secs').textContent = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
     }
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+    setInterval(updateCountdown,1000); updateCountdown();
 
-    // ---- WAITLIST ----
-    function joinWaitlist() {
-      showPage('home');
-      setTimeout(() => {
-        document.querySelector('.waitlist-section').scrollIntoView({behavior:'smooth'});
-      }, 100);
-    }
-    document.getElementById && document.getElementById('waitlist-email') && (function(){
-      const btn = document.querySelector('.waitlist-form .btn-gold');
-      if(!btn) return;
-      btn.addEventListener('click', function() {
-        const email = document.getElementById('waitlist-email').value;
-        if (!email || !email.includes('@')) { alert('Please enter a valid email'); return; }
-        document.getElementById('waitlist-count').innerHTML = '⚽ <span>' + (848 + Math.floor(Math.random()*3)) + '</span> fans already registered';
-        document.getElementById('waitlist-email').value = '';
-        btn.textContent = '✓ Joined!';
-        btn.style.background = 'var(--green)';
-        setTimeout(() => { btn.textContent = 'Join →'; btn.style.background = ''; }, 3000);
-      });
-    })();
-
-    // ---- SCROLL REVEAL ----
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-    }, {threshold:0.08});
+    // ===================== REVEAL =====================
+    const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.08});
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // ===================== INIT =====================
+    buildTicker();
+    buildHomeGroups();
   </script>
 </body>
 </html>
