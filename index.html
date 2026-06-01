@@ -336,11 +336,11 @@
       <span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted2)" id="mundial-price">LIVE</span>
     </div>
     <ul class="nav-links">
-      <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
-      <li><a onclick="showPage('groups')" id="nav-groups">Groups</a></li>
-      <li><a onclick="showPage('matches')" id="nav-matches">Matches</a></li>
-      <li><a onclick="showPage('tokens')" id="nav-tokens">Tokens</a></li>
-      <li><a onclick="showPage('schedule')" id="nav-schedule">Schedule</a></li>
+      <li><a href="#home" onclick="showPage('home');return false;" id="nav-home" class="active">Home</a></li>
+      <li><a href="#groups" onclick="showPage('groups');return false;" id="nav-groups">Groups</a></li>
+      <li><a href="#matches" onclick="showPage('matches');return false;" id="nav-matches">Matches</a></li>
+      <li><a href="#tokens" onclick="showPage('tokens');return false;" id="nav-tokens">Tokens</a></li>
+      <li><a href="#schedule" onclick="showPage('schedule');return false;" id="nav-schedule">Schedule</a></li>
       <li><a href="claim.html">Claim</a></li>
     </ul>
     <div class="nav-right">
@@ -383,7 +383,7 @@
               <div class="hero-card-stat-label">Nations</div>
             </div>
             <div class="hero-card-stat">
-              <div class="hero-card-stat-num">64</div>
+              <div class="hero-card-stat-num">104</div>
               <div class="hero-card-stat-label">Matches</div>
             </div>
             <div class="hero-card-stat">
@@ -403,10 +403,10 @@
       <h2>Simple.<br>On-chain.<br>Ruthless.</h2>
       <div class="how-grid">
         <div class="how-card"><div class="how-num">01</div><span class="how-icon">🪙</span><h3>Buy Your Nation</h3><p>Every nation has a token using the official 3-letter FIFA code — ARG, BRA, ENG, AUS. The flag is the token identity. 1% creator reward is set at launch on pump.fun — 0.5% funds the group pool, 0.25% the champion pool, 0.25% the platform.</p></div>
-        <div class="how-card"><div class="how-num">02</div><span class="how-icon">📊</span><h3>Group Stage Pools</h3><p>All 4 teams in each group share a prize pool fed by 0.5% of every trade on any platform. 1st takes 50%, 2nd 25%, 3rd 15%. 4th place rolls to $MUNDIAL buyback &amp; burn.</p></div>
+        <div class="how-card"><div class="how-num">02</div><span class="how-icon">📊</span><h3>Group Stage Pools</h3><p>All 4 teams in each group share a prize pool fed by 0.5% of every trade on any platform. 1st takes 50%, 2nd 25%, 3rd 15%. 4th place share is used to buy back &amp; burn $MUNDIAL when group standings settle (12+ burn events across the tournament).</p></div>
         <div class="how-card"><div class="how-num">03</div><span class="how-icon">🏆</span><h3>Champion Pool</h3><p>0.25% of every trade on all 48 tokens builds the Champion Pool across 32 days. At the final whistle it pays out — 70% to the World Cup winner holders, 20% runner-up, 10% third place.</p></div>
         
-      <div class="how-card"><div class="how-num">04</div><span class="how-icon">🏆</span><h3>Champion Pool</h3><p>0.25% of every trade on all 48 tokens builds the Champion Pool across 32 days. At the final whistle — 70% to World Cup winner holders, 20% runner-up, 10% third place.</p></div>
+      <div class="how-card"><div class="how-num">04</div><span class="how-icon">💸</span><h3>Get Paid in SOL</h3><p>Payouts happen at two moments: end of the group stage and the final whistle. Holder snapshots are taken on-chain and SOL is distributed from the Mundial treasury straight to qualifying wallets. Follow <a href="https://x.com/Mundial2026_sol" target="_blank" style="color:var(--gold)">@Mundial2026_sol</a> for timing.</p></div>
       </div>
     </div>
 
@@ -447,7 +447,7 @@
             <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">🏅</span><div><div class="stage-name">Group 1st Place</div><div class="stage-sub">Per group pool</div></div></div><div class="payout-mult" style="color:var(--gold)">50%</div></div>
             <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">🥈</span><div><div class="stage-name">Group 2nd Place</div><div class="stage-sub">Per group pool</div></div></div><div class="payout-mult" style="color:var(--muted2)">25%</div></div>
             <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">🔄</span><div><div class="stage-name">Group 3rd Place</div><div class="stage-sub">May still progress</div></div></div><div class="payout-mult" style="color:var(--muted2)">15%</div></div>
-            <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">💀</span><div><div class="stage-name">Group 4th Place</div><div class="stage-sub">Eliminated</div></div></div><div class="payout-mult" style="color:var(--red)">→ Burn</div></div>
+            <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">💀</span><div><div class="stage-name">Group 4th Place</div><div class="stage-sub">Eliminated → 10% burns $MUNDIAL</div></div></div><div class="payout-mult" style="color:var(--red)">10% 🔥</div></div>
             <div style="padding:10px 22px 6px;display:flex;align-items:center;gap:10px">
               <div style="flex:1;height:1px;background:rgba(245,197,24,0.15)"></div>
               <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,197,24,0.5)">Champion Pool · Final Whistle</div>
@@ -492,7 +492,7 @@
 
     <footer>
       <div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div>
-      <ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="#" target="_blank">Telegram</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul>
+      <ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul>
       <div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Country tokens are speculative assets. Participate responsibly.</div>
     </footer>
   </div>
@@ -501,14 +501,14 @@
   <div class="page" id="page-groups">
     <div class="page-hero"><div class="section-tag">2026 World Cup</div><h1>All 12 <span style="color:var(--gold)">Groups.</span></h1><p>Each group has its own prize pool funded by 0.5% of every trade on that group's tokens — on any platform. Settles by final standing: 1st 50%, 2nd 25%, 3rd 15%, 4th burns to $MUNDIAL.</p></div>
     <div class="groups-page-inner" id="groups-full-list"></div>
-    <footer><div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div><ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="#" target="_blank">Telegram</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul><div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div></footer>
+    <footer><div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div><ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul><div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div></footer>
   </div>
 
   <!-- MATCHES PAGE -->
   <div class="page" id="page-matches">
     <div class="page-hero"><div class="section-tag">Match Schedule</div><h1>Every Match.<br><span style="color:var(--gold)">Every Pool.</span></h1><p>Group pools settle at the end of each group's final game. Knockout pools open after the previous whistle and close at kickoff.</p></div>
     <div class="matches-page-inner" id="matches-list"></div>
-    <footer><div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div><ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="#" target="_blank">Telegram</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul><div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div></footer>
+    <footer><div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div><ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul><div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div></footer>
   </div>
 
 
@@ -617,7 +617,7 @@
       <div class="schedule-row sr-kickoff">
         <div class="sr-date"><div class="sr-date-num">JUN 11</div><div class="sr-day">Wednesday</div></div>
         <div class="sr-content">
-          <div class="sr-title">⚽ WORLD CUP KICKOFF — ALL 48 NATIONS LIVE</div>
+          <div class="sr-title">⚽ WORLD CUP KICKOFF — JUNE 11</div>
           <div class="sr-nations">The tournament is on-chain · Group pools open · Champion pool building · Buy your nation</div>
         </div>
         <div class="sr-count">GO<br>LIVE</div>
@@ -628,7 +628,7 @@
       <div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div>
       <ul class="footer-links">
         <li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li>
-        <li><a href="#" target="_blank">Telegram</a></li>
+        
         <li><a href="https://pump.fun" target="_blank">pump.fun</a></li>
       </ul>
       <div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div>
@@ -645,7 +645,7 @@
       </div>
       <div class="tokens-grid" id="tokens-grid"></div>
     </div>
-    <footer><div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div><ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="#" target="_blank">Telegram</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul><div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div></footer>
+    <footer><div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div><ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul><div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div></footer>
   </div>
 
   <!-- BUY MODAL -->
@@ -809,7 +809,7 @@
     function closeSwapModal() {
       document.getElementById('buy-modal').classList.remove('open');
     }
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    function closeModal(id) { if(!id) { document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open')); return; } const el=document.getElementById(id); if(el) el.classList.remove('open'); }
 
     function showBuyModal(code, name, group) {
       const url = flagUrl(code, 64);
@@ -993,7 +993,10 @@
     // ===================== TOKENS PAGE =====================
     function renderTokens() { displayTokens(allTokens); }
     function displayTokens(tokens) {
-      document.getElementById('tokens-grid').innerHTML = tokens.map(t => `
+      if(!tokens || !Array.isArray(tokens)) tokens = allTokens;
+      const grid = document.getElementById('tokens-grid');
+      if(!grid) return;
+      grid.innerHTML = tokens.map(t => `
         <div class="token-card">
           <div class="tc-top">
             ${flagImg(t.code,'lg')}
@@ -1077,9 +1080,19 @@
     const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.08});
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
+    // ===================== HASH ROUTING =====================
+    function routeFromHash() {
+      const hash = (window.location.hash || '').replace('#','');
+      const valid = ['home','groups','matches','tokens','schedule'];
+      if (valid.includes(hash)) showPage(hash);
+      else showPage('home');
+    }
+    window.addEventListener('hashchange', routeFromHash);
+
     // ===================== INIT =====================
     buildTicker();
     buildHomeGroups();
+    routeFromHash();
   </script>
 </body>
 </html>
