@@ -751,28 +751,26 @@
     const allTokens = groups.flatMap(g => g.teams.map(t => ({...t, group:g.letter})));
 
     const matches = [
-      {stage:'Group Stage', games:[
-        {date:'Jun 11',hCode:'USA',aCode:'MEX'},{date:'Jun 12',hCode:'BRA',aCode:'ECU'},
-        {date:'Jun 12',hCode:'ARG',aCode:'COL'},{date:'Jun 13',hCode:'FRA',aCode:'SEN'},
-        {date:'Jun 13',hCode:'GER',aCode:'SUI'},{date:'Jun 14',hCode:'ESP',aCode:'TUR'},
-        {date:'Jun 14',hCode:'POR',aCode:'MAR'},{date:'Jun 15',hCode:'ENG',aCode:'IRN'},
-        {date:'Jun 15',hCode:'JPN',aCode:'KSA'},{date:'Jun 16',hCode:'AUS',aCode:'KOR'},
+      {stage:'Group Stage — Matchday 1', games:[
+        {date:'Jun 11',hCode:'USA',aCode:'MEX'},{date:'Jun 11',hCode:'CAN',aCode:'NZL'},
+        {date:'Jun 12',hCode:'BRA',aCode:'ECU'},{date:'Jun 12',hCode:'ARG',aCode:'COL'},
+        {date:'Jun 13',hCode:'FRA',aCode:'SEN'},{date:'Jun 13',hCode:'GER',aCode:'SUI'},
+        {date:'Jun 14',hCode:'ESP',aCode:'TUR'},{date:'Jun 14',hCode:'POR',aCode:'MAR'},
+        {date:'Jun 15',hCode:'ENG',aCode:'IRN'},{date:'Jun 15',hCode:'NED',aCode:'CRC'},
+        {date:'Jun 16',hCode:'JPN',aCode:'KSA'},{date:'Jun 16',hCode:'AUS',aCode:'KOR'},
       ]},
-      {stage:'Round of 32', games:[
-        {date:'Jul 1',hCode:'BRA',aCode:'DEN'},{date:'Jul 1',hCode:'ARG',aCode:'JPN'},
-        {date:'Jul 2',hCode:'FRA',aCode:'BEL'},{date:'Jul 2',hCode:'ESP',aCode:'NED'},
-        {date:'Jul 3',hCode:'ENG',aCode:'POR'},{date:'Jul 3',hCode:'USA',aCode:'MEX'},
+      {stage:'Group Stage — Matchday 2', games:[
+        {date:'Jun 17',hCode:'USA',aCode:'CAN'},{date:'Jun 17',hCode:'MEX',aCode:'NZL'},
+        {date:'Jun 18',hCode:'BRA',aCode:'ARG'},{date:'Jun 18',hCode:'COL',aCode:'ECU'},
+        {date:'Jun 19',hCode:'FRA',aCode:'GER'},{date:'Jun 19',hCode:'SUI',aCode:'SEN'},
+        {date:'Jun 20',hCode:'ESP',aCode:'POR'},{date:'Jun 20',hCode:'MAR',aCode:'TUR'},
       ]},
-      {stage:'Quarter-Finals', games:[
-        {date:'Jul 9',hCode:'BRA',aCode:'FRA'},{date:'Jul 9',hCode:'ARG',aCode:'ESP'},
-        {date:'Jul 10',hCode:'ENG',aCode:'NED'},{date:'Jul 10',hCode:'USA',aCode:'DEN'},
+      {stage:'Group Stage — Matchday 3', games:[
+        {date:'Jun 24',hCode:'BEL',aCode:'CRO'},{date:'Jun 24',hCode:'URU',aCode:'CMR'},
+        {date:'Jun 25',hCode:'DEN',aCode:'POL'},{date:'Jun 25',hCode:'TUN',aCode:'GHA'},
+        {date:'Jun 26',hCode:'ITA',aCode:'AUT'},{date:'Jun 26',hCode:'CHI',aCode:'COD'},
       ]},
-      {stage:'Semi-Finals', games:[
-        {date:'Jul 14',hCode:'BRA',aCode:'ARG'},{date:'Jul 15',hCode:'ENG',aCode:'USA'},
-      ]},
-      {stage:'🏆 The Final', games:[
-        {date:'Jul 19',hCode:'BRA',aCode:'ENG'},
-      ]},
+      {stage:'Knockouts — TBD', games:[], tbd:true, note:'Round of 32 through the Final. Brackets set once the group stage finishes on June 27. Pools and pairings will populate here live.'},
     ];
 
     // ===================== NAV =====================
@@ -797,6 +795,16 @@
     const tokenCAs = {
       MUNDIAL: 'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump',
     };
+
+    // Buy button helper — shows "Coming Soon" until token CA exists
+    function buyButton(code, name, group, cls) {
+      cls = cls || 'buy-pill';
+      if (tokenCAs[code]) {
+        return `<button class="${cls}" onclick="showBuyModal('${code}','${name.replace(/'/g,"\\'")}','${group}')">⚡ Buy $${code}</button>`;
+      }
+      return `<button class="${cls}" style="opacity:0.45;cursor:default" disabled>${code} · Coming Soon</button>`;
+    }
+
 
     function closeSwapModal() {
       document.getElementById('buy-modal').classList.remove('open');
@@ -885,7 +893,7 @@
     // ===================== TICKER =====================
     function buildTicker() {
       const items = allTokens.map(t =>
-        `<div class="ticker-item">${flagImg(t.code,'sm')} <strong>${t.code}</strong> <span class="ticker-sep">·</span> <button class="buy-pill" onclick="showBuyModal('${t.code}','${t.name}','${t.group}')">Buy</button></div>`
+        `<div class="ticker-item">${flagImg(t.code,'sm')} <strong>${t.code}</strong> <span class="ticker-sep">·</span> ${tokenCAs[t.code] ? `<button class="buy-pill" onclick="showBuyModal('${t.code}','${t.name}','${t.group}')">Buy</button>` : `<button class="buy-pill" style="opacity:0.4;cursor:default" disabled>Soon</button>`}</div>`
       ).join('');
       document.getElementById('main-ticker').innerHTML = items + items;
     }
@@ -902,7 +910,7 @@
               ${flagImg(t.code,'sm')}
               <span class="team-code-sm">${t.code}</span>
               <span class="team-name-sm">${t.name}</span>
-              <button class="buy-pill" onclick="event.stopPropagation();showBuyModal('${t.code}','${t.name}','${g.letter}')">Buy</button>
+              ${tokenCAs[t.code] ? `<button class="buy-pill" onclick="event.stopPropagation();showBuyModal('${t.code}','${t.name}','${g.letter}')">Buy</button>` : `<button class="buy-pill" style="opacity:0.4;cursor:default" disabled>Soon</button>`}
             </div>
           `).join('')}
         </div>
@@ -930,7 +938,7 @@
                 <div class="team-full-flag-wrap">${flagImg(t.code,'xl')}</div>
                 <div class="team-full-name">${t.name}</div>
                 <span class="team-full-code">${t.code}</span>
-                <button class="team-buy-btn" onclick="showBuyModal('${t.code}','${t.name}','${g.letter}')">⚡ Buy $${t.code}</button>
+                ${tokenCAs[t.code] ? `<button class="team-buy-btn" onclick="showBuyModal('${t.code}','${t.name}','${g.letter}')">⚡ Buy $${t.code}</button>` : `<button class="team-buy-btn" style="opacity:0.45;cursor:default;background:var(--surface2);color:var(--muted2)" disabled>Coming Soon</button>`}
               </div>
             `).join('')}
           </div>
@@ -946,10 +954,24 @@
 
     // ===================== MATCHES PAGE =====================
     function renderMatches() {
-      document.getElementById('matches-list').innerHTML = matches.map(s => `
+      document.getElementById('matches-list').innerHTML = matches.map(s => {
+        if (s.tbd) {
+          return `
+            <div class="stage-section">
+              <div class="stage-title">${s.stage}</div>
+              <div class="match-card" style="justify-content:center;padding:32px;text-align:center;flex-direction:column;gap:8px">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--muted2);letter-spacing:0.04em">Bracket Locks June 27</div>
+                <div style="color:var(--muted);font-size:0.85rem;max-width:440px;line-height:1.6">${s.note}</div>
+              </div>
+            </div>`;
+        }
+        return `
         <div class="stage-section">
           <div class="stage-title">${s.stage}</div>
-          ${s.games.map(m => `
+          ${s.games.map(m => {
+            const hLive = !!tokenCAs[m.hCode];
+            const aLive = !!tokenCAs[m.aCode];
+            return `
             <div class="match-card">
               <div class="match-date">${m.date}</div>
               <div class="match-teams">
@@ -958,14 +980,14 @@
                 <div class="match-team"><span class="match-team-code">${m.aCode}</span>${flagImg(m.aCode,'sm')}</div>
               </div>
               <div class="match-actions">
-                <button class="buy-pill" onclick="showBuyModal('${m.hCode}','${m.hCode}','—')">Buy $${m.hCode}</button>
-                <button class="buy-pill" onclick="showBuyModal('${m.aCode}','${m.aCode}','—')">Buy $${m.aCode}</button>
+                ${hLive ? `<button class="buy-pill" onclick="showBuyModal('${m.hCode}','${m.hCode}','—')">Buy $${m.hCode}</button>` : `<button class="buy-pill" style="opacity:0.4;cursor:default" disabled>$${m.hCode} Soon</button>`}
+                ${aLive ? `<button class="buy-pill" onclick="showBuyModal('${m.aCode}','${m.aCode}','—')">Buy $${m.aCode}</button>` : `<button class="buy-pill" style="opacity:0.4;cursor:default" disabled>$${m.aCode} Soon</button>`}
               </div>
               <span class="match-status status-upcoming">Upcoming</span>
             </div>
-          `).join('')}
+          `;}).join('')}
         </div>
-      `).join('');
+      `;}).join('');
     }
 
     // ===================== TOKENS PAGE =====================
@@ -985,9 +1007,9 @@
             <div><div class="tc-stat-val" style="color:var(--gold)">TBA</div><div class="tc-stat-key">Launch Price</div></div>
             <div><div class="tc-stat-val">—</div><div class="tc-stat-key">Pool Size</div></div>
             <div><div class="tc-stat-val">pump.fun</div><div class="tc-stat-key">Platform</div></div>
-            <div><div class="tc-stat-val" style="color:var(--green)">Open</div><div class="tc-stat-key">Status</div></div>
+            <div><div class="tc-stat-val" style="color:${tokenCAs[t.code] ? 'var(--green)' : 'var(--muted)'}">${tokenCAs[t.code] ? 'Live' : 'Soon'}</div><div class="tc-stat-key">Status</div></div>
           </div>
-          <button class="tc-buy-btn" onclick="showBuyModal('${t.code}','${t.name}','${t.group}')">⚡ Buy $${t.code}</button>
+          ${tokenCAs[t.code] ? `<button class="tc-buy-btn" onclick="showBuyModal('${t.code}','${t.name}','${t.group}')">⚡ Buy $${t.code}</button>` : `<button class="tc-buy-btn" style="opacity:0.45;cursor:default;background:var(--surface2);color:var(--muted2)" disabled>Coming Soon</button>`}
         </div>
       `).join('');
     }
