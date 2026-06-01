@@ -11,7 +11,7 @@
   <title>MUNDIAL — Back Your Nation. On-Chain. | mundial.gg</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
       --bg: #060709;
@@ -374,6 +374,11 @@
 
   <nav>
     <div class="nav-logo" onclick="showPage('home')">⚽ MUNDIAL</div>
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.2);border-radius:6px;padding:5px 12px;cursor:pointer" onclick="window.open('https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump','_blank')">
+      <div style="width:8px;height:8px;border-radius:50%;background:#00e676;animation:livePulse 2s ease-in-out infinite;flex-shrink:0"></div>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.06em;color:#f5c518">$MUNDIAL</span>
+      <span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted2)" id="mundial-price">LIVE</span>
+    </div>
     <ul class="nav-links">
       <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
       <li><a onclick="showPage('groups')" id="nav-groups">Groups</a></li>
@@ -385,7 +390,7 @@
     </ul>
     <div class="nav-right">
       <button class="btn-outline" onclick="showWalletModal()">Connect Wallet</button>
-      <button class="btn-gold" onclick="showBuyModal('MUNDIAL','Mundial Platform Token','—')">Buy $MUNDIAL</button>
+      <button class="btn-gold" onclick="window.open('https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump','_blank')">Buy $MUNDIAL</button>
     </div>
   </nav>
 
@@ -474,7 +479,7 @@
           <div class="mundial-token">
             <div class="mundial-token-header">
               <div class="mundial-logo">MUN<br>DIAL</div>
-              <div><div class="mundial-token-name">$MUNDIAL</div><div class="mundial-token-sub">Launched on pump.fun · Trades on Raydium</div></div>
+              <div><div class="mundial-token-name">$MUNDIAL</div><div class="mundial-token-sub">Live on pump.fun · <a href="https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump" target="_blank" style="color:var(--gold);text-decoration:none">Buy now →</a></div></div>
             </div>
             <p>The platform token. $MUNDIAL is bought and burned from the 4th place group pool shares — every group stage produces one losing nation whose pool allocation goes straight to $MUNDIAL. 12 groups = 12 burn events minimum.</p>
           </div>
@@ -558,7 +563,7 @@
       <h2>THE WORLD CUP<br>IS <span class="gold">ON-CHAIN.</span></h2>
       <p>48 nations. One tournament. Your money where your flag is.</p>
       <div class="cta-btns">
-        <button class="btn-gold-lg" onclick="showPage('tokens')">Pick Your Nation →</button>
+        <button class="btn-gold-lg" onclick="window.open('https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump','_blank')">Buy $MUNDIAL →</button>
         <button class="btn-outline-lg" onclick="showPage('groups')">View Groups</button>
       </div>
     </div>
@@ -1247,6 +1252,27 @@
         `).join('');
       });
     }
+
+
+    // ===================== MUNDIAL PRICE =====================
+    const MUNDIAL_CA = 'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump';
+    async function fetchMundialPrice() {
+      try {
+        const res = await fetch(`https://price.jup.ag/v6/price?ids=${MUNDIAL_CA}`);
+        const data = await res.json();
+        const price = data?.data?.[MUNDIAL_CA]?.price;
+        if(price) {
+          const el = document.getElementById('mundial-price');
+          if(el) el.textContent = price < 0.001 
+            ? '$'+price.toExponential(2) 
+            : '$'+parseFloat(price).toFixed(6);
+        }
+      } catch(e) {
+        // silently fail
+      }
+    }
+    fetchMundialPrice();
+    setInterval(fetchMundialPrice, 30000);
 
     // ===================== COUNTDOWN =====================
     function updateCountdown() {
