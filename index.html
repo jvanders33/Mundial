@@ -876,7 +876,6 @@
     // ===================== MODAL =====================
     // ===================== JUPITER SWAP MODAL =====================
     const MUNDIAL_CA = 'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump';
-    const SOL_MINT = 'So11111111111111111111111111111111111111112';
     let jupiterInitialised = false;
     let currentOutputMint = MUNDIAL_CA;
 
@@ -944,6 +943,11 @@
 
       if (loading) loading.style.display = 'none';
 
+      // Destroy previous instance if reinitialising
+      if (jupiterInitialised && window.Jupiter.close) {
+        window.Jupiter.close();
+      }
+
       window.Jupiter.init({
         displayMode: 'integrated',
         integratedTargetId: 'jupiter-terminal-container',
@@ -951,16 +955,24 @@
         strictTokenList: false,
         defaultExplorer: 'Solscan',
         formProps: {
-          initialInputMint: SOL_MINT,
+          initialInputMint: 'So11111111111111111111111111111111111111112',
           initialOutputMint: outputMint,
+          fixedOutputMint: false,
           initialSlippageBps: 100,
         },
         containerStyles: {
           borderRadius: '0',
           boxShadow: 'none',
-          background: 'transparent',
+          background: 'var(--surface)',
+          minHeight: '380px',
         },
         containerClassName: 'jupiter-mundial',
+        onSuccess: ({ txid }) => {
+          console.log('Swap success:', txid);
+        },
+        onSwapError: ({ error }) => {
+          console.log('Swap error:', error);
+        },
       });
       jupiterInitialised = true;
     }
