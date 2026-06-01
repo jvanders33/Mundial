@@ -113,10 +113,12 @@
   <a class="nav-logo" href="index.html">⚽ MUNDIAL</a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
-    <li><a href="index.html">Groups</a></li>
-    <li><a href="index.html">Tokens</a></li>
-    <li><a href="claim.html">Claim</a></li>
+    <li><a href="index.html#groups">Groups</a></li>
+    <li><a href="index.html#matches">Matches</a></li>
+    <li><a href="index.html#tokens">Tokens</a></li>
+    <li><a href="index.html#schedule">Schedule</a></li>
     <li><a href="banner.html" class="active">Banners</a></li>
+    <li><a href="claim.html">Claim</a></li>
   </ul>
   <button class="btn-gold" onclick="window.location.href='index.html'">Buy $MUNDIAL</button>
 </nav>
@@ -590,7 +592,7 @@ async function drawBanner(canvas, code) {
 
     ctx.font = `700 ${urlSize}px 'Bebas Neue',sans-serif`;
     ctx.fillStyle = s.accent; ctx.globalAlpha = 0.65;
-    ctx.fillText('MUNDIAL2026.VERCEL.APP', brX, Math.round(H*0.89));
+    ctx.fillText('MUNDIAL.GG', brX, Math.round(H*0.89));
 
     ctx.font = `600 ${Math.round(urlSize*0.78)}px 'Barlow Condensed',sans-serif`;
     ctx.fillStyle = 'white'; ctx.globalAlpha = 0.32;
