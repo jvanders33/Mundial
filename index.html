@@ -12,8 +12,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <!-- Jupiter Terminal -->
-  <script src="https://terminal.jup.ag/main-v2.js" data-preload defer></script>
   <style>
     :root {
       --bg: #060709;
@@ -179,8 +177,6 @@
     @keyframes arrowPulse { 0%,100%{opacity:0.25} 50%{opacity:0.7} }
     @keyframes livePulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
     @keyframes spin { to{transform:rotate(360deg)} }
-    .jupiter-mundial { background:transparent !important; }
-    #jupiter-terminal-container > div { background:transparent !important; }
 
     /* CTA */
     .cta-section { text-align:center; padding:100px 48px; position:relative; overflow:hidden; }
@@ -758,29 +754,39 @@
   <!-- BUY MODAL -->
   <!-- SWAP MODAL -->
   <div class="modal-overlay" id="buy-modal">
-    <div class="modal" style="width:min(480px,95vw);padding:0;overflow:hidden;background:var(--surface);border-radius:16px">
+    <div class="modal" style="width:min(460px,95vw);padding:0;overflow:hidden">
       <!-- Header -->
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--border)">
-        <div style="display:flex;align-items:center;gap:10px">
-          <img id="modal-flag-img" class="flag-img" style="width:36px;height:36px" src="" alt=""/>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 22px 16px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:12px">
+          <img id="modal-flag-img" class="flag-img" style="width:40px;height:40px" src="" alt=""/>
           <div>
-            <div class="modal-country-code" id="modal-code" style="font-size:1.2rem"></div>
-            <div class="modal-country-name" id="modal-name" style="font-size:0.72rem"></div>
+            <div class="modal-country-code" id="modal-code" style="font-size:1.3rem;line-height:1"></div>
+            <div class="modal-country-name" id="modal-name" style="font-size:0.72rem;margin-top:2px"></div>
           </div>
         </div>
-        <button class="modal-close" onclick="closeSwapModal()" style="position:static">✕</button>
+        <button class="modal-close" onclick="closeSwapModal()" style="position:static;font-size:1.2rem">✕</button>
       </div>
 
-      <!-- Jupiter Terminal container -->
-      <div id="jupiter-terminal-container" style="width:100%;min-height:420px;position:relative">
-        <div id="jupiter-loading" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:420px;gap:16px">
-          <div style="width:40px;height:40px;border-radius:50%;border:3px solid rgba(245,197,24,0.15);border-top-color:var(--gold);animation:spin 0.8s linear infinite"></div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;color:var(--muted2);letter-spacing:0.08em">Loading swap...</div>
+      <!-- Buy options -->
+      <div style="padding:24px 22px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:16px">Buy on your preferred platform</div>
+
+        <div style="display:flex;flex-direction:column;gap:10px" id="modal-buy-links">
+          <!-- populated by JS -->
+        </div>
+
+        <!-- CA copy -->
+        <div style="margin-top:20px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Contract Address</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div id="modal-ca" style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted2);word-break:break-all;line-height:1.5"></div>
+            <button onclick="copyCA()" style="background:none;border:1px solid var(--border);color:var(--muted2);cursor:pointer;padding:4px 10px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.06em;white-space:nowrap;transition:all 0.15s" id="copy-ca-btn">Copy</button>
+          </div>
         </div>
       </div>
 
       <!-- Pool note -->
-      <div style="padding:12px 18px 16px;border-top:1px solid var(--border)">
+      <div style="padding:0 22px 20px">
         <div style="background:rgba(245,197,24,0.06);border:1px solid rgba(245,197,24,0.15);border-radius:8px;padding:10px 13px;font-size:0.75rem;color:var(--muted2);line-height:1.6">
           ⚽ Every trade on every platform feeds the pool. <strong style="color:var(--gold)">Hold through the group stage to qualify for payouts.</strong>
         </div>
@@ -874,114 +880,80 @@
     }
 
     // ===================== MODAL =====================
-    // ===================== JUPITER SWAP MODAL =====================
+    // ===================== BUY MODAL =====================
     const MUNDIAL_CA = 'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump';
-    let jupiterInitialised = false;
-    let currentOutputMint = MUNDIAL_CA;
+    let currentModalCA = MUNDIAL_CA;
+
+    // Token CAs — add country token CAs here as they launch June 4-9
+    const tokenCAs = {
+      MUNDIAL: 'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump',
+    };
 
     function closeSwapModal() {
       document.getElementById('buy-modal').classList.remove('open');
     }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
     function showBuyModal(code, name, group) {
-      // Set header info
       const url = flagUrl(code, 64);
       document.getElementById('modal-flag-img').src = url;
       document.getElementById('modal-flag-img').alt = code;
       document.getElementById('modal-code').textContent = '$' + code;
       document.getElementById('modal-name').textContent = name;
 
-      // Determine output mint — for country tokens we use MUNDIAL CA as placeholder
-      // until individual CAs exist; for MUNDIAL use its CA directly
-      currentOutputMint = MUNDIAL_CA;
+      const ca = tokenCAs[code] || MUNDIAL_CA;
+      currentModalCA = ca;
+      document.getElementById('modal-ca').textContent = ca;
 
-      // Open modal
+      document.getElementById('modal-buy-links').innerHTML = `
+        <a href="https://pump.fun/coin/${ca}" target="_blank" rel="noopener"
+           style="display:flex;align-items:center;gap:12px;background:var(--gold);color:#000;padding:14px 18px;border-radius:8px;text-decoration:none">
+          <span style="font-size:1.2rem">⚡</span>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.06em">Buy on pump.fun</div>
+            <div style="font-size:0.72rem;opacity:0.65;font-family:'Barlow Condensed',sans-serif">Most liquidity · Recommended</div>
+          </div>
+          <span style="margin-left:auto">→</span>
+        </a>
+        <a href="https://jup.ag/swap/SOL-${ca}" target="_blank" rel="noopener"
+           style="display:flex;align-items:center;gap:12px;background:var(--surface2);color:var(--text);padding:14px 18px;border-radius:8px;text-decoration:none;border:1px solid var(--border)">
+          <span style="font-size:1.2rem">🪐</span>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.06em">Swap on Jupiter</div>
+            <div style="font-size:0.72rem;color:var(--muted2);font-family:'Barlow Condensed',sans-serif">Best price routing</div>
+          </div>
+          <span style="margin-left:auto;color:var(--muted)">→</span>
+        </a>
+        <a href="https://raydium.io/swap/?inputCurrency=sol&outputCurrency=${ca}" target="_blank" rel="noopener"
+           style="display:flex;align-items:center;gap:12px;background:var(--surface2);color:var(--text);padding:14px 18px;border-radius:8px;text-decoration:none;border:1px solid var(--border)">
+          <span style="font-size:1.2rem">☀️</span>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.06em">Swap on Raydium</div>
+            <div style="font-size:0.72rem;color:var(--muted2);font-family:'Barlow Condensed',sans-serif">AMM trading</div>
+          </div>
+          <span style="margin-left:auto;color:var(--muted)">→</span>
+        </a>`;
+
       document.getElementById('buy-modal').classList.add('open');
-
-      // Init or resume Jupiter Terminal
-      initJupiter(currentOutputMint);
     }
 
     function showWalletModal() {
       showBuyModal('MUNDIAL', 'Platform Token · Back Your Nation', '—');
     }
 
-    function initJupiter(outputMint) {
-      const loading = document.getElementById('jupiter-loading');
-      const container = document.getElementById('jupiter-terminal-container');
-
-      // Check if Jupiter Terminal loaded
-      if (typeof window.Jupiter === 'undefined') {
-        // Fallback — show manual buy options
-        if (loading) {
-          loading.innerHTML = `
-            <div style="padding:24px;width:100%;text-align:center">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:0.06em;margin-bottom:8px">BUY $MUNDIAL</div>
-              <div style="font-size:0.82rem;color:var(--muted2);margin-bottom:24px;line-height:1.6">Choose where to buy:</div>
-              <div style="display:flex;flex-direction:column;gap:10px;max-width:320px;margin:0 auto">
-                <a href="https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump" target="_blank" 
-                   style="display:block;background:var(--gold);color:#000;padding:14px;border-radius:8px;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.06em">
-                  ⚡ Buy on pump.fun
-                </a>
-                <a href="https://jup.ag/swap/SOL-DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump" target="_blank"
-                   style="display:block;background:rgba(255,255,255,0.06);color:white;padding:13px;border-radius:8px;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.06em;border:1px solid var(--border)">
-                  🪐 Swap on Jupiter
-                </a>
-                <a href="https://raydium.io/swap/?inputCurrency=sol&outputCurrency=DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump" target="_blank"
-                   style="display:block;background:rgba(255,255,255,0.06);color:white;padding:13px;border-radius:8px;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.06em;border:1px solid var(--border)">
-                  ☀️ Swap on Raydium
-                </a>
-              </div>
-              <div style="margin-top:20px;font-size:0.72rem;color:var(--muted);line-height:1.5">
-                CA: <span style="font-family:'DM Mono',monospace;color:var(--muted2);font-size:0.65rem">DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump</span>
-              </div>
-            </div>`;
-          loading.style.display = 'flex';
-        }
-        return;
-      }
-
-      if (loading) loading.style.display = 'none';
-
-      // Destroy previous instance if reinitialising
-      if (jupiterInitialised && window.Jupiter.close) {
-        window.Jupiter.close();
-      }
-
-      window.Jupiter.init({
-        displayMode: 'integrated',
-        integratedTargetId: 'jupiter-terminal-container',
-        endpoint: 'https://api.mainnet-beta.solana.com',
-        strictTokenList: false,
-        defaultExplorer: 'Solscan',
-        formProps: {
-          initialInputMint: 'So11111111111111111111111111111111111111112',
-          initialOutputMint: outputMint,
-          fixedOutputMint: false,
-          initialSlippageBps: 100,
-        },
-        containerStyles: {
-          borderRadius: '0',
-          boxShadow: 'none',
-          background: 'var(--surface)',
-          minHeight: '380px',
-        },
-        containerClassName: 'jupiter-mundial',
-        onSuccess: ({ txid }) => {
-          console.log('Swap success:', txid);
-        },
-        onSwapError: ({ error }) => {
-          console.log('Swap error:', error);
-        },
+    function copyCA() {
+      navigator.clipboard.writeText(currentModalCA).then(() => {
+        const btn = document.getElementById('copy-ca-btn');
+        btn.textContent = 'Copied!';
+        btn.style.color = 'var(--green)';
+        btn.style.borderColor = 'var(--green)';
+        setTimeout(() => { btn.textContent = 'Copy'; btn.style.color='var(--muted2)'; btn.style.borderColor='var(--border)'; }, 2000);
       });
-      jupiterInitialised = true;
     }
 
-    // Close on overlay click
     document.getElementById('buy-modal').addEventListener('click', e => {
       if (e.target === document.getElementById('buy-modal')) closeSwapModal();
     });
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
     // ===================== TICKER =====================
     function buildTicker() {
