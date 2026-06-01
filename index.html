@@ -62,7 +62,7 @@
 
     /* HERO */
     .hero { min-height:100vh; display:grid; grid-template-columns:1fr 480px; align-items:center; padding:0 48px; position:relative; overflow:hidden; gap:60px; }
-    .hero-left { display:flex; flex-direction:column; justify-content:center; }
+    .hero-left { display:flex; flex-direction:column; justify-content:center; gap:0; }
     .hero-right { display:flex; flex-direction:column; justify-content:center; align-items:flex-start; position:relative; z-index:2; }
     .countdown-card { background:rgba(13,15,28,0.75); border:1px solid rgba(245,197,24,0.2); border-radius:16px; padding:32px 28px; backdrop-filter:blur(20px); width:100%; }
     .countdown-card-label { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; display:flex; align-items:center; gap:8px; }
@@ -409,9 +409,9 @@
 
       <!-- LEFT — headline -->
       <div class="hero-left">
-        <div class="hero-eyebrow"><span class="eyebrow-line"></span>World Cup 2026 · On Solana · 48 Nations</div>
+        <div class="hero-eyebrow" style="margin-bottom:12px"><span class="eyebrow-line"></span>World Cup 2026 · On Solana · 48 Nations</div>
         <h1>BACK<br>YOUR<br><span class="gold">NATION.</span></h1>
-        <p class="hero-tagline" style="margin-top:24px"><strong>48 country tokens. One tournament. Real SOL payouts.</strong><br>Buy your nation's token, hold through the groups, claim when they win — or watch the losers fund your prize pool.</p>
+        <p class="hero-tagline" style="margin-top:20px;font-size:1.15rem"><strong>48 country tokens. One tournament. Real SOL payouts.</strong><br>Buy your nation's token, hold through the groups, claim when they win — or watch the losers fund your prize pool.</p>
         <div style="display:flex;gap:12px;margin-top:28px;position:relative">
           <button class="btn-gold-lg" onclick="showPage('tokens')" style="font-size:1rem;padding:13px 28px">Pick Your Nation →</button>
           <button class="btn-outline-lg" onclick="showPage('groups')" style="font-size:1rem;padding:12px 24px">View Groups</button>
@@ -455,7 +455,7 @@
       <div class="how-grid">
         <div class="how-card"><div class="how-num">01</div><span class="how-icon">🪙</span><h3>Buy Your Nation</h3><p>Every nation has a token using the official 3-letter FIFA code — ARG, BRA, ENG, AUS. The flag is the token identity. 1% creator reward is set at launch on pump.fun — 0.5% funds the group pool, 0.25% the champion pool, 0.25% the platform.</p></div>
         <div class="how-card"><div class="how-num">02</div><span class="how-icon">📊</span><h3>Group Stage Pools</h3><p>All 4 teams in each group share a prize pool fed by 0.5% of every trade on any platform. 1st takes 50%, 2nd 25%, 3rd 15%. 4th place rolls to $MUNDIAL buyback &amp; burn.</p></div>
-        <div class="how-card"><div class="how-num">03</div><span class="how-icon">⚔️</span><h3>Knockout Match Pools</h3><p>From Round of 32 onwards, every match has its own pool. Trade right up to kickoff. Winners claim 100% of the combined pool.</p></div>
+        <div class="how-card"><div class="how-num">03</div><span class="how-icon">🏆</span><h3>Champion Pool</h3><p>0.25% of every trade on all 48 tokens builds the Champion Pool across 32 days. At the final whistle it pays out — 70% to the World Cup winner holders, 20% runner-up, 10% third place.</p></div>
         <div class="how-card"><div class="how-num">04</div><span class="how-icon">🏆</span><h3>Champion Pool</h3><p>0.25% of every trade across all 48 tokens builds the Champion Pool for 32 days. At the final whistle it pays out to the top 3 nations — 70% to the winner, 20% to the runner-up, 10% to 3rd place.</p></div>
       </div>
     </div>
@@ -498,8 +498,11 @@
             <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">🥈</span><div><div class="stage-name">Group 2nd Place</div><div class="stage-sub">Per group pool</div></div></div><div class="payout-mult" style="color:var(--muted2)">25%</div></div>
             <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">🔄</span><div><div class="stage-name">Group 3rd Place</div><div class="stage-sub">May still progress</div></div></div><div class="payout-mult" style="color:var(--muted2)">15%</div></div>
             <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">💀</span><div><div class="stage-name">Group 4th Place</div><div class="stage-sub">Eliminated</div></div></div><div class="payout-mult" style="color:var(--red)">→ Burn</div></div>
-            <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">⚔️</span><div><div class="stage-name">Knockout Winner</div><div class="stage-sub">R32 through Final</div></div></div><div class="payout-mult" style="color:var(--green)">100%</div></div>
-            <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">💀</span><div><div class="stage-name">Knockout Loser</div><div class="stage-sub">48hr claim window</div></div></div><div class="payout-mult" style="color:var(--red)">→ $MUNDIAL</div></div>
+            <div style="padding:10px 22px 6px;display:flex;align-items:center;gap:10px">
+              <div style="flex:1;height:1px;background:rgba(245,197,24,0.15)"></div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,197,24,0.5)">Champion Pool · Final Whistle</div>
+              <div style="flex:1;height:1px;background:rgba(245,197,24,0.15)"></div>
+            </div>
             <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">🥇</span><div><div class="stage-name">Champion Pool — 1st</div><div class="stage-sub">World Cup Winner holders</div></div></div><div class="payout-mult" style="color:var(--gold)">70%</div></div>
             <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">🥈</span><div><div class="stage-name">Champion Pool — 2nd</div><div class="stage-sub">Runner-up holders</div></div></div><div class="payout-mult" style="color:var(--muted2)">20%</div></div>
             <div class="payout-row"><div class="payout-stage"><span style="font-size:1.1rem">🥉</span><div><div class="stage-name">Champion Pool — 3rd</div><div class="stage-sub">3rd place holders</div></div></div><div class="payout-mult" style="color:var(--muted2)">10%</div></div>
