@@ -12,6 +12,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <!-- Jupiter Terminal -->
+  <script src="https://terminal.jup.ag/main-v3.js" data-preload></script>
   <style>
     :root {
       --bg: #060709;
@@ -175,6 +177,10 @@
     .fw-node p { font-size:0.75rem; color:var(--muted2); line-height:1.5; }
     .fw-arrow { font-size:1.2rem; color:var(--gold); opacity:0.5; padding:0 6px; animation:arrowPulse 2s ease-in-out infinite; }
     @keyframes arrowPulse { 0%,100%{opacity:0.25} 50%{opacity:0.7} }
+    @keyframes livePulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .jupiter-mundial { background:transparent !important; }
+    #jupiter-terminal-container > div { background:transparent !important; }
 
     /* CTA */
     .cta-section { text-align:center; padding:100px 48px; position:relative; overflow:hidden; }
@@ -747,17 +753,35 @@
   </div>
 
   <!-- BUY MODAL -->
+  <!-- SWAP MODAL -->
   <div class="modal-overlay" id="buy-modal">
-    <div class="modal">
-      <button class="modal-close" onclick="closeModal('buy-modal')">✕</button>
-      <div class="modal-flag-row">
-        <img id="modal-flag-img" class="flag-img lg" src="" alt=""/>
-        <div><div class="modal-country-code" id="modal-code"></div><div class="modal-country-name" id="modal-name"></div></div>
+    <div class="modal" style="width:min(480px,95vw);padding:0;overflow:hidden;background:var(--surface);border-radius:16px">
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <img id="modal-flag-img" class="flag-img" style="width:36px;height:36px" src="" alt=""/>
+          <div>
+            <div class="modal-country-code" id="modal-code" style="font-size:1.2rem"></div>
+            <div class="modal-country-name" id="modal-name" style="font-size:0.72rem"></div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeSwapModal()" style="position:static">✕</button>
       </div>
-      <p id="modal-desc"></p>
-      <div class="modal-note">Every trade on every platform feeds the pool automatically via pump.fun's 1% creator reward. Buy on pump.fun, Raydium, or Jupiter — you're in the pool either way. <strong>Hold through the group stage to qualify for payouts.</strong></div>
-      <button class="btn-gold-lg" style="width:100%;margin-bottom:10px" onclick="window.open('https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump','_blank')">⚡ Buy $MUNDIAL on pump.fun →</button>
-      <button class="btn-outline-lg" style="width:100%;font-size:0.85rem" onclick="closeModal('buy-modal')">Cancel</button>
+
+      <!-- Jupiter Terminal container -->
+      <div id="jupiter-terminal-container" style="width:100%;min-height:420px;position:relative">
+        <div id="jupiter-loading" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:420px;gap:16px">
+          <div style="width:40px;height:40px;border-radius:50%;border:3px solid rgba(245,197,24,0.15);border-top-color:var(--gold);animation:spin 0.8s linear infinite"></div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;color:var(--muted2);letter-spacing:0.08em">Loading swap...</div>
+        </div>
+      </div>
+
+      <!-- Pool note -->
+      <div style="padding:12px 18px 16px;border-top:1px solid var(--border)">
+        <div style="background:rgba(245,197,24,0.06);border:1px solid rgba(245,197,24,0.15);border-radius:8px;padding:10px 13px;font-size:0.75rem;color:var(--muted2);line-height:1.6">
+          ⚽ Every trade on every platform feeds the pool. <strong style="color:var(--gold)">Hold through the group stage to qualify for payouts.</strong>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -847,20 +871,78 @@
     }
 
     // ===================== MODAL =====================
+    // ===================== JUPITER SWAP MODAL =====================
+    const MUNDIAL_CA = 'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump';
+    const SOL_MINT = 'So11111111111111111111111111111111111111112';
+    let jupiterInitialised = false;
+    let currentOutputMint = MUNDIAL_CA;
+
+    function closeSwapModal() {
+      document.getElementById('buy-modal').classList.remove('open');
+    }
+
     function showBuyModal(code, name, group) {
-      const url = flagUrl(code, 80);
+      // Set header info
+      const url = flagUrl(code, 64);
       document.getElementById('modal-flag-img').src = url;
       document.getElementById('modal-flag-img').alt = code;
-      document.getElementById('modal-code').textContent = '$'+code;
+      document.getElementById('modal-code').textContent = '$' + code;
       document.getElementById('modal-name').textContent = name;
-      document.getElementById('modal-desc').textContent = group !== '—'
-        ? 'Purchase '+name+' ('+code+') tokens through Mundial to qualify for Group '+group+' pool payouts and all knockout round pools your team reaches.'
-        : 'The platform token. Every country token trade burns $MUNDIAL and rewards holders with SOL yield throughout the tournament.';
+
+      // Determine output mint — for country tokens we use MUNDIAL CA as placeholder
+      // until individual CAs exist; for MUNDIAL use its CA directly
+      currentOutputMint = MUNDIAL_CA;
+
+      // Open modal
       document.getElementById('buy-modal').classList.add('open');
+
+      // Init or resume Jupiter Terminal
+      initJupiter(currentOutputMint);
     }
-    function showWalletModal() { showBuyModal('MUNDIAL','Connect your Solana wallet to buy and qualify for payouts','—'); }
+
+    function showWalletModal() {
+      showBuyModal('MUNDIAL', 'Platform Token · Back Your Nation', '—');
+    }
+
+    function initJupiter(outputMint) {
+      const loading = document.getElementById('jupiter-loading');
+      const container = document.getElementById('jupiter-terminal-container');
+
+      if (typeof window.Jupiter === 'undefined') {
+        // Jupiter not loaded yet — show loading then retry
+        if (loading) loading.style.display = 'flex';
+        setTimeout(() => initJupiter(outputMint), 800);
+        return;
+      }
+
+      if (loading) loading.style.display = 'none';
+
+      window.Jupiter.init({
+        displayMode: 'integrated',
+        integratedTargetId: 'jupiter-terminal-container',
+        endpoint: 'https://api.mainnet-beta.solana.com',
+        strictTokenList: false,
+        defaultExplorer: 'Solscan',
+        formProps: {
+          initialInputMint: SOL_MINT,
+          initialOutputMint: outputMint,
+          initialSlippageBps: 100,
+        },
+        containerStyles: {
+          borderRadius: '0',
+          boxShadow: 'none',
+          background: 'transparent',
+        },
+        containerClassName: 'jupiter-mundial',
+      });
+      jupiterInitialised = true;
+    }
+
+    // Close on overlay click
+    document.getElementById('buy-modal').addEventListener('click', e => {
+      if (e.target === document.getElementById('buy-modal')) closeSwapModal();
+    });
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-    document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); }));
 
     // ===================== TICKER =====================
     function buildTicker() {
