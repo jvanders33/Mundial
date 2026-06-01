@@ -344,7 +344,7 @@
       <li><a href="claim.html">Claim</a></li>
     </ul>
     <div class="nav-right">
-      <button class="btn-outline" onclick="showWalletModal()">Connect Wallet</button>
+      <button class="btn-outline" onclick="showWalletModal()">Buy / Connect</button>
       <button class="btn-gold" onclick="window.open('https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump','_blank')">Buy $MUNDIAL</button>
     </div>
   </nav>
@@ -469,7 +469,7 @@
         <div class="flywheel-nodes">
           <div class="fw-node"><span class="fw-node-icon">🌍</span><h4>Fans buy tokens</h4><p>48 tokens, unlimited buyers</p></div>
           <div class="fw-arrow">→</div>
-          <div class="fw-node"><span class="fw-node-icon">🔥</span><h4>2% fee captured</h4><p>Split to pools, burn, platform</p></div>
+          <div class="fw-node"><span class="fw-node-icon">🔥</span><h4>1% fee captured</h4><p>Split to pools, burn, platform</p></div>
           <div class="fw-arrow">→</div>
           <div class="fw-node"><span class="fw-node-icon">📈</span><h4>$MUNDIAL rises</h4><p>Buyback & burn every trade</p></div>
           <div class="fw-arrow">→</div>
@@ -522,7 +522,7 @@
     <div class="schedule-page-inner">
 
       <div class="schedule-stats">
-        <div class="ss-item"><div class="ss-num">49</div><div class="ss-label">Total Tokens</div></div>
+        <div class="ss-item"><div class="ss-num">48</div><div class="ss-label">Nation Tokens</div></div>
         <div class="ss-divider"></div>
         <div class="ss-item"><div class="ss-num">8</div><div class="ss-label">Launch Days</div></div>
         <div class="ss-divider"></div>
@@ -617,7 +617,7 @@
       <div class="schedule-row sr-kickoff">
         <div class="sr-date"><div class="sr-date-num">JUN 11</div><div class="sr-day">Wednesday</div></div>
         <div class="sr-content">
-          <div class="sr-title">⚽ WORLD CUP KICKOFF — ALL 49 TOKENS LIVE</div>
+          <div class="sr-title">⚽ WORLD CUP KICKOFF — ALL 48 NATIONS LIVE</div>
           <div class="sr-nations">The tournament is on-chain · Group pools open · Champion pool building · Buy your nation</div>
         </div>
         <div class="sr-count">GO<br>LIVE</div>
@@ -705,7 +705,7 @@
       DEN:'dk', POL:'pl', TUN:'tn', GHA:'gh',
       ITA:'it', AUT:'at', CHI:'cl', COD:'cd',
       SRB:'rs', CZE:'cz', PER:'pe', NGA:'ng',
-      EGY:'eg', SVK:'sk', RSA:'za',
+      EGY:'eg', SVK:'sk', RSA:'za', QAT:'qa',
       GRE:'gr', ROU:'ro', PAN:'pa', BFA:'bf',
     };
 
@@ -719,7 +719,7 @@
       CRO:'Croatia',URU:'Uruguay',CMR:'Cameroon',DEN:'Denmark',POL:'Poland',
       TUN:'Tunisia',GHA:'Ghana',ITA:'Italy',AUT:'Austria',CHI:'Chile',COD:'DR Congo',
       SRB:'Serbia',CZE:'Czech Republic',PER:'Peru',NGA:'Nigeria',EGY:'Egypt',
-      SVK:'Slovakia',RSA:'South Africa',GRE:'Greece',ROU:'Romania',PAN:'Panama',BFA:'Burkina Faso'
+      SVK:'Slovakia',RSA:'South Africa',QAT:'Qatar',GRE:'Greece',ROU:'Romania',PAN:'Panama',BFA:'Burkina Faso'
     };
 
     function flagUrl(code, size=64) {
@@ -745,7 +745,7 @@
       {letter:'H', teams:[{name:'Denmark',code:'DEN'},{name:'Poland',code:'POL'},{name:'Tunisia',code:'TUN'},{name:'Ghana',code:'GHA'}]},
       {letter:'I', teams:[{name:'Italy',code:'ITA'},{name:'Austria',code:'AUT'},{name:'Chile',code:'CHI'},{name:'DR Congo',code:'COD'}]},
       {letter:'J', teams:[{name:'Serbia',code:'SRB'},{name:'Czech Republic',code:'CZE'},{name:'Peru',code:'PER'},{name:'Nigeria',code:'NGA'}]},
-      {letter:'K', teams:[{name:'Egypt',code:'EGY'},{name:'Slovakia',code:'SVK'},{name:'South Africa',code:'RSA'},{name:'Uruguay',code:'URU'}]},
+      {letter:'K', teams:[{name:'Egypt',code:'EGY'},{name:'Slovakia',code:'SVK'},{name:'South Africa',code:'RSA'},{name:'Qatar',code:'QAT'}]},
       {letter:'L', teams:[{name:'Greece',code:'GRE'},{name:'Romania',code:'ROU'},{name:'Panama',code:'PAN'},{name:'Burkina Faso',code:'BFA'}]},
     ];
     const allTokens = groups.flatMap(g => g.teams.map(t => ({...t, group:g.letter})));
@@ -805,8 +805,10 @@
 
     function showBuyModal(code, name, group) {
       const url = flagUrl(code, 64);
-      document.getElementById('modal-flag-img').src = url;
-      document.getElementById('modal-flag-img').alt = code;
+      const mfi = document.getElementById('modal-flag-img');
+      mfi.src = url;
+      mfi.alt = code;
+      mfi.onerror = function(){ this.style.background='var(--surface2)'; this.style.border='1px solid var(--border)'; };
       document.getElementById('modal-code').textContent = '$' + code;
       document.getElementById('modal-name').textContent = name;
 
@@ -860,9 +862,25 @@
       });
     }
 
+
+    // ESC closes modals
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+      }
+    });
+
     document.getElementById('buy-modal').addEventListener('click', e => {
       if (e.target === document.getElementById('buy-modal')) closeSwapModal();
     });
+
+    // ESC closes modals
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+      }
+    });
+
 
     // ===================== TICKER =====================
     function buildTicker() {
@@ -986,7 +1004,7 @@
       'ef': ['ENG','NED','CRC','IRN','JPN','KOR','AUS','KSA'],
       'gh': ['BEL','CRO','URU','CMR','DEN','POL','TUN','GHA'],
       'ij': ['ITA','AUT','CHI','COD','SRB','CZE','PER','NGA'],
-      'kl': ['EGY','SVK','RSA','URU','GRE','ROU','PAN','BFA'],
+      'kl': ['EGY','SVK','RSA','QAT','GRE','ROU','PAN','BFA'],
     };
 
     function renderSchedule() {
