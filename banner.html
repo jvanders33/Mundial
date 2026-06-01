@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MUNDIAL — Banner Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:#060709; --surface:#0c0e12; --surface2:#12151c;
+      --border:rgba(255,255,255,0.06); --gold:#f5c518; --gold2:#e8a900;
+      --green:#00e676; --red:#ff1744; --text:#f0f2f5; --muted:#5a6070; --muted2:#8892a4;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh}
+    body::after{content:'';position:fixed;inset:0;z-index:1000;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;opacity:0.4}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(6,7,9,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.08em;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:10px}
+    .nav-links{display:flex;gap:28px;list-style:none}
+    .nav-links a{color:var(--muted2);text-decoration:none;font-size:0.82rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--gold)}
+    .btn-gold{background:var(--gold);color:#000;border:none;cursor:pointer;padding:10px 22px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.9rem;letter-spacing:0.06em;text-transform:uppercase;border-radius:4px;transition:all 0.15s}
+    .btn-gold:hover{background:var(--gold2);transform:translateY(-1px)}
+
+    .main{padding:90px 48px 80px;max-width:1400px;margin:0 auto}
+
+    /* PAGE HEADER */
+    .page-header{margin-bottom:48px}
+    .section-tag{font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+    .section-tag::before{content:'';width:24px;height:1px;background:var(--gold);opacity:0.6}
+    .page-header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,6vw,5rem);letter-spacing:0.03em;line-height:1;margin-bottom:16px}
+    .page-header h1 span{color:var(--gold)}
+    .page-header p{color:var(--muted2);font-size:1rem;max-width:600px;line-height:1.7}
+
+    /* CONTROLS BAR */
+    .controls-bar{display:flex;gap:16px;align-items:center;margin-bottom:36px;flex-wrap:wrap;padding:20px 24px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+    .ctrl-label{font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+    .ctrl-group{display:flex;flex-direction:column}
+    .ctrl-divider{width:1px;height:48px;background:var(--border);flex-shrink:0}
+    .style-pills{display:flex;gap:6px}
+    .style-pill{padding:8px 16px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted2);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+    .style-pill:hover{border-color:rgba(255,255,255,0.2);color:var(--text)}
+    .style-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(245,197,24,0.08)}
+    .style-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .format-pills{display:flex;gap:6px}
+    .format-pill{padding:8px 14px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted2);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.2s}
+    .format-pill:hover{border-color:rgba(255,255,255,0.2);color:var(--text)}
+    .format-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(245,197,24,0.08)}
+
+    .search-wrap{flex:1;min-width:180px}
+    .search-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:6px;font-family:'Barlow',sans-serif;font-size:0.88rem;outline:none;transition:border-color 0.2s}
+    .search-input:focus{border-color:rgba(245,197,24,0.4)}
+    .search-input::placeholder{color:var(--muted)}
+
+    .btn-dl-all{background:rgba(245,197,24,0.1);border:1px solid rgba(245,197,24,0.3);color:var(--gold);cursor:pointer;padding:10px 20px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.82rem;letter-spacing:0.06em;text-transform:uppercase;border-radius:6px;transition:all 0.2s;white-space:nowrap}
+    .btn-dl-all:hover{background:rgba(245,197,24,0.18)}
+
+    /* BANNER GRID */
+    .banner-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+
+    .banner-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color 0.2s,transform 0.2s}
+    .banner-card:hover{border-color:rgba(245,197,24,0.3);transform:translateY(-2px)}
+
+    .banner-canvas-wrap{position:relative;overflow:hidden;background:#000}
+    .banner-canvas-wrap canvas{width:100%;display:block}
+
+    .banner-card-footer{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .bcf-left{display:flex;align-items:center;gap:10px}
+    .bcf-flag{width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,0.1);flex-shrink:0}
+    .bcf-code{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:0.06em;color:var(--gold)}
+    .bcf-name{font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;color:var(--muted2);letter-spacing:0.04em;text-transform:uppercase}
+    .bcf-group{font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;color:var(--muted);padding:2px 6px;background:rgba(255,255,255,0.04);border-radius:4px;letter-spacing:0.04em}
+    .btn-dl-card{background:var(--gold);color:#000;border:none;cursor:pointer;padding:8px 16px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;border-radius:6px;transition:all 0.15s;white-space:nowrap;flex-shrink:0}
+    .btn-dl-card:hover{background:var(--gold2);transform:translateY(-1px)}
+
+    /* Loading state */
+    .loading-bar{height:3px;background:var(--border);border-radius:100px;overflow:hidden;margin-bottom:20px}
+    .loading-fill{height:100%;background:var(--gold);border-radius:100px;transition:width 0.3s ease;width:0%}
+    .loading-text{font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:20px}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:28px;right:28px;z-index:800;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all 0.3s ease;max-width:300px}
+    .toast.show{transform:translateY(0);opacity:1}
+    .toast-text strong{color:var(--green);display:block;font-family:'Barlow Condensed',sans-serif;font-size:0.88rem;letter-spacing:0.04em;text-transform:uppercase}
+    .toast-text span{font-size:0.78rem;color:var(--muted2)}
+
+    /* SHARE SECTION */
+    .share-section{background:rgba(245,197,24,0.04);border:1px solid rgba(245,197,24,0.12);border-radius:12px;padding:28px 32px;margin-bottom:40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+    .share-left h3{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.04em;margin-bottom:6px}
+    .share-left p{font-size:0.85rem;color:var(--muted2);line-height:1.6}
+    .share-left p strong{color:var(--gold)}
+    .share-pills{display:flex;gap:8px;flex-wrap:wrap}
+    .share-pill{padding:8px 16px;border-radius:100px;border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+    .share-pill.x{color:#fff;border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.04)}
+    .share-pill.x:hover{background:rgba(255,255,255,0.1)}
+    .share-pill.copy{color:var(--gold);border-color:rgba(245,197,24,0.3);background:rgba(245,197,24,0.06)}
+    .share-pill.copy:hover{background:rgba(245,197,24,0.14)}
+
+    footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-top:60px}
+    .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.08em;color:var(--gold)}
+    .footer-disclaimer{font-size:0.7rem;color:var(--muted);max-width:400px}
+
+    @media(max-width:900px){nav{padding:0 20px}.nav-links{display:none}.main{padding:90px 20px 60px}.banner-grid{grid-template-columns:1fr}.controls-bar{padding:14px}.ctrl-divider{display:none}footer{padding:24px;flex-direction:column;align-items:flex-start}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚽ MUNDIAL</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html">Groups</a></li>
+    <li><a href="index.html">Tokens</a></li>
+    <li><a href="claim.html">Claim</a></li>
+    <li><a href="banner.html" class="active">Banners</a></li>
+  </ul>
+  <button class="btn-gold" onclick="window.location.href='index.html'">Buy $MUNDIAL</button>
+</nav>
+
+<div class="main">
+
+  <div class="page-header">
+    <div class="section-tag">Fan Banners</div>
+    <h1>Back Your Nation. <span>Show The World.</span></h1>
+    <p>Download your country's official Mundial X banner. The circular flag IS the token — same image, same identity. Pick your style, download, post on X with <strong style="color:var(--gold)">#Mundial2026</strong> and back your team publicly.</p>
+  </div>
+
+  <!-- SHARE BAR -->
+  <div class="share-section">
+    <div class="share-left">
+      <h3>Post & Grow The Pool</h3>
+      <p>Every share brings more buyers to your nation's token — which grows the prize pool you're already in.<br>Tag <strong>@Mundial2026_sol</strong> and use <strong>#Mundial2026</strong> on every post.</p>
+    </div>
+    <div class="share-pills">
+      <a class="share-pill x" href="https://x.com/Mundial2026_sol" target="_blank">𝕏 Follow @Mundial2026_sol</a>
+      <button class="share-pill copy" onclick="copyHashtag()">📋 Copy Hashtags</button>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls-bar">
+    <div class="ctrl-group">
+      <div class="ctrl-label">Style</div>
+      <div class="style-pills">
+        <button class="style-pill active" onclick="setStyle('dark',this)"><span class="style-dot" style="background:#1a1a2e"></span>Dark Pitch</button>
+        <button class="style-pill" onclick="setStyle('gold',this)"><span class="style-dot" style="background:#f5c518"></span>Gold Strike</button>
+        <button class="style-pill" onclick="setStyle('flame',this)"><span class="style-dot" style="background:#ff1744"></span>Flame</button>
+        <button class="style-pill" onclick="setStyle('night',this)"><span class="style-dot" style="background:#7b61ff"></span>Night Game</button>
+        <button class="style-pill" onclick="setStyle('nation',this)"><span class="style-dot" style="background:conic-gradient(red,yellow,green,blue,red)"></span>Nation Colours</button>
+      </div>
+    </div>
+    <div class="ctrl-divider"></div>
+    <div class="ctrl-group">
+      <div class="ctrl-label">Format</div>
+      <div class="format-pills">
+        <button class="format-pill active" onclick="setFormat('twitter',this)">X Banner</button>
+        <button class="format-pill" onclick="setFormat('square',this)">Square</button>
+        <button class="format-pill" onclick="setFormat('story',this)">Story</button>
+      </div>
+    </div>
+    <div class="ctrl-divider"></div>
+    <div class="ctrl-group search-wrap">
+      <div class="ctrl-label">Search</div>
+      <input type="text" class="search-input" placeholder="Search nation or code..." id="search-input" oninput="filterBanners()"/>
+    </div>
+    <div class="ctrl-divider"></div>
+    <button class="btn-dl-all" onclick="downloadAll()">⬇ Download All 48</button>
+  </div>
+
+  <!-- LOADING BAR -->
+  <div class="loading-bar"><div class="loading-fill" id="loading-fill"></div></div>
+  <div class="loading-text" id="loading-text"></div>
+
+  <!-- BANNER GRID -->
+  <div class="banner-grid" id="banner-grid"></div>
+
+</div>
+
+<div class="toast" id="toast">
+  <span style="font-size:1.2rem">✅</span>
+  <div class="toast-text" id="toast-text"></div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚽ MUNDIAL</div>
+  <div class="footer-disclaimer">Banners are fan-made assets for community use. Not affiliated with FIFA or any national association. mundial2026.vercel.app · @Mundial2026_sol</div>
+</footer>
+
+<script>
+// ===================== DATA =====================
+const iso2 = {
+  USA:'us',MEX:'mx',CAN:'ca',NZL:'nz',BRA:'br',ARG:'ar',COL:'co',ECU:'ec',
+  FRA:'fr',GER:'de',SUI:'ch',SEN:'sn',ESP:'es',POR:'pt',MAR:'ma',TUR:'tr',
+  ENG:'gb-eng',NED:'nl',CRC:'cr',IRN:'ir',JPN:'jp',KOR:'kr',AUS:'au',KSA:'sa',
+  BEL:'be',CRO:'hr',URU:'uy',CMR:'cm',DEN:'dk',POL:'pl',TUN:'tn',GHA:'gh',
+  ITA:'it',AUT:'at',CHI:'cl',COD:'cd',SRB:'rs',CZE:'cz',PER:'pe',NGA:'ng',
+  EGY:'eg',SVK:'sk',RSA:'za',GRE:'gr',ROU:'ro',PAN:'pa',BFA:'bf'
+};
+const names = {
+  USA:'United States',MEX:'Mexico',CAN:'Canada',NZL:'New Zealand',BRA:'Brazil',
+  ARG:'Argentina',COL:'Colombia',ECU:'Ecuador',FRA:'France',GER:'Germany',
+  SUI:'Switzerland',SEN:'Senegal',ESP:'Spain',POR:'Portugal',MAR:'Morocco',
+  TUR:'Turkey',ENG:'England',NED:'Netherlands',CRC:'Costa Rica',IRN:'Iran',
+  JPN:'Japan',KOR:'South Korea',AUS:'Australia',KSA:'Saudi Arabia',BEL:'Belgium',
+  CRO:'Croatia',URU:'Uruguay',CMR:'Cameroon',DEN:'Denmark',POL:'Poland',
+  TUN:'Tunisia',GHA:'Ghana',ITA:'Italy',AUT:'Austria',CHI:'Chile',COD:'DR Congo',
+  SRB:'Serbia',CZE:'Czech Republic',PER:'Peru',NGA:'Nigeria',EGY:'Egypt',
+  SVK:'Slovakia',RSA:'South Africa',GRE:'Greece',ROU:'Romania',PAN:'Panama',BFA:'Burkina Faso'
+};
+const groupMap = {
+  USA:'A',MEX:'A',CAN:'A',NZL:'A',BRA:'B',ARG:'B',COL:'B',ECU:'B',
+  FRA:'C',GER:'C',SUI:'C',SEN:'C',ESP:'D',POR:'D',MAR:'D',TUR:'D',
+  ENG:'E',NED:'E',CRC:'E',IRN:'E',JPN:'F',KOR:'F',AUS:'F',KSA:'F',
+  BEL:'G',CRO:'G',URU:'G',CMR:'G',DEN:'H',POL:'H',TUN:'H',GHA:'H',
+  ITA:'I',AUT:'I',CHI:'I',COD:'I',SRB:'J',CZE:'J',PER:'J',NGA:'J',
+  EGY:'K',SVK:'K',RSA:'K',GRE:'L',ROU:'L',PAN:'L',BFA:'L'
+};
+// Nation-specific colour palettes
+const nationPalette = {
+  USA:{bg1:'#00050f',bg2:'#000a1a',accent:'#b22234',accent2:'#3c3b6e',glow:'rgba(60,59,110,0.3)'},
+  MEX:{bg1:'#000d00',bg2:'#001500',accent:'#006847',accent2:'#ce1126',glow:'rgba(0,104,71,0.32)'},
+  CAN:{bg1:'#0d0000',bg2:'#1a0000',accent:'#ff0000',accent2:'#ffffff',glow:'rgba(255,0,0,0.22)'},
+  NZL:{bg1:'#00000d',bg2:'#00001a',accent:'#00247d',accent2:'#cc142b',glow:'rgba(0,36,125,0.28)'},
+  BRA:{bg1:'#001200',bg2:'#003300',accent:'#009c3b',accent2:'#ffdf00',glow:'rgba(0,156,59,0.35)'},
+  ARG:{bg1:'#00001a',bg2:'#00082e',accent:'#74acdf',accent2:'#ffffff',glow:'rgba(116,172,223,0.32)'},
+  COL:{bg1:'#100d00',bg2:'#1a1200',accent:'#fcd116',accent2:'#003087',glow:'rgba(252,209,22,0.25)'},
+  ECU:{bg1:'#0f0a00',bg2:'#1a1200',accent:'#ffda00',accent2:'#0072c6',glow:'rgba(255,218,0,0.22)'},
+  FRA:{bg1:'#000818',bg2:'#00102a',accent:'#002395',accent2:'#ed2939',glow:'rgba(0,35,149,0.3)'},
+  GER:{bg1:'#0a0a0a',bg2:'#141414',accent:'#ffcc00',accent2:'#dd0000',glow:'rgba(255,204,0,0.22)'},
+  SUI:{bg1:'#0d0000',bg2:'#1a0000',accent:'#ff0000',accent2:'#ffffff',glow:'rgba(255,0,0,0.22)'},
+  SEN:{bg1:'#001a00',bg2:'#002800',accent:'#00853f',accent2:'#fdef42',glow:'rgba(0,133,63,0.3)'},
+  ESP:{bg1:'#1a0400',bg2:'#2e0800',accent:'#c60b1e',accent2:'#ffc400',glow:'rgba(198,11,30,0.32)'},
+  POR:{bg1:'#0a0500',bg2:'#1a0a00',accent:'#006600',accent2:'#ff0000',glow:'rgba(0,102,0,0.3)'},
+  MAR:{bg1:'#0a0000',bg2:'#150000',accent:'#c1272d',accent2:'#006233',glow:'rgba(193,39,45,0.28)'},
+  TUR:{bg1:'#0d0000',bg2:'#1a0000',accent:'#e30a17',accent2:'#ffffff',glow:'rgba(227,10,23,0.28)'},
+  ENG:{bg1:'#0a0003',bg2:'#18000c',accent:'#cf081f',accent2:'#ffffff',glow:'rgba(207,8,31,0.3)'},
+  NED:{bg1:'#100800',bg2:'#1a0f00',accent:'#ff6600',accent2:'#ffffff',glow:'rgba(255,102,0,0.28)'},
+  CRC:{bg1:'#00050d',bg2:'#000a18',accent:'#002b7f',accent2:'#ce1126',glow:'rgba(0,43,127,0.28)'},
+  IRN:{bg1:'#001500',bg2:'#002000',accent:'#239f40',accent2:'#da0000',glow:'rgba(35,159,64,0.28)'},
+  JPN:{bg1:'#0a0000',bg2:'#180000',accent:'#bc002d',accent2:'#ffffff',glow:'rgba(188,0,45,0.28)'},
+  KOR:{bg1:'#0a0002',bg2:'#180004',accent:'#cd2e3a',accent2:'#003478',glow:'rgba(205,46,58,0.28)'},
+  AUS:{bg1:'#000810',bg2:'#001020',accent:'#ffcd00',accent2:'#00008b',glow:'rgba(255,205,0,0.28)'},
+  KSA:{bg1:'#001500',bg2:'#002000',accent:'#006c35',accent2:'#ffffff',glow:'rgba(0,108,53,0.3)'},
+  BEL:{bg1:'#0a0000',bg2:'#150000',accent:'#ef3340',accent2:'#fdda24',glow:'rgba(239,51,64,0.28)'},
+  CRO:{bg1:'#0a0002',bg2:'#180004',accent:'#ff0000',accent2:'#ffffff',glow:'rgba(255,0,0,0.22)'},
+  URU:{bg1:'#00050d',bg2:'#00091a',accent:'#0038a8',accent2:'#ffffff',glow:'rgba(0,56,168,0.28)'},
+  CMR:{bg1:'#001000',bg2:'#001a00',accent:'#007a5e',accent2:'#ce1126',glow:'rgba(0,122,94,0.3)'},
+  DEN:{bg1:'#0d0000',bg2:'#1a0000',accent:'#c60c30',accent2:'#ffffff',glow:'rgba(198,12,48,0.28)'},
+  POL:{bg1:'#0a0000',bg2:'#150000',accent:'#dc143c',accent2:'#ffffff',glow:'rgba(220,20,60,0.25)'},
+  TUN:{bg1:'#0d0000',bg2:'#1a0000',accent:'#e70013',accent2:'#ffffff',glow:'rgba(231,0,19,0.25)'},
+  GHA:{bg1:'#0f0500',bg2:'#1a0a00',accent:'#006b3f',accent2:'#fcd116',glow:'rgba(252,209,22,0.25)'},
+  ITA:{bg1:'#001500',bg2:'#002200',accent:'#009246',accent2:'#ce2b37',glow:'rgba(0,146,70,0.28)'},
+  AUT:{bg1:'#0d0000',bg2:'#1a0000',accent:'#ed2939',accent2:'#ffffff',glow:'rgba(237,41,57,0.28)'},
+  CHI:{bg1:'#00000d',bg2:'#00001a',accent:'#d52b1e',accent2:'#ffffff',glow:'rgba(213,43,30,0.28)'},
+  COD:{bg1:'#000f00',bg2:'#001800',accent:'#007fff',accent2:'#f7d618',glow:'rgba(0,127,255,0.25)'},
+  SRB:{bg1:'#0d0000',bg2:'#1a0000',accent:'#c6363c',accent2:'#0c4076',glow:'rgba(198,54,60,0.28)'},
+  CZE:{bg1:'#00000d',bg2:'#00001a',accent:'#d7141a',accent2:'#11457e',glow:'rgba(215,20,26,0.28)'},
+  PER:{bg1:'#0d0000',bg2:'#1a0000',accent:'#d91023',accent2:'#ffffff',glow:'rgba(217,16,35,0.28)'},
+  NGA:{bg1:'#001500',bg2:'#002200',accent:'#008751',accent2:'#ffffff',glow:'rgba(0,135,81,0.3)'},
+  EGY:{bg1:'#0d0000',bg2:'#1a0000',accent:'#ce1126',accent2:'#ffffff',glow:'rgba(206,17,38,0.28)'},
+  SVK:{bg1:'#00000d',bg2:'#00001a',accent:'#0b4ea2',accent2:'#ee1c25',glow:'rgba(11,78,162,0.28)'},
+  RSA:{bg1:'#001500',bg2:'#002200',accent:'#007a4d',accent2:'#ffb612',glow:'rgba(0,122,77,0.3)'},
+  GRE:{bg1:'#00050d',bg2:'#000a1a',accent:'#0d5eaf',accent2:'#ffffff',glow:'rgba(13,94,175,0.28)'},
+  ROU:{bg1:'#00000a',bg2:'#000014',accent:'#002b7f',accent2:'#fcd116',glow:'rgba(252,209,22,0.22)'},
+  PAN:{bg1:'#00000d',bg2:'#00001a',accent:'#da121a',accent2:'#005293',glow:'rgba(218,18,26,0.28)'},
+  BFA:{bg1:'#0d0000',bg2:'#1a0000',accent:'#ef2b2d',accent2:'#009a00',glow:'rgba(239,43,45,0.28)'},
+};
+
+const globalStyles = {
+  dark: {bg1:'#060709',bg2:'#0d0f1c',accent:'#f5c518',accent2:'#ffffff',glow:'rgba(245,197,24,0.14)'},
+  gold: {bg1:'#1a1000',bg2:'#2a1a00',accent:'#f5c518',accent2:'#ffd700',glow:'rgba(245,197,24,0.28)'},
+  flame:{bg1:'#0d0000',bg2:'#1a0505',accent:'#ff1744',accent2:'#ff6b35',glow:'rgba(255,23,68,0.22)'},
+  night:{bg1:'#020208',bg2:'#08091a',accent:'#7b61ff',accent2:'#a08bff',glow:'rgba(123,97,255,0.2)'},
+};
+
+const taglines = {
+  USA:"IT'S OUR WORLD CUP. AND OUR SOL.",BRA:'THE BEAUTIFUL GAME. THE BIGGEST PRIZE.',
+  ARG:'DEFENDING CHAMPIONS. DEFENDING EVERYTHING.',ENG:"IT'S COMING HOME. AND SO IS THE SOL.",
+  AUS:'THE SOCCEROOS ARE ON-CHAIN.',MEX:'EL TRI ON THE BLOCKCHAIN.',
+  FRA:'LES BLEUS. LES POOLS. LES PAYOUTS.',GER:'EFFICIENCY ON AND OFF THE PITCH.',
+  ESP:'LA ROJA. BACKED ON-CHAIN.',POR:'BACK THE BEST. WIN THE REST.',
+  JPN:'THE SAMURAI BLUE GO DIGITAL.',KOR:'TAEGUK WARRIORS. REAL REWARDS.',
+  NED:'TOTAL FOOTBALL. TOTAL PAYOUT.',BEL:'THE GOLDEN GENERATION. GOLDEN RETURNS.',
+  URU:'PASSION. HISTORY. SOL.',ITA:'THE AZZURRI ARE BACK. SO IS YOUR WALLET.',
+  DEFAULT:'BACK YOUR NATION. WIN REAL SOL.',
+};
+
+const allCodes = Object.keys(names);
+const formats = {
+  twitter:{w:1200,h:400},
+  square:{w:800,h:800},
+  story:{w:600,h:1067},
+};
+
+// ===================== STATE =====================
+let activeStyle = 'nation'; // default to nation colours
+let activeFormat = 'twitter';
+let flagCache = {};
+let filteredCodes = [...allCodes];
+
+// ===================== FLAG LOADER =====================
+function loadFlag(code) {
+  if(flagCache[code]) return Promise.resolve(flagCache[code]);
+  return new Promise(resolve => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => { flagCache[code] = img; resolve(img); };
+    img.onerror = () => resolve(null);
+    img.src = `https://flagcdn.com/w320/${iso2[code]}.png`;
+  });
+}
+
+// Preload all flags
+function preloadAllFlags() {
+  return Promise.all(allCodes.map(c => loadFlag(c)));
+}
+
+// ===================== DRAW BANNER =====================
+async function drawBanner(canvas, code) {
+  const ctx = canvas.getContext('2d');
+  const fmt = formats[activeFormat];
+  const W = fmt.w, H = fmt.h;
+  canvas.width = W; canvas.height = H;
+
+  const s = activeStyle === 'nation'
+    ? (nationPalette[code] || globalStyles.dark)
+    : globalStyles[activeStyle];
+
+  const isStory = activeFormat === 'story';
+  const isSquare = activeFormat === 'square';
+
+  // ---- BG ----
+  const bg = ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0, s.bg1); bg.addColorStop(1, s.bg2);
+  ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+
+  // ---- GRID ----
+  ctx.strokeStyle='rgba(255,255,255,0.02)'; ctx.lineWidth=1;
+  for(let x=0;x<W;x+=Math.round(W/20)){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=Math.round(H/12)){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  // ---- FLAG POSITION ----
+  // Flag circle is the DOMINANT element — large and prominent
+  let flagCX, flagCY, flagR;
+  if(isStory) {
+    flagCX = W/2; flagCY = H*0.32; flagR = W*0.38;
+  } else if(isSquare) {
+    flagCX = W*0.68; flagCY = H*0.42; flagR = W*0.32;
+  } else {
+    // Twitter banner — flag on right, large
+    flagCX = W*0.74; flagCY = H*0.5; flagR = H*0.44;
+  }
+
+  // ---- PITCH RINGS (behind flag) ----
+  [flagR*1.55, flagR*1.25, flagR].forEach((r,i) => {
+    ctx.beginPath(); ctx.arc(flagCX, flagCY, r, 0, Math.PI*2);
+    ctx.strokeStyle = s.accent;
+    ctx.globalAlpha = 0.055 - i*0.012;
+    ctx.lineWidth = 1; ctx.stroke();
+  });
+  ctx.globalAlpha = 1;
+
+  // ---- GLOW behind flag ----
+  const gl = ctx.createRadialGradient(flagCX,flagCY,0,flagCX,flagCY,flagR*1.6);
+  gl.addColorStop(0, s.glow||'rgba(245,197,24,0.15)');
+  gl.addColorStop(1, 'transparent');
+  ctx.fillStyle=gl; ctx.fillRect(0,0,W,H);
+
+  // ---- FLAG IMAGE (BIG CIRCLE) ----
+  const flagImg = await loadFlag(code);
+  if(flagImg) {
+    // Shadow behind flag circle
+    ctx.save();
+    ctx.shadowColor = s.accent;
+    ctx.shadowBlur = 32;
+    ctx.beginPath(); ctx.arc(flagCX,flagCY,flagR,0,Math.PI*2);
+    ctx.fillStyle='transparent'; ctx.fill();
+    ctx.restore();
+
+    // Clip and draw flag
+    ctx.save();
+    ctx.beginPath(); ctx.arc(flagCX,flagCY,flagR,0,Math.PI*2); ctx.clip();
+    ctx.drawImage(flagImg, flagCX-flagR, flagCY-flagR, flagR*2, flagR*2);
+    ctx.restore();
+
+    // Subtle vignette inside flag
+    const vignet = ctx.createRadialGradient(flagCX,flagCY,flagR*0.5,flagCX,flagCY,flagR);
+    vignet.addColorStop(0,'transparent'); vignet.addColorStop(1,'rgba(0,0,0,0.18)');
+    ctx.save(); ctx.beginPath(); ctx.arc(flagCX,flagCY,flagR,0,Math.PI*2); ctx.clip();
+    ctx.fillStyle=vignet; ctx.fillRect(flagCX-flagR,flagCY-flagR,flagR*2,flagR*2);
+    ctx.restore();
+
+    // Flag border — gold ring (the token ring)
+    ctx.beginPath(); ctx.arc(flagCX,flagCY,flagR,0,Math.PI*2);
+    ctx.strokeStyle=s.accent; ctx.lineWidth=isStory?5:4; ctx.globalAlpha=1; ctx.stroke();
+    // Outer glow ring
+    ctx.beginPath(); ctx.arc(flagCX,flagCY,flagR+6,0,Math.PI*2);
+    ctx.strokeStyle=s.accent; ctx.lineWidth=1; ctx.globalAlpha=0.35; ctx.stroke();
+    ctx.beginPath(); ctx.arc(flagCX,flagCY,flagR+12,0,Math.PI*2);
+    ctx.strokeStyle=s.accent; ctx.lineWidth=0.5; ctx.globalAlpha=0.15; ctx.stroke();
+    ctx.globalAlpha=1;
+  }
+
+  // ---- LEFT TEXT FADE (twitter/square only) ----
+  if(!isStory) {
+    const fade = ctx.createLinearGradient(0,0,W,0);
+    fade.addColorStop(0, s.bg1);
+    fade.addColorStop(0.45, s.bg1+'ee');
+    fade.addColorStop(0.62, s.bg1+'55');
+    fade.addColorStop(0.78, 'transparent');
+    ctx.fillStyle=fade; ctx.fillRect(0,0,W,H);
+  }
+
+  // ---- BOTTOM FADE ----
+  const btm = ctx.createLinearGradient(0,0,0,H);
+  btm.addColorStop(isStory?0.55:0.45,'transparent');
+  btm.addColorStop(1,'rgba(0,0,0,0.72)');
+  ctx.fillStyle=btm; ctx.fillRect(0,0,W,H);
+
+  // ---- LEFT ACCENT BAR ----
+  const bar = ctx.createLinearGradient(0,0,0,H);
+  bar.addColorStop(0,s.accent2||'#fff'); bar.addColorStop(0.5,s.accent); bar.addColorStop(1,s.accent2||'#fff');
+  ctx.fillStyle=bar; ctx.fillRect(0,0,5,H);
+
+  // ---- TEXT ----
+  const tagline = taglines[code]||taglines.DEFAULT;
+  const grp = groupMap[code]||'?';
+  const fullName = (names[code]||code).toUpperCase();
+
+  if(isStory) {
+    // ---- STORY LAYOUT (centred, below flag) ----
+    const textY = H*0.62;
+    ctx.textAlign='center';
+
+    // MUNDIAL small
+    ctx.font=`700 ${Math.round(W*0.048)}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle=s.accent; ctx.globalAlpha=0.8;
+    ctx.fillText('MUNDIAL', W/2, textY);
+    ctx.globalAlpha=1;
+
+    // BIG CODE
+    ctx.font=`700 ${Math.round(W*0.3)}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle='white';
+    ctx.fillText(code, W/2, textY+W*0.3*0.78);
+
+    // Full name
+    ctx.font=`300 ${Math.round(W*0.055)}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle='white'; ctx.globalAlpha=0.5;
+    ctx.fillText(fullName, W/2, textY+W*0.3*0.78+W*0.07);
+    ctx.globalAlpha=1;
+
+    // Token pill
+    const pillW=W*0.32, pillH=H*0.038, pillX=W/2-pillW/2, pillY=textY+W*0.3*0.78+W*0.12;
+    ctx.fillStyle=s.accent; ctx.globalAlpha=0.15; roundRect(ctx,pillX,pillY,pillW,pillH,pillH/2); ctx.fill();
+    ctx.strokeStyle=s.accent; ctx.lineWidth=1.2; ctx.globalAlpha=0.6; roundRect(ctx,pillX,pillY,pillW,pillH,pillH/2); ctx.stroke();
+    ctx.globalAlpha=1;
+    ctx.font=`700 ${Math.round(W*0.04)}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle=s.accent;
+    ctx.fillText('$'+code+'  ·  GROUP '+grp, W/2, pillY+pillH*0.7);
+
+    // Tagline
+    ctx.font=`400 ${Math.round(W*0.032)}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle='white'; ctx.globalAlpha=0.36;
+    ctx.fillText(tagline, W/2, H*0.91);
+
+    // Handle
+    ctx.font=`700 ${Math.round(W*0.035)}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle=s.accent; ctx.globalAlpha=0.55;
+    ctx.fillText('@MUNDIAL2026_SOL', W/2, H*0.96);
+    ctx.globalAlpha=1;
+
+  } else {
+    // ---- TWITTER / SQUARE LAYOUT (left-aligned) ----
+    const tx = isSquare ? 44 : 52;
+    const codeSize = isSquare ? Math.round(H*0.52) : Math.round(H*0.54);
+    const topY = isSquare ? H*0.12 : H*0.12;
+
+    ctx.textAlign='left';
+
+    // MUNDIAL
+    ctx.font=`700 ${isSquare?14:13}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle=s.accent; ctx.globalAlpha=0.8;
+    ctx.fillText('MUNDIAL', tx, topY+16);
+    ctx.globalAlpha=0.18; ctx.fillStyle=s.accent;
+    ctx.fillRect(tx, topY+22, isSquare?200:180, 1);
+    ctx.globalAlpha=0.28; ctx.fillStyle='white';
+    ctx.font=`700 11px 'Bebas Neue',sans-serif`;
+    ctx.fillText('2026 WORLD CUP · SOLANA', tx, topY+36);
+    ctx.globalAlpha=1;
+
+    // BIG CODE shadow
+    ctx.font=`700 ${codeSize}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle=s.accent; ctx.globalAlpha=0.045;
+    ctx.fillText(code, tx-2, topY+36+codeSize*0.82+2);
+    ctx.globalAlpha=1;
+
+    // BIG CODE main
+    ctx.fillStyle='white';
+    ctx.fillText(code, tx, topY+36+codeSize*0.82);
+
+    // Full name
+    const nameY = topY+36+codeSize*0.82+Math.round(codeSize*0.16);
+    ctx.font=`300 ${Math.round(codeSize*0.12)}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle='white'; ctx.globalAlpha=0.48;
+    ctx.fillText(fullName, tx+4, nameY);
+    ctx.globalAlpha=1;
+
+    // Pills
+    const pillY = nameY + Math.round(codeSize*0.16);
+    const pH=32;
+
+    // Token pill
+    ctx.fillStyle=s.accent; ctx.globalAlpha=0.15;
+    roundRect(ctx,tx,pillY,120,pH,pH/2); ctx.fill();
+    ctx.strokeStyle=s.accent; ctx.lineWidth=1.2; ctx.globalAlpha=0.65;
+    roundRect(ctx,tx,pillY,120,pH,pH/2); ctx.stroke();
+    ctx.globalAlpha=1;
+    ctx.font=`700 16px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle=s.accent; ctx.textAlign='center';
+    ctx.fillText('$'+code, tx+60, pillY+pH*0.66);
+
+    // Group pill
+    ctx.fillStyle='white'; ctx.globalAlpha=0.04;
+    roundRect(ctx,tx+130,pillY,110,pH,pH/2); ctx.fill();
+    ctx.strokeStyle='white'; ctx.lineWidth=1; ctx.globalAlpha=0.12;
+    roundRect(ctx,tx+130,pillY,110,pH,pH/2); ctx.stroke();
+    ctx.globalAlpha=0.4; ctx.fillStyle='white';
+    ctx.font=`700 13px 'Barlow Condensed',sans-serif`;
+    ctx.fillText('GROUP '+grp, tx+185, pillY+pH*0.66);
+    ctx.globalAlpha=1;
+    ctx.textAlign='left';
+
+    // Tagline
+    const tagY = isSquare ? H*0.92 : H*0.88;
+    ctx.font=`400 ${isSquare?13:12}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle='white'; ctx.globalAlpha=0.32;
+    ctx.fillText(tagline, tx, tagY);
+    ctx.globalAlpha=1;
+
+    // Bottom right
+    ctx.textAlign='right';
+    const brX = isSquare ? W-36 : W-28;
+    ctx.font=`700 13px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle=s.accent; ctx.globalAlpha=0.5;
+    ctx.fillText('MUNDIAL2026.VERCEL.APP', brX, H-28);
+    ctx.font=`600 11px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle='white'; ctx.globalAlpha=0.22;
+    ctx.fillText('@MUNDIAL2026_SOL  ·  BUY · HOLD · WIN SOL', brX, H-12);
+    ctx.globalAlpha=1;
+    ctx.textAlign='left';
+  }
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
+}
+
+// ===================== RENDER GRID =====================
+function buildGrid() {
+  const grid = document.getElementById('banner-grid');
+  const fmt = formats[activeFormat];
+  const aspectPct = (fmt.h/fmt.w*100).toFixed(1)+'%';
+
+  grid.innerHTML = filteredCodes.map(code => `
+    <div class="banner-card" id="card-${code}">
+      <div class="banner-canvas-wrap" style="padding-bottom:${aspectPct};position:relative;overflow:hidden">
+        <canvas id="canvas-${code}" style="position:absolute;top:0;left:0;width:100%;height:100%"></canvas>
+      </div>
+      <div class="banner-card-footer">
+        <div class="bcf-left">
+          <img class="bcf-flag" src="https://flagcdn.com/w40/${iso2[code]}.png" alt="${code}" onerror="this.style.display='none'"/>
+          <div>
+            <div class="bcf-code">${code}</div>
+            <div class="bcf-name">${names[code]}</div>
+          </div>
+          <span class="bcf-group">Group ${groupMap[code]||'?'}</span>
+        </div>
+        <button class="btn-dl-card" onclick="downloadOne('${code}')">⬇ Download</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function renderAll() {
+  buildGrid();
+  const total = filteredCodes.length;
+  let done = 0;
+  setLoading(0, total);
+
+  // Render in batches of 6
+  const batchSize = 6;
+  for(let i=0; i<filteredCodes.length; i+=batchSize) {
+    const batch = filteredCodes.slice(i, i+batchSize);
+    await Promise.all(batch.map(async code => {
+      const canvas = document.getElementById('canvas-'+code);
+      if(canvas) {
+        canvas.width = formats[activeFormat].w;
+        canvas.height = formats[activeFormat].h;
+        await drawBanner(canvas, code);
+      }
+      done++;
+      setLoading(done, total);
+    }));
+  }
+  setLoading(total, total);
+}
+
+function setLoading(done, total) {
+  const pct = total > 0 ? (done/total*100) : 0;
+  document.getElementById('loading-fill').style.width = pct+'%';
+  document.getElementById('loading-text').textContent = done < total
+    ? `Rendering ${done} of ${total} banners...`
+    : done > 0 ? `All ${total} banners ready — click any to download` : '';
+}
+
+// ===================== CONTROLS =====================
+function setStyle(style, el) {
+  activeStyle = style;
+  document.querySelectorAll('.style-pill').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
+}
+
+function setFormat(fmt, el) {
+  activeFormat = fmt;
+  document.querySelectorAll('.format-pill').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
+}
+
+function filterBanners() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  filteredCodes = allCodes.filter(c =>
+    !q || (names[c]||'').toLowerCase().includes(q) || c.toLowerCase().includes(q)
+  );
+  renderAll();
+}
+
+// ===================== DOWNLOAD =====================
+function downloadOne(code) {
+  const canvas = document.getElementById('canvas-'+code);
+  if(!canvas) return;
+  const link = document.createElement('a');
+  link.download = `mundial-${code}-${activeStyle}-${activeFormat}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  showToast(`Downloaded $${code} banner`, `${names[code]} · ${activeStyle} · ${activeFormat}`);
+}
+
+async function downloadAll() {
+  showToast('Downloading all banners...', 'This may take a moment');
+  for(const code of filteredCodes) {
+    const canvas = document.getElementById('canvas-'+code);
+    if(!canvas) continue;
+    const link = document.createElement('a');
+    link.download = `mundial-${code}-${activeStyle}-${activeFormat}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    await new Promise(r => setTimeout(r, 120)); // stagger downloads
+  }
+}
+
+// ===================== SHARE =====================
+function copyHashtag() {
+  navigator.clipboard.writeText('#Mundial2026 #WorldCup2026 @Mundial2026_sol').then(() => {
+    showToast('Hashtags copied!', '#Mundial2026 #WorldCup2026 @Mundial2026_sol');
+  });
+}
+
+// ===================== TOAST =====================
+function showToast(title, msg) {
+  document.getElementById('toast-text').innerHTML = `<strong>${title}</strong><span>${msg}</span>`;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3500);
+}
+
+// ===================== INIT =====================
+// Set nation colours as default (most visually impressive)
+document.querySelector('.style-pill:last-child').click = null;
+// Mark nation pill active
+document.querySelectorAll('.style-pill').forEach(p => {
+  if(p.textContent.includes('Nation')) p.classList.add('active');
+  else p.classList.remove('active');
+});
+
+preloadAllFlags().then(() => renderAll());
+</script>
+</body>
+</html>
