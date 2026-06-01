@@ -432,126 +432,171 @@ async function drawBanner(canvas, code) {
   const fullName = (names[code]||code).toUpperCase();
 
   if(isStory) {
-    // ---- STORY LAYOUT (centred, below flag) ----
-    const textY = H*0.62;
-    ctx.textAlign='center';
+    // ---- STORY LAYOUT ----
+    // All sizes relative to W so they scale with canvas
+    const S = W; // scale unit
+    const textStartY = H * 0.65;
+    ctx.textAlign = 'center';
 
-    // MUNDIAL small
-    ctx.font=`700 ${Math.round(W*0.048)}px 'Bebas Neue',sans-serif`;
-    ctx.fillStyle=s.accent; ctx.globalAlpha=0.8;
-    ctx.fillText('MUNDIAL', W/2, textY);
-    ctx.globalAlpha=1;
+    // MUNDIAL label
+    const mSize = Math.round(S*0.055);
+    ctx.font = `700 ${mSize}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.85;
+    ctx.fillText('MUNDIAL  ·  2026 WORLD CUP', W/2, textStartY);
+
+    // Divider
+    ctx.globalAlpha = 0.2; ctx.fillStyle = s.accent;
+    ctx.fillRect(W*0.25, textStartY+mSize*0.4, W*0.5, 1);
+    ctx.globalAlpha = 1;
 
     // BIG CODE
-    ctx.font=`700 ${Math.round(W*0.3)}px 'Bebas Neue',sans-serif`;
-    ctx.fillStyle='white';
-    ctx.fillText(code, W/2, textY+W*0.3*0.78);
+    const cSize = Math.round(S*0.32);
+    ctx.font = `700 ${cSize}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle = 'white';
+    ctx.fillText(code, W/2, textStartY + mSize*0.6 + cSize*0.85);
 
-    // Full name
-    ctx.font=`300 ${Math.round(W*0.055)}px 'Barlow Condensed',sans-serif`;
-    ctx.fillStyle='white'; ctx.globalAlpha=0.5;
-    ctx.fillText(fullName, W/2, textY+W*0.3*0.78+W*0.07);
-    ctx.globalAlpha=1;
+    // Country name
+    const nSize = Math.round(S*0.065);
+    ctx.font = `300 ${nSize}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle = 'white'; ctx.globalAlpha = 0.55;
+    ctx.fillText(fullName, W/2, textStartY + mSize*0.6 + cSize*0.85 + nSize*1.3);
+    ctx.globalAlpha = 1;
 
-    // Token pill
-    const pillW=W*0.32, pillH=H*0.038, pillX=W/2-pillW/2, pillY=textY+W*0.3*0.78+W*0.12;
-    ctx.fillStyle=s.accent; ctx.globalAlpha=0.15; roundRect(ctx,pillX,pillY,pillW,pillH,pillH/2); ctx.fill();
-    ctx.strokeStyle=s.accent; ctx.lineWidth=1.2; ctx.globalAlpha=0.6; roundRect(ctx,pillX,pillY,pillW,pillH,pillH/2); ctx.stroke();
-    ctx.globalAlpha=1;
-    ctx.font=`700 ${Math.round(W*0.04)}px 'Bebas Neue',sans-serif`;
-    ctx.fillStyle=s.accent;
-    ctx.fillText('$'+code+'  ·  GROUP '+grp, W/2, pillY+pillH*0.7);
+    // Single pill: $CODE · GROUP X
+    const pText = '$' + code + '  ·  GROUP ' + grp;
+    const pSize = Math.round(S*0.048);
+    const pY = textStartY + mSize*0.6 + cSize*0.85 + nSize*1.3 + pSize*1.6;
+    const pW = S*0.44; const pH2 = pSize*1.8;
+    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.14;
+    roundRect(ctx, W/2-pW/2, pY-pH2*0.75, pW, pH2, pH2/2); ctx.fill();
+    ctx.strokeStyle = s.accent; ctx.lineWidth = Math.round(S*0.003); ctx.globalAlpha = 0.55;
+    roundRect(ctx, W/2-pW/2, pY-pH2*0.75, pW, pH2, pH2/2); ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.font = `700 ${pSize}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle = s.accent;
+    ctx.fillText(pText, W/2, pY);
 
-    // Tagline
-    ctx.font=`400 ${Math.round(W*0.032)}px 'Barlow Condensed',sans-serif`;
-    ctx.fillStyle='white'; ctx.globalAlpha=0.36;
-    ctx.fillText(tagline, W/2, H*0.91);
+    // Tagline — truncate if too long for story width
+    const tSize = Math.round(S*0.036);
+    ctx.font = `500 ${tSize}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle = 'white'; ctx.globalAlpha = 0.42;
+    const maxTagChars = 36;
+    const tLine = tagline.length > maxTagChars ? tagline.substring(0, maxTagChars)+'…' : tagline;
+    ctx.fillText(tLine, W/2, H*0.915);
+    ctx.globalAlpha = 1;
 
     // Handle
-    ctx.font=`700 ${Math.round(W*0.035)}px 'Barlow Condensed',sans-serif`;
-    ctx.fillStyle=s.accent; ctx.globalAlpha=0.55;
-    ctx.fillText('@MUNDIAL2026_SOL', W/2, H*0.96);
-    ctx.globalAlpha=1;
+    const hSize = Math.round(S*0.042);
+    ctx.font = `700 ${hSize}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.65;
+    ctx.fillText('@MUNDIAL2026_SOL', W/2, H*0.965);
+    ctx.globalAlpha = 1;
 
   } else {
-    // ---- TWITTER / SQUARE LAYOUT (left-aligned) ----
-    const tx = isSquare ? 44 : 52;
-    const codeSize = isSquare ? Math.round(H*0.52) : Math.round(H*0.54);
-    const topY = isSquare ? H*0.12 : H*0.12;
+    // ---- TWITTER / SQUARE LAYOUT ----
+    // Use H as scale unit so proportions hold across both formats
+    const S = H;
+    const tx = Math.round(W*0.042);
+    ctx.textAlign = 'left';
 
-    ctx.textAlign='left';
+    // ---- TOP: MUNDIAL wordmark ----
+    const mSize = Math.round(S*0.095); // visible and clear
+    const mY = Math.round(S*0.14);
+    ctx.font = `700 ${mSize}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.9;
+    ctx.fillText('MUNDIAL', tx, mY);
 
-    // MUNDIAL
-    ctx.font=`700 ${isSquare?14:13}px 'Bebas Neue',sans-serif`;
-    ctx.fillStyle=s.accent; ctx.globalAlpha=0.8;
-    ctx.fillText('MUNDIAL', tx, topY+16);
-    ctx.globalAlpha=0.18; ctx.fillStyle=s.accent;
-    ctx.fillRect(tx, topY+22, isSquare?200:180, 1);
-    ctx.globalAlpha=0.28; ctx.fillStyle='white';
-    ctx.font=`700 11px 'Bebas Neue',sans-serif`;
-    ctx.fillText('2026 WORLD CUP · SOLANA', tx, topY+36);
-    ctx.globalAlpha=1;
+    // Rule line
+    ctx.globalAlpha = 0.2; ctx.fillStyle = s.accent;
+    ctx.fillRect(tx, mY + Math.round(mSize*0.25), Math.round(W*0.28), 1);
+    ctx.globalAlpha = 1;
 
-    // BIG CODE shadow
-    ctx.font=`700 ${codeSize}px 'Bebas Neue',sans-serif`;
-    ctx.fillStyle=s.accent; ctx.globalAlpha=0.045;
-    ctx.fillText(code, tx-2, topY+36+codeSize*0.82+2);
-    ctx.globalAlpha=1;
+    // Sub label
+    const subSize = Math.round(S*0.058);
+    ctx.font = `600 ${subSize}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle = 'white'; ctx.globalAlpha = 0.38;
+    ctx.fillText('2026 WORLD CUP · SOLANA', tx, mY + Math.round(mSize*0.25) + Math.round(subSize*1.2));
+    ctx.globalAlpha = 1;
 
-    // BIG CODE main
-    ctx.fillStyle='white';
-    ctx.fillText(code, tx, topY+36+codeSize*0.82);
+    // ---- CENTRE: BIG CODE ----
+    const codeSize = isSquare ? Math.round(S*0.52) : Math.round(S*0.56);
+    const codeY = Math.round(S*0.78);
 
-    // Full name
-    const nameY = topY+36+codeSize*0.82+Math.round(codeSize*0.16);
-    ctx.font=`300 ${Math.round(codeSize*0.12)}px 'Barlow Condensed',sans-serif`;
-    ctx.fillStyle='white'; ctx.globalAlpha=0.48;
-    ctx.fillText(fullName, tx+4, nameY);
-    ctx.globalAlpha=1;
+    // Shadow
+    ctx.font = `700 ${codeSize}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.05;
+    ctx.fillText(code, tx+2, codeY+2);
+    ctx.globalAlpha = 1;
+    // Main
+    ctx.fillStyle = 'white';
+    ctx.fillText(code, tx, codeY);
 
-    // Pills
-    const pillY = nameY + Math.round(codeSize*0.16);
-    const pH=32;
+    // ---- COUNTRY NAME ----
+    const nameSize = Math.round(S*0.1);
+    const nameY = codeY + Math.round(S*0.12);
+    ctx.font = `300 ${nameSize}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle = 'white'; ctx.globalAlpha = 0.52;
+    ctx.fillText(fullName, tx+2, nameY);
+    ctx.globalAlpha = 1;
+
+    // ---- PILLS ----
+    const pillH = Math.round(S*0.1);
+    const pillY2 = nameY + Math.round(S*0.1);
+    const pillR = pillH/2;
+    const pFontSize = Math.round(S*0.065);
+    const tokenPillW = Math.round(S*0.38);
+    const groupPillW = Math.round(S*0.34);
 
     // Token pill
-    ctx.fillStyle=s.accent; ctx.globalAlpha=0.15;
-    roundRect(ctx,tx,pillY,120,pH,pH/2); ctx.fill();
-    ctx.strokeStyle=s.accent; ctx.lineWidth=1.2; ctx.globalAlpha=0.65;
-    roundRect(ctx,tx,pillY,120,pH,pH/2); ctx.stroke();
-    ctx.globalAlpha=1;
-    ctx.font=`700 16px 'Bebas Neue',sans-serif`;
-    ctx.fillStyle=s.accent; ctx.textAlign='center';
-    ctx.fillText('$'+code, tx+60, pillY+pH*0.66);
+    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.15;
+    roundRect(ctx, tx, pillY2, tokenPillW, pillH, pillR); ctx.fill();
+    ctx.strokeStyle = s.accent; ctx.lineWidth = 2; ctx.globalAlpha = 0.65;
+    roundRect(ctx, tx, pillY2, tokenPillW, pillH, pillR); ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.font = `700 ${pFontSize}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle = s.accent; ctx.textAlign = 'center';
+    ctx.fillText('$'+code, tx + tokenPillW/2, pillY2 + pillH*0.68);
 
     // Group pill
-    ctx.fillStyle='white'; ctx.globalAlpha=0.04;
-    roundRect(ctx,tx+130,pillY,110,pH,pH/2); ctx.fill();
-    ctx.strokeStyle='white'; ctx.lineWidth=1; ctx.globalAlpha=0.12;
-    roundRect(ctx,tx+130,pillY,110,pH,pH/2); ctx.stroke();
-    ctx.globalAlpha=0.4; ctx.fillStyle='white';
-    ctx.font=`700 13px 'Barlow Condensed',sans-serif`;
-    ctx.fillText('GROUP '+grp, tx+185, pillY+pH*0.66);
-    ctx.globalAlpha=1;
-    ctx.textAlign='left';
+    const gPillX = tx + tokenPillW + Math.round(S*0.04);
+    ctx.fillStyle = 'white'; ctx.globalAlpha = 0.05;
+    roundRect(ctx, gPillX, pillY2, groupPillW, pillH, pillR); ctx.fill();
+    ctx.strokeStyle = 'white'; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.18;
+    roundRect(ctx, gPillX, pillY2, groupPillW, pillH, pillR); ctx.stroke();
+    ctx.globalAlpha = 0.55; ctx.fillStyle = 'white';
+    ctx.fillText('GROUP '+grp, gPillX + groupPillW/2, pillY2 + pillH*0.68);
+    ctx.globalAlpha = 1;
+    ctx.textAlign = 'left';
 
-    // Tagline
-    const tagY = isSquare ? H*0.92 : H*0.88;
-    ctx.font=`400 ${isSquare?13:12}px 'Barlow Condensed',sans-serif`;
-    ctx.fillStyle='white'; ctx.globalAlpha=0.32;
-    ctx.fillText(tagline, tx, tagY);
-    ctx.globalAlpha=1;
+    // ---- TAGLINE — sits in bottom dark strip ----
+    const tSize = Math.round(S*0.072);
+    const tY = Math.round(H*0.91);
+    ctx.font = `500 ${tSize}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle = 'white'; ctx.globalAlpha = 0.5;
+    // Truncate tagline to fit left column
+    const maxW = isSquare ? W*0.55 : W*0.48;
+    let tText = tagline;
+    ctx.globalAlpha = 0.5;
+    while(ctx.measureText(tText).width > maxW && tText.length > 10) {
+      tText = tText.slice(0, -4) + '…';
+    }
+    ctx.fillText(tText, tx, tY);
+    ctx.globalAlpha = 1;
 
-    // Bottom right
-    ctx.textAlign='right';
-    const brX = isSquare ? W-36 : W-28;
-    ctx.font=`700 13px 'Bebas Neue',sans-serif`;
-    ctx.fillStyle=s.accent; ctx.globalAlpha=0.5;
-    ctx.fillText('MUNDIAL2026.VERCEL.APP', brX, H-28);
-    ctx.font=`600 11px 'Barlow Condensed',sans-serif`;
-    ctx.fillStyle='white'; ctx.globalAlpha=0.22;
-    ctx.fillText('@MUNDIAL2026_SOL  ·  BUY · HOLD · WIN SOL', brX, H-12);
-    ctx.globalAlpha=1;
-    ctx.textAlign='left';
+    // ---- BOTTOM RIGHT: URL + handle ----
+    const urlSize = Math.round(S*0.065);
+    ctx.textAlign = 'right';
+    const brX = W - Math.round(W*0.03);
+
+    ctx.font = `700 ${urlSize}px 'Bebas Neue',sans-serif`;
+    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.65;
+    ctx.fillText('MUNDIAL2026.VERCEL.APP', brX, Math.round(H*0.89));
+
+    ctx.font = `600 ${Math.round(urlSize*0.78)}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle = 'white'; ctx.globalAlpha = 0.32;
+    ctx.fillText('@MUNDIAL2026_SOL  ·  BUY · HOLD · WIN SOL', brX, Math.round(H*0.97));
+    ctx.globalAlpha = 1;
+    ctx.textAlign = 'left';
   }
 }
 
