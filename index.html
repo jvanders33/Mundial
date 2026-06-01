@@ -54,9 +54,9 @@
     .buy-pill:hover { background:rgba(245,197,24,0.25); border-color:var(--gold); }
 
     /* HERO */
-    .hero { min-height:100vh; display:grid; grid-template-columns:1fr 480px; align-items:end; padding:80px 48px 80px; position:relative; overflow:hidden; gap:40px; }
-    .hero-left { display:flex; flex-direction:column; justify-content:flex-end; }
-    .hero-right { display:flex; flex-direction:column; justify-content:center; align-items:flex-start; padding-bottom:20px; position:relative; z-index:2; }
+    .hero { min-height:100vh; display:grid; grid-template-columns:1fr 480px; align-items:center; padding:100px 48px 80px; position:relative; overflow:hidden; gap:60px; }
+    .hero-left { display:flex; flex-direction:column; justify-content:center; }
+    .hero-right { display:flex; flex-direction:column; justify-content:center; align-items:flex-start; position:relative; z-index:2; }
     .countdown-card { background:rgba(13,15,28,0.75); border:1px solid rgba(245,197,24,0.2); border-radius:16px; padding:32px 28px; backdrop-filter:blur(20px); width:100%; }
     .countdown-card-label { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; display:flex; align-items:center; gap:8px; }
     .countdown-card-label::before { content:''; width:16px; height:1px; background:var(--gold); opacity:0.6; }
@@ -72,8 +72,8 @@
     .hero-card-cta:hover { background:var(--gold2); transform:translateY(-1px); box-shadow:0 6px 24px rgba(245,197,24,0.3); }
     .pitch-bg { position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(0,230,118,0.04) 0%,transparent 70%),radial-gradient(ellipse 120% 80% at 50% 110%,rgba(0,0,0,0.8) 0%,transparent 60%); }
     .pitch-lines { position:absolute; inset:0; opacity:0.04; background-image:radial-gradient(circle 120px at 50% 52%,transparent 118px,rgba(255,255,255,0.8) 120px,transparent 122px),linear-gradient(rgba(255,255,255,0.8) 1px,transparent 1px); background-size:100% 100%,100% 2px; background-position:0 0,0 52%; }
-    .pitch-arc { position:absolute; bottom:-200px; left:50%; transform:translateX(-50%); width:900px; height:500px; border:1px solid rgba(255,255,255,0.05); border-radius:50%; pointer-events:none; }
-    .pitch-arc2 { bottom:-350px; width:1400px; height:700px; border-color:rgba(255,255,255,0.03); }
+    .pitch-arc { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:900px; height:500px; border:1px solid rgba(255,255,255,0.05); border-radius:50%; pointer-events:none; }
+    .pitch-arc2 { width:1400px; height:700px; border-color:rgba(255,255,255,0.03); }
     .hero-glow { position:absolute; width:800px; height:400px; background:radial-gradient(ellipse,rgba(245,197,24,0.06) 0%,transparent 70%); top:20%; left:50%; transform:translateX(-50%); animation:glowPulse 6s ease-in-out infinite; }
     @keyframes glowPulse { 0%,100%{opacity:0.5;transform:translateX(-50%) scale(1)} 50%{opacity:1;transform:translateX(-50%) scale(1.1)} }
     .hero-eyebrow { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:24px; display:flex; align-items:center; gap:12px; position:relative; }
