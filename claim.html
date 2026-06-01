@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MUNDIAL — Claim Your Winnings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #060709;
+      --surface: #0c0e12;
+      --surface2: #12151c;
+      --border: rgba(255,255,255,0.06);
+      --gold: #f5c518;
+      --gold2: #e8a900;
+      --green: #00e676;
+      --red: #ff1744;
+      --text: #f0f2f5;
+      --muted: #5a6070;
+      --muted2: #8892a4;
+      --purple: #7b61ff;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:'Barlow',sans-serif; overflow-x:hidden; min-height:100vh; }
+    body::after { content:''; position:fixed; inset:0; z-index:1000; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events:none; opacity:0.4; }
+
+    /* FLAG */
+    .flag-img { border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.12); display:block; flex-shrink:0; }
+    .flag-img.sm  { width:32px; height:32px; }
+    .flag-img.md  { width:48px; height:48px; }
+    .flag-img.lg  { width:64px; height:64px; border-width:3px; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; justify-content:space-between; padding:0 48px; height:64px; background:rgba(6,7,9,0.92); backdrop-filter:blur(24px); border-bottom:1px solid var(--border); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.08em; color:var(--gold); display:flex; align-items:center; gap:10px; cursor:pointer; text-decoration:none; }
+    .nav-links { display:flex; gap:32px; list-style:none; }
+    .nav-links a { color:var(--muted2); text-decoration:none; font-size:0.82rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; transition:color 0.2s; }
+    .nav-links a:hover { color:var(--gold); }
+    .nav-links a.active { color:var(--gold); }
+    .nav-right { display:flex; gap:12px; align-items:center; }
+    .btn-gold { background:var(--gold); color:#000; border:none; cursor:pointer; padding:10px 22px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.9rem; letter-spacing:0.06em; text-transform:uppercase; border-radius:4px; transition:all 0.15s; }
+    .btn-gold:hover { background:var(--gold2); transform:translateY(-1px); }
+    .btn-outline { background:transparent; color:var(--muted2); border:1px solid var(--border); cursor:pointer; padding:9px 20px; font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:0.9rem; letter-spacing:0.06em; text-transform:uppercase; border-radius:4px; transition:all 0.2s; }
+    .btn-outline:hover { border-color:rgba(255,255,255,0.2); color:var(--text); }
+
+    /* MAIN LAYOUT */
+    .main { padding:100px 48px 80px; max-width:1280px; margin:0 auto; }
+
+    /* PAGE HEADER */
+    .page-header { margin-bottom:56px; }
+    .section-tag { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; display:flex; align-items:center; gap:12px; }
+    .section-tag::before { content:''; width:24px; height:1px; background:var(--gold); opacity:0.6; }
+    .page-header h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,6vw,5.5rem); letter-spacing:0.03em; line-height:1; margin-bottom:16px; }
+    .page-header h1 span { color:var(--gold); }
+    .page-header p { color:var(--muted2); font-size:1rem; max-width:560px; line-height:1.7; }
+
+    /* WALLET CONNECT BAR */
+    .wallet-bar { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px 28px; display:flex; align-items:center; justify-content:space-between; gap:24px; margin-bottom:40px; flex-wrap:wrap; }
+    .wallet-bar-left { display:flex; align-items:center; gap:16px; }
+    .wallet-icon { width:48px; height:48px; background:rgba(123,97,255,0.15); border:1px solid rgba(123,97,255,0.3); border-radius:50%; display:grid; place-items:center; font-size:1.4rem; flex-shrink:0; }
+    .wallet-status-label { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+    .wallet-address { font-family:'DM Mono',monospace; font-size:0.88rem; color:var(--muted2); }
+    .wallet-address.connected { color:var(--green); }
+    .wallet-bar-right { display:flex; gap:12px; }
+    .btn-connect { background:var(--purple); color:#fff; border:none; cursor:pointer; padding:12px 28px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.9rem; letter-spacing:0.06em; text-transform:uppercase; border-radius:6px; transition:all 0.15s; }
+    .btn-connect:hover { background:#6a50ee; transform:translateY(-1px); }
+    .btn-connected { background:rgba(0,230,118,0.1); color:var(--green); border:1px solid rgba(0,230,118,0.2); cursor:pointer; padding:11px 24px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.85rem; letter-spacing:0.06em; text-transform:uppercase; border-radius:6px; }
+
+    /* SUMMARY CARDS */
+    .summary-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:40px; }
+    .summary-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:22px 20px; }
+    .summary-card.highlight { background:linear-gradient(135deg,rgba(245,197,24,0.08),rgba(245,197,24,0.02)); border-color:rgba(245,197,24,0.2); }
+    .sc-label { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+    .sc-value { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.04em; line-height:1; }
+    .sc-value.gold { color:var(--gold); }
+    .sc-value.green { color:var(--green); }
+    .sc-value.muted { color:var(--muted2); }
+    .sc-sub { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; color:var(--muted); margin-top:6px; letter-spacing:0.04em; }
+
+    /* TABS */
+    .tabs { display:flex; gap:4px; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:4px; margin-bottom:32px; width:fit-content; }
+    .tab { padding:8px 20px; border-radius:6px; border:none; background:transparent; color:var(--muted2); font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.85rem; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.2s; }
+    .tab.active { background:var(--surface2); color:var(--text); box-shadow:0 2px 8px rgba(0,0,0,0.3); }
+
+    /* CLAIMABLE SECTION */
+    .claimable-list { display:flex; flex-direction:column; gap:8px; margin-bottom:48px; }
+
+    .claim-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden; transition:border-color 0.2s; }
+    .claim-card.ready { border-color:rgba(0,230,118,0.25); }
+    .claim-card.pending { border-color:rgba(245,197,24,0.15); }
+    .claim-card.claimed { opacity:0.5; }
+
+    .claim-card-inner { display:flex; align-items:center; gap:16px; padding:18px 22px; }
+    .claim-left { display:flex; align-items:center; gap:14px; flex:1; }
+    .claim-token-info { }
+    .claim-token-code { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:0.06em; color:var(--gold); line-height:1; }
+    .claim-token-name { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; color:var(--muted2); letter-spacing:0.04em; text-transform:uppercase; margin-top:2px; }
+    .claim-stage { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:3px 10px; border-radius:100px; margin-left:8px; flex-shrink:0; }
+    .stage-group { background:rgba(123,97,255,0.12); color:var(--purple); border:1px solid rgba(123,97,255,0.2); }
+    .stage-r32 { background:rgba(245,197,24,0.1); color:var(--gold); border:1px solid rgba(245,197,24,0.2); }
+    .stage-qf { background:rgba(255,23,68,0.1); color:var(--red); border:1px solid rgba(255,23,68,0.2); }
+    .stage-final { background:rgba(0,230,118,0.1); color:var(--green); border:1px solid rgba(0,230,118,0.2); }
+
+    .claim-middle { text-align:center; min-width:140px; }
+    .claim-finish { font-family:'Bebas Neue',sans-serif; font-size:1rem; color:var(--muted2); letter-spacing:0.06em; }
+    .claim-pool-share { font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--muted); margin-top:2px; }
+
+    .claim-amount { text-align:right; min-width:160px; }
+    .claim-sol { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.04em; color:var(--green); line-height:1; }
+    .claim-sol.pending-amt { color:var(--gold); }
+    .claim-usd { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--muted); margin-top:3px; }
+    .claim-fee-note { font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; color:var(--muted); margin-top:2px; }
+
+    .claim-action { min-width:130px; text-align:right; }
+    .btn-claim { background:var(--green); color:#000; border:none; cursor:pointer; padding:10px 20px; font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:0.85rem; letter-spacing:0.06em; text-transform:uppercase; border-radius:6px; transition:all 0.15s; width:100%; }
+    .btn-claim:hover { background:#00cc6a; transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,230,118,0.3); }
+    .btn-claim-pending { background:rgba(245,197,24,0.1); color:var(--gold); border:1px solid rgba(245,197,24,0.2); cursor:not-allowed; padding:10px 20px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.82rem; letter-spacing:0.06em; text-transform:uppercase; border-radius:6px; width:100%; }
+    .btn-claimed { background:rgba(255,255,255,0.04); color:var(--muted); border:1px solid var(--border); cursor:default; padding:10px 20px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.82rem; letter-spacing:0.06em; text-transform:uppercase; border-radius:6px; width:100%; }
+
+    .claim-progress { height:3px; background:rgba(0,230,118,0.08); }
+    .claim-progress-fill { height:100%; background:var(--green); }
+    .claim-progress-fill.pending-fill { background:var(--gold); }
+
+    /* WINDOW WARNING */
+    .window-warning { background:rgba(255,23,68,0.06); border:1px solid rgba(255,23,68,0.15); border-radius:8px; padding:12px 16px; display:flex; align-items:center; gap:10px; margin-top:8px; margin-left:22px; margin-right:22px; margin-bottom:14px; }
+    .window-warning p { font-size:0.78rem; color:var(--red); font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:0.04em; }
+
+    /* POOL TRACKER */
+    .pool-section-title { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.04em; color:var(--text); margin-bottom:8px; }
+    .pool-section-sub { color:var(--muted2); font-size:0.9rem; margin-bottom:28px; line-height:1.6; }
+
+    .pool-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:48px; }
+
+    .pool-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden; transition:border-color 0.2s,transform 0.2s; }
+    .pool-card:hover { border-color:rgba(245,197,24,0.2); transform:translateY(-2px); }
+    .pool-card-header { padding:14px 18px; background:rgba(245,197,24,0.05); border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+    .pool-group-label { font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:0.1em; color:var(--gold); }
+    .pool-status { font-family:'Barlow Condensed',sans-serif; font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:3px 8px; border-radius:100px; }
+    .pool-open { background:rgba(0,230,118,0.1); color:var(--green); border:1px solid rgba(0,230,118,0.2); }
+    .pool-settled { background:rgba(255,255,255,0.05); color:var(--muted2); }
+    .pool-live { background:rgba(255,23,68,0.12); color:var(--red); border:1px solid rgba(255,23,68,0.2); animation:livePulse 1.5s ease-in-out infinite; }
+    @keyframes livePulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    .pool-card-body { padding:16px 18px; }
+    .pool-total-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px; }
+    .pool-total-num { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.04em; color:var(--gold); line-height:1; }
+    .pool-total-usd { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--muted); }
+
+    .pool-teams { display:flex; flex-direction:column; gap:6px; }
+    .pool-team-row { display:flex; align-items:center; gap:8px; }
+    .pool-team-code { font-family:'Bebas Neue',sans-serif; font-size:0.9rem; letter-spacing:0.06em; color:var(--text); width:36px; flex-shrink:0; }
+    .pool-team-bar-bg { flex:1; height:5px; background:rgba(255,255,255,0.05); border-radius:100px; overflow:hidden; }
+    .pool-team-bar-fill { height:100%; border-radius:100px; background:var(--gold); opacity:0.6; transition:width 1s ease; }
+    .pool-team-bar-fill.leader { opacity:1; background:var(--gold); }
+    .pool-team-pct { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted); width:32px; text-align:right; flex-shrink:0; }
+    .pool-team-position { font-family:'Bebas Neue',sans-serif; font-size:0.75rem; color:var(--muted); width:16px; flex-shrink:0; }
+
+    .pool-card-footer { padding:10px 18px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+    .pool-closes { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; color:var(--muted); letter-spacing:0.04em; }
+    .pool-closes span { color:var(--text); font-weight:600; }
+
+    /* CHAMPION POOL */
+    .champion-pool-card { background:linear-gradient(135deg,rgba(245,197,24,0.08) 0%,rgba(245,197,24,0.02) 50%,rgba(255,23,68,0.04) 100%); border:1px solid rgba(245,197,24,0.2); border-radius:12px; padding:32px; margin-bottom:48px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:32px; align-items:center; }
+    .champ-label { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+    .champ-num { font-family:'Bebas Neue',sans-serif; font-size:3.5rem; letter-spacing:0.04em; color:var(--gold); line-height:1; }
+    .champ-sub { font-family:'Barlow Condensed',sans-serif; font-size:0.78rem; color:var(--muted2); margin-top:6px; line-height:1.5; }
+    .champ-divider { width:1px; height:80px; background:rgba(245,197,24,0.15); }
+    .champ-bar-wrap { }
+    .champ-bar-bg { height:8px; background:rgba(255,255,255,0.05); border-radius:100px; overflow:hidden; margin-top:12px; }
+    .champ-bar-fill { height:100%; background:linear-gradient(90deg,var(--gold2),var(--gold)); border-radius:100px; animation:champFill 2s ease both; }
+    @keyframes champFill { from{width:0} }
+    .champ-note { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; color:var(--muted); margin-top:8px; letter-spacing:0.04em; }
+
+    /* HOW CLAIMS WORK */
+    .how-claims { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:32px; margin-bottom:48px; }
+    .how-claims h3 { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:0.04em; margin-bottom:24px; }
+    .how-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+    .how-step { }
+    .how-step-num { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:rgba(245,197,24,0.12); line-height:1; margin-bottom:8px; }
+    .how-step h4 { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.9rem; letter-spacing:0.04em; text-transform:uppercase; margin-bottom:6px; }
+    .how-step p { font-size:0.82rem; color:var(--muted2); line-height:1.6; }
+
+    /* FEE NOTICE */
+    .fee-notice { background:rgba(245,197,24,0.05); border:1px solid rgba(245,197,24,0.12); border-radius:8px; padding:16px 20px; display:flex; align-items:flex-start; gap:12px; margin-bottom:48px; }
+    .fee-notice-icon { font-size:1.2rem; flex-shrink:0; margin-top:2px; }
+    .fee-notice p { font-size:0.84rem; color:var(--muted2); line-height:1.6; }
+    .fee-notice strong { color:var(--gold); }
+
+    /* EMPTY STATE */
+    .empty-state { text-align:center; padding:80px 40px; }
+    .empty-state-icon { font-size:3rem; margin-bottom:16px; opacity:0.4; }
+    .empty-state h3 { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.04em; color:var(--muted2); margin-bottom:8px; }
+    .empty-state p { color:var(--muted); font-size:0.88rem; max-width:320px; margin:0 auto 24px; line-height:1.6; }
+
+    /* TOAST */
+    .toast { position:fixed; bottom:32px; right:32px; z-index:800; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:16px 20px; display:flex; align-items:center; gap:12px; transform:translateY(100px); opacity:0; transition:all 0.3s ease; max-width:340px; }
+    .toast.show { transform:translateY(0); opacity:1; }
+    .toast-icon { font-size:1.2rem; flex-shrink:0; }
+    .toast-text { font-size:0.85rem; line-height:1.5; }
+    .toast-text strong { color:var(--green); display:block; font-family:'Barlow Condensed',sans-serif; font-size:0.9rem; letter-spacing:0.04em; text-transform:uppercase; }
+
+    /* MODAL */
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:900; display:none; align-items:center; justify-content:center; backdrop-filter:blur(8px); }
+    .modal-overlay.open { display:flex; }
+    .modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:36px; max-width:440px; width:90%; position:relative; }
+    .modal-close { position:absolute; top:14px; right:18px; background:none; border:none; color:var(--muted); font-size:1.4rem; cursor:pointer; }
+    .modal-close:hover { color:var(--text); }
+    .modal h3 { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.04em; margin-bottom:8px; }
+    .modal-claim-amount { font-family:'Bebas Neue',sans-serif; font-size:3rem; color:var(--green); letter-spacing:0.04em; line-height:1; margin:20px 0; }
+    .modal-claim-usd { font-family:'DM Mono',monospace; font-size:0.82rem; color:var(--muted); margin-bottom:20px; }
+    .modal-fee-breakdown { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:20px; }
+    .modal-fee-row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:0.84rem; }
+    .modal-fee-row:first-child { padding-top:0; }
+    .modal-fee-row:last-child { padding-bottom:0; border-top:1px solid var(--border); margin-top:4px; padding-top:10px; }
+    .modal-fee-label { color:var(--muted2); }
+    .modal-fee-val { font-family:'DM Mono',monospace; font-weight:500; }
+    .modal-fee-val.positive { color:var(--green); }
+    .modal-fee-val.negative { color:var(--red); }
+    .modal p { color:var(--muted2); font-size:0.85rem; line-height:1.6; margin-bottom:20px; }
+
+    /* FOOTER */
+    footer { border-top:1px solid var(--border); padding:28px 48px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+    .footer-logo { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.08em; color:var(--gold); }
+    .footer-disclaimer { font-size:0.7rem; color:var(--muted); max-width:500px; line-height:1.5; }
+
+    /* REVEAL */
+    .reveal { opacity:0; transform:translateY(16px); transition:opacity 0.7s ease,transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    @media(max-width:1024px) { .summary-grid{grid-template-columns:1fr 1fr} .pool-grid{grid-template-columns:1fr 1fr} .champion-pool-card{grid-template-columns:1fr;gap:20px} .champ-divider{display:none} .how-steps{grid-template-columns:1fr 1fr} }
+    @media(max-width:768px) { nav{padding:0 20px} .nav-links{display:none} .main{padding:90px 24px 60px} .summary-grid{grid-template-columns:1fr 1fr} .pool-grid{grid-template-columns:1fr} .how-steps{grid-template-columns:1fr 1fr} .claim-card-inner{flex-wrap:wrap} .claim-middle{display:none} footer{padding:24px;flex-direction:column;align-items:flex-start} }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="index.html">⚽ MUNDIAL</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#groups">Groups</a></li>
+      <li><a href="index.html#matches">Matches</a></li>
+      <li><a href="index.html#tokens">Tokens</a></li>
+      <li><a href="claim.html" class="active">Claim</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="btn-outline" id="nav-wallet-btn" onclick="connectWallet()">Connect Wallet</button>
+      <button class="btn-gold" onclick="window.location.href='index.html'">Buy $MUNDIAL</button>
+    </div>
+  </nav>
+
+  <div class="main">
+
+    <!-- HEADER -->
+    <div class="page-header reveal">
+      <div class="section-tag">Winnings</div>
+      <h1>Claim Your <span>SOL.</span></h1>
+      <p>Connect your wallet to see your claimable pool winnings. Claims are available after each group stage result and each knockout match. A 1% platform fee applies on all claims.</p>
+    </div>
+
+    <!-- WALLET BAR -->
+    <div class="wallet-bar reveal" id="wallet-bar">
+      <div class="wallet-bar-left">
+        <div class="wallet-icon">👻</div>
+        <div>
+          <div class="wallet-status-label">Wallet Status</div>
+          <div class="wallet-address" id="wallet-display">Not connected — connect to view your claimable winnings</div>
+        </div>
+      </div>
+      <div class="wallet-bar-right">
+        <button class="btn-connect" id="wallet-connect-btn" onclick="connectWallet()">Connect Phantom</button>
+      </div>
+    </div>
+
+    <!-- SUMMARY CARDS -->
+    <div class="summary-grid reveal" id="summary-grid" style="display:none">
+      <div class="summary-card highlight">
+        <div class="sc-label">Ready to Claim</div>
+        <div class="sc-value gold" id="sc-ready">0.00 SOL</div>
+        <div class="sc-sub" id="sc-ready-usd">≈ $0.00 USD</div>
+      </div>
+      <div class="summary-card">
+        <div class="sc-label">Pending (match in progress)</div>
+        <div class="sc-value gold" id="sc-pending">0.00 SOL</div>
+        <div class="sc-sub">Claimable after full time</div>
+      </div>
+      <div class="summary-card">
+        <div class="sc-label">Total Claimed</div>
+        <div class="sc-value green" id="sc-claimed">0.00 SOL</div>
+        <div class="sc-sub">All time from this wallet</div>
+      </div>
+      <div class="summary-card">
+        <div class="sc-label">Tokens Held</div>
+        <div class="sc-value muted" id="sc-tokens">0</div>
+        <div class="sc-sub">Mundial country tokens</div>
+      </div>
+    </div>
+
+    <!-- FEE NOTICE -->
+    <div class="fee-notice reveal">
+      <div class="fee-notice-icon">ℹ️</div>
+      <p><strong>1% claim fee:</strong> A 1% platform fee is deducted from all claims. This funds ongoing platform development and operations. The fee is shown clearly in the claim confirmation before you sign. All remaining SOL goes directly to your wallet in the same transaction.</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs reveal">
+      <button class="tab active" onclick="switchTab('claimable', this)">Claimable</button>
+      <button class="tab" onclick="switchTab('pools', this)">Live Pools</button>
+      <button class="tab" onclick="switchTab('champion', this)">Champion Pool</button>
+      <button class="tab" onclick="switchTab('history', this)">History</button>
+    </div>
+
+    <!-- TAB: CLAIMABLE -->
+    <div id="tab-claimable">
+      <div class="claimable-list" id="claimable-list">
+        <!-- Pre-connection empty state -->
+        <div class="empty-state" id="connect-prompt">
+          <div class="empty-state-icon">👻</div>
+          <h3>Connect Your Wallet</h3>
+          <p>Connect your Phantom wallet to see which pool payouts you're eligible to claim.</p>
+          <button class="btn-connect" onclick="connectWallet()">Connect Phantom</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: LIVE POOLS -->
+    <div id="tab-pools" style="display:none">
+      <div class="reveal">
+        <div class="pool-section-title">Group Stage Pools</div>
+        <div class="pool-section-sub">Each group has its own prize pool building from 0.5% of every trade on that group's tokens. Pools settle at the end of each group's final match. Your finish position determines your share.</div>
+        <div class="pool-grid" id="pool-grid"></div>
+
+        <div class="pool-section-title">Knockout Pools</div>
+        <div class="pool-section-sub">Match pools open after the previous whistle and close at kickoff. Winners claim 100% of the combined pool. Unclaimed after 48 hours rolls to $MUNDIAL treasury.</div>
+        <div class="pool-grid" id="knockout-pool-grid"></div>
+      </div>
+    </div>
+
+    <!-- TAB: CHAMPION POOL -->
+    <div id="tab-champion" style="display:none">
+      <div class="champion-pool-card reveal">
+        <div>
+          <div class="champ-label">Champion Pool — Total Accumulated</div>
+          <div class="champ-num" id="champ-total">0.00 SOL</div>
+          <div class="champ-sub">0.25% of every trade across all 48 tokens flows here.<br>Paid in full to the World Cup winning nation's holders at full time of the final.</div>
+        </div>
+        <div class="champ-divider"></div>
+        <div>
+          <div class="champ-label">Tournament Progress</div>
+          <div class="champ-bar-wrap">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+              <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">Jun 11</span>
+              <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">Jul 19 — Final</span>
+            </div>
+            <div class="champ-bar-bg"><div class="champ-bar-fill" id="champ-progress" style="width:0%"></div></div>
+          </div>
+          <div class="champ-note" id="champ-days-left">Tournament starts in 11 days</div>
+          <div style="margin-top:20px">
+            <div class="champ-label">Projected Final Pool</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.04em;color:var(--muted2)" id="champ-projected">TBA at launch</div>
+          </div>
+        </div>
+        <div>
+          <div class="champ-label">How to Qualify</div>
+          <div style="font-size:0.85rem;color:var(--muted2);line-height:1.7;margin-top:8px">
+            Hold the winning nation's token at the time of the <strong style="color:var(--text)">final whistle</strong> of the World Cup Final.<br><br>
+            Your share = your % of all eligible holdings of that nation's token at snapshot time.<br><br>
+            <strong style="color:var(--gold)">Plus:</strong> Champion holders also receive a $MUNDIAL airdrop from the treasury.
+          </div>
+        </div>
+      </div>
+
+      <div class="how-claims reveal">
+        <h3>How the Champion Pool Works</h3>
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="how-step-num">01</div>
+            <h4>Buy Any Token</h4>
+            <p>0.25% of every trade on every one of the 48 country tokens flows into the champion pool automatically via creator rewards.</p>
+          </div>
+          <div class="how-step">
+            <div class="how-step-num">02</div>
+            <h4>Hold to the Final</h4>
+            <p>The pool builds for 32 days. The longer the tournament runs and the more volume there is, the larger the pool grows.</p>
+          </div>
+          <div class="how-step">
+            <div class="how-step-num">03</div>
+            <h4>Final Whistle Snapshot</h4>
+            <p>At full time of the final, a snapshot captures all holders of the winning nation's token. Your holdings at that moment determine your share.</p>
+          </div>
+          <div class="how-step">
+            <div class="how-step-num">04</div>
+            <h4>Claim Your SOL</h4>
+            <p>Return to this page after the final. The claim button activates within 24 hours. 1% platform fee applies. The rest goes straight to your wallet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: HISTORY -->
+    <div id="tab-history" style="display:none">
+      <div class="empty-state reveal">
+        <div class="empty-state-icon">📋</div>
+        <h3>No Claims Yet</h3>
+        <p>Your claim history will appear here once you've claimed winnings from a group stage or knockout pool.</p>
+        <button class="btn-gold" onclick="switchTab('pools', document.querySelector('.tab'))">View Live Pools →</button>
+      </div>
+    </div>
+
+    <!-- HOW CLAIMS WORK -->
+    <div class="how-claims reveal" id="how-claims-section">
+      <h3>How Claims Work</h3>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-step-num">01</div>
+          <h4>Hold Tokens</h4>
+          <p>Buy any country token through Mundial. Your holdings are tracked continuously — no registration needed.</p>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">02</div>
+          <h4>Match Resolves</h4>
+          <p>After each group stage and knockout match, results are confirmed on-chain. Pool splits are calculated automatically by finish position.</p>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">03</div>
+          <h4>Claim Opens</h4>
+          <p>Your claimable amount appears here within 2 hours of the result. You have 48 hours to claim before unclaimed SOL rolls to $MUNDIAL.</p>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">04</div>
+          <h4>Sign & Receive</h4>
+          <p>One wallet signature. 1% platform fee deducted. SOL lands in your wallet in the same transaction. Done.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end main -->
+
+  <!-- CLAIM CONFIRMATION MODAL -->
+  <div class="modal-overlay" id="claim-modal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h3>Confirm Claim</h3>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:16px">
+        <img id="modal-flag" class="flag-img lg" src="" alt=""/>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.06em;color:var(--gold)" id="modal-token"></div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;color:var(--muted2);letter-spacing:0.04em;text-transform:uppercase" id="modal-stage-label"></div>
+        </div>
+      </div>
+      <div class="modal-claim-amount" id="modal-amount"></div>
+      <div class="modal-claim-usd" id="modal-usd"></div>
+      <div class="modal-fee-breakdown">
+        <div class="modal-fee-row">
+          <span class="modal-fee-label">Gross winnings</span>
+          <span class="modal-fee-val" id="modal-gross"></span>
+        </div>
+        <div class="modal-fee-row">
+          <span class="modal-fee-label">Platform fee (1%)</span>
+          <span class="modal-fee-val negative" id="modal-fee"></span>
+        </div>
+        <div class="modal-fee-row">
+          <span class="modal-fee-label" style="font-weight:600;color:var(--text)">You receive</span>
+          <span class="modal-fee-val positive" id="modal-net"></span>
+        </div>
+      </div>
+      <p>By confirming, you authorise a transaction to your connected wallet. The platform fee is deducted on-chain in the same transaction.</p>
+      <button class="btn-gold" style="width:100%;padding:14px;font-size:1rem" onclick="confirmClaim()">Sign & Claim SOL →</button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <div class="toast-icon" id="toast-icon">✅</div>
+    <div class="toast-text" id="toast-text"></div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">⚽ MUNDIAL</div>
+    <div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Country tokens are speculative assets. Claims are subject to a 1% platform fee. Unclaimed winnings expire after 48 hours and roll to the $MUNDIAL treasury. Participate responsibly.</div>
+  </footer>
+
+  <script>
+    // ===================== FLAG HELPER =====================
+    const iso2 = {
+      USA:'us',MEX:'mx',CAN:'ca',NZL:'nz',BRA:'br',ARG:'ar',COL:'co',ECU:'ec',
+      FRA:'fr',GER:'de',SUI:'ch',SEN:'sn',ESP:'es',POR:'pt',MAR:'ma',TUR:'tr',
+      ENG:'gb-eng',NED:'nl',CRC:'cr',IRN:'ir',JPN:'jp',KOR:'kr',AUS:'au',KSA:'sa',
+      BEL:'be',CRO:'hr',URU:'uy',CMR:'cm',DEN:'dk',POL:'pl',TUN:'tn',GHA:'gh',
+      ITA:'it',AUT:'at',CHI:'cl',COD:'cd',SRB:'rs',CZE:'cz',PER:'pe',NGA:'ng',
+      EGY:'eg',SVK:'sk',RSA:'za',GRE:'gr',ROU:'ro',PAN:'pa',BFA:'bf'
+    };
+    const names = {
+      USA:'United States',MEX:'Mexico',CAN:'Canada',NZL:'New Zealand',BRA:'Brazil',
+      ARG:'Argentina',COL:'Colombia',ECU:'Ecuador',FRA:'France',GER:'Germany',
+      SUI:'Switzerland',SEN:'Senegal',ESP:'Spain',POR:'Portugal',MAR:'Morocco',
+      TUR:'Turkey',ENG:'England',NED:'Netherlands',CRC:'Costa Rica',IRN:'Iran',
+      JPN:'Japan',KOR:'South Korea',AUS:'Australia',KSA:'Saudi Arabia',BEL:'Belgium',
+      CRO:'Croatia',URU:'Uruguay',CMR:'Cameroon',DEN:'Denmark',POL:'Poland',
+      TUN:'Tunisia',GHA:'Ghana',ITA:'Italy',AUT:'Austria',CHI:'Chile',COD:'DR Congo',
+      SRB:'Serbia',CZE:'Czech Republic',PER:'Peru',NGA:'Nigeria',EGY:'Egypt',
+      SVK:'Slovakia',RSA:'South Africa',GRE:'Greece',ROU:'Romania',PAN:'Panama',BFA:'Burkina Faso'
+    };
+    function flagUrl(code) { return `https://flagcdn.com/w64/${iso2[code]}.png`; }
+    function flagImg(code, cls='sm') { return `<img class="flag-img ${cls}" src="${flagUrl(code)}" alt="${code}" onerror="this.style.display='none'"/>`; }
+
+    // ===================== STATE =====================
+    const SOL_PRICE = 175; // placeholder
+    const CLAIM_FEE = 0.01;
+    let walletConnected = false;
+    let pendingClaim = null;
+    let activeTab = 'claimable';
+
+    // Mock pool data — replace with live on-chain reads at launch
+    const groupPools = [
+      { group:'A', total:'0.00', teams:[{code:'USA',pct:42},{code:'MEX',pct:28},{code:'CAN',pct:18},{code:'NZL',pct:12}], status:'open', closes:'Jun 25' },
+      { group:'B', total:'0.00', teams:[{code:'BRA',pct:38},{code:'ARG',pct:32},{code:'COL',pct:18},{code:'ECU',pct:12}], status:'open', closes:'Jun 26' },
+      { group:'C', total:'0.00', teams:[{code:'FRA',pct:40},{code:'GER',pct:30},{code:'SUI',pct:18},{code:'SEN',pct:12}], status:'open', closes:'Jun 25' },
+      { group:'D', total:'0.00', teams:[{code:'ESP',pct:36},{code:'POR',pct:34},{code:'MAR',pct:18},{code:'TUR',pct:12}], status:'open', closes:'Jun 26' },
+      { group:'E', total:'0.00', teams:[{code:'ENG',pct:40},{code:'NED',pct:28},{code:'CRC',pct:18},{code:'IRN',pct:14}], status:'open', closes:'Jun 25' },
+      { group:'F', total:'0.00', teams:[{code:'JPN',pct:36},{code:'KOR',pct:28},{code:'AUS',pct:22},{code:'KSA',pct:14}], status:'open', closes:'Jun 25' },
+      { group:'G', total:'0.00', teams:[{code:'BEL',pct:38},{code:'CRO',pct:26},{code:'URU',pct:22},{code:'CMR',pct:14}], status:'open', closes:'Jun 26' },
+      { group:'H', total:'0.00', teams:[{code:'DEN',pct:36},{code:'POL',pct:28},{code:'TUN',pct:20},{code:'GHA',pct:16}], status:'open', closes:'Jun 26' },
+      { group:'I', total:'0.00', teams:[{code:'ITA',pct:40},{code:'AUT',pct:26},{code:'CHI',pct:20},{code:'COD',pct:14}], status:'open', closes:'Jun 25' },
+      { group:'J', total:'0.00', teams:[{code:'SRB',pct:34},{code:'CZE',pct:28},{code:'PER',pct:22},{code:'NGA',pct:16}], status:'open', closes:'Jun 26' },
+      { group:'K', total:'0.00', teams:[{code:'EGY',pct:36},{code:'SVK',pct:28},{code:'RSA',pct:22},{code:'URU',pct:14}], status:'open', closes:'Jun 25' },
+      { group:'L', total:'0.00', teams:[{code:'GRE',pct:36},{code:'ROU',pct:28},{code:'PAN',pct:22},{code:'BFA',pct:14}], status:'open', closes:'Jun 26' },
+    ];
+
+    const knockoutPools = [
+      { name:'Round of 32', teams:[{code:'BRA'},{code:'DEN'}], total:'0.00', status:'open', closes:'Jul 1' },
+      { name:'Round of 32', teams:[{code:'ARG'},{code:'JPN'}], total:'0.00', status:'open', closes:'Jul 1' },
+      { name:'Quarter-Final', teams:[{code:'FRA'},{code:'ENG'}], total:'0.00', status:'open', closes:'Jul 9' },
+      { name:'Semi-Final', teams:[{code:'BRA'},{code:'ARG'}], total:'0.00', status:'open', closes:'Jul 14' },
+    ];
+
+    // Mock claimable data for demo — real data comes from on-chain reads
+    const mockClaims = [
+      { code:'BRA', stage:'Group B', stageType:'group', finish:'1st', poolShare:'50%', holdings:'2.4%', grossSol:0.847, status:'ready', windowHours:31 },
+      { code:'ENG', stage:'Group E', stageType:'group', finish:'2nd', poolShare:'25%', holdings:'1.1%', grossSol:0.312, status:'ready', windowHours:18 },
+      { code:'AUS', stage:'Group F', stageType:'group', finish:'3rd', poolShare:'15%', holdings:'3.2%', grossSol:0.094, status:'pending', windowHours:null },
+    ];
+
+    // ===================== WALLET =====================
+    function connectWallet() {
+      // Placeholder — real Phantom connection at launch
+      walletConnected = true;
+      document.getElementById('wallet-display').textContent = '7xKp...3mRt';
+      document.getElementById('wallet-display').classList.add('connected');
+      document.getElementById('wallet-connect-btn').outerHTML = '<button class="btn-connected">✓ Connected</button>';
+      document.getElementById('nav-wallet-btn').textContent = '7xKp...3mRt';
+      document.getElementById('nav-wallet-btn').style.color = 'var(--green)';
+      document.getElementById('summary-grid').style.display = 'grid';
+      document.getElementById('connect-prompt').style.display = 'none';
+      updateSummary();
+      renderClaims();
+      showToast('✅', 'Wallet Connected', 'Showing your claimable winnings.');
+    }
+
+    function updateSummary() {
+      const ready = mockClaims.filter(c=>c.status==='ready').reduce((s,c)=>s+c.grossSol,0);
+      const pending = mockClaims.filter(c=>c.status==='pending').reduce((s,c)=>s+c.grossSol,0);
+      document.getElementById('sc-ready').textContent = ready.toFixed(3)+' SOL';
+      document.getElementById('sc-ready-usd').textContent = '≈ $'+(ready*SOL_PRICE).toFixed(2)+' USD';
+      document.getElementById('sc-pending').textContent = pending.toFixed(3)+' SOL';
+      document.getElementById('sc-claimed').textContent = '0.000 SOL';
+      document.getElementById('sc-tokens').textContent = '3';
+    }
+
+    // ===================== CLAIMS RENDER =====================
+    function renderClaims() {
+      const list = document.getElementById('claimable-list');
+      if (!walletConnected) return;
+
+      list.innerHTML = mockClaims.map(c => {
+        const net = c.grossSol * (1 - CLAIM_FEE);
+        const stageClass = c.stageType==='group'?'stage-group':c.stageType==='r32'?'stage-r32':c.stageType==='qf'?'stage-qf':'stage-final';
+        const isReady = c.status==='ready';
+        const isPending = c.status==='pending';
+
+        return `
+          <div class="claim-card ${isReady?'ready':isPending?'pending':'claimed'}">
+            <div class="claim-card-inner">
+              <div class="claim-left">
+                ${flagImg(c.code,'md')}
+                <div class="claim-token-info">
+                  <div class="claim-token-code">${c.code}</div>
+                  <div class="claim-token-name">${names[c.code]}</div>
+                </div>
+                <span class="claim-stage ${stageClass}">${c.stage}</span>
+              </div>
+              <div class="claim-middle">
+                <div class="claim-finish">${c.finish} Place</div>
+                <div class="claim-pool-share">Pool share: ${c.poolShare} · Your holdings: ${c.holdings}</div>
+              </div>
+              <div class="claim-amount">
+                <div class="claim-sol ${isPending?'pending-amt':''}">${c.grossSol.toFixed(3)} SOL</div>
+                <div class="claim-usd">≈ $${(c.grossSol*SOL_PRICE).toFixed(2)}</div>
+                <div class="claim-fee-note">1% fee = ${(c.grossSol*CLAIM_FEE).toFixed(4)} SOL</div>
+              </div>
+              <div class="claim-action">
+                ${isReady
+                  ? `<button class="btn-claim" onclick="openClaimModal('${c.code}','${c.stage}',${c.grossSol})">Claim SOL →</button>`
+                  : isPending
+                  ? `<button class="btn-claim-pending">Pending Result</button>`
+                  : `<button class="btn-claimed">✓ Claimed</button>`
+                }
+              </div>
+            </div>
+            ${isReady && c.windowHours ? `
+              <div class="window-warning">
+                <p>⏱ Claim window closes in ${c.windowHours} hours — unclaimed SOL rolls to $MUNDIAL treasury</p>
+              </div>` : ''}
+            <div class="claim-progress">
+              <div class="claim-progress-fill ${isPending?'pending-fill':''}" style="width:${isReady?100:isPending?50:100}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ===================== POOL GRID =====================
+    function renderPools() {
+      const grid = document.getElementById('pool-grid');
+      grid.innerHTML = groupPools.map(p => `
+        <div class="pool-card">
+          <div class="pool-card-header">
+            <span class="pool-group-label">GROUP ${p.group}</span>
+            <span class="pool-status pool-${p.status}">${p.status==='open'?'Open':'Settled'}</span>
+          </div>
+          <div class="pool-card-body">
+            <div class="pool-total-row">
+              <div class="pool-total-num">${p.total} SOL</div>
+              <div class="pool-total-usd">Pre-launch</div>
+            </div>
+            <div class="pool-teams">
+              ${p.teams.map((t,i) => `
+                <div class="pool-team-row">
+                  <span class="pool-team-position">${i+1}</span>
+                  ${flagImg(t.code,'sm')}
+                  <span class="pool-team-code">${t.code}</span>
+                  <div class="pool-team-bar-bg">
+                    <div class="pool-team-bar-fill ${i===0?'leader':''}" style="width:${t.pct}%"></div>
+                  </div>
+                  <span class="pool-team-pct">${t.pct}%</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          <div class="pool-card-footer">
+            <span class="pool-closes">Settles: <span>${p.closes}</span></span>
+            <span class="pool-closes">Payout: <span>50/25/15/→burn</span></span>
+          </div>
+        </div>
+      `).join('');
+
+      const kgrid = document.getElementById('knockout-pool-grid');
+      kgrid.innerHTML = knockoutPools.map(p => `
+        <div class="pool-card">
+          <div class="pool-card-header">
+            <span class="pool-group-label">${p.name}</span>
+            <span class="pool-status pool-open">Open</span>
+          </div>
+          <div class="pool-card-body">
+            <div class="pool-total-row">
+              <div class="pool-total-num">${p.total} SOL</div>
+              <div class="pool-total-usd">Pre-launch</div>
+            </div>
+            <div class="pool-teams" style="gap:10px">
+              ${p.teams.map(t => `
+                <div class="pool-team-row">
+                  ${flagImg(t.code,'sm')}
+                  <span class="pool-team-code" style="flex:1">${t.code} — ${names[t.code]}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          <div class="pool-card-footer">
+            <span class="pool-closes">Closes at kickoff: <span>${p.closes}</span></span>
+            <span class="pool-closes">Winner takes: <span>100%</span></span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ===================== CLAIM MODAL =====================
+    function openClaimModal(code, stage, gross) {
+      pendingClaim = { code, stage, gross };
+      const net = gross * (1 - CLAIM_FEE);
+      const fee = gross * CLAIM_FEE;
+      document.getElementById('modal-flag').src = flagUrl(code);
+      document.getElementById('modal-token').textContent = '$'+code+' — '+names[code];
+      document.getElementById('modal-stage-label').textContent = stage;
+      document.getElementById('modal-amount').textContent = net.toFixed(4)+' SOL';
+      document.getElementById('modal-usd').textContent = '≈ $'+(net*SOL_PRICE).toFixed(2)+' USD at current SOL price';
+      document.getElementById('modal-gross').textContent = gross.toFixed(4)+' SOL';
+      document.getElementById('modal-fee').textContent = '−'+fee.toFixed(4)+' SOL';
+      document.getElementById('modal-net').textContent = net.toFixed(4)+' SOL';
+      document.getElementById('claim-modal').classList.add('open');
+    }
+
+    function closeModal() { document.getElementById('claim-modal').classList.remove('open'); }
+
+    function confirmClaim() {
+      closeModal();
+      showToast('✅','Claim Submitted','SOL is on its way to your wallet. Transaction will confirm in ~2 seconds.');
+      // In production: trigger Phantom signTransaction here
+    }
+
+    document.getElementById('claim-modal').addEventListener('click', e => {
+      if(e.target===document.getElementById('claim-modal')) closeModal();
+    });
+
+    // ===================== TABS =====================
+    function switchTab(tab, el) {
+      activeTab = tab;
+      ['claimable','pools','champion','history'].forEach(t => {
+        document.getElementById('tab-'+t).style.display = t===tab?'block':'none';
+      });
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      if(el) el.classList.add('active');
+      document.getElementById('how-claims-section').style.display = tab==='claimable'?'block':'none';
+      if(tab==='pools') renderPools();
+    }
+
+    // ===================== TOAST =====================
+    function showToast(icon, title, msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toast-icon').textContent = icon;
+      document.getElementById('toast-text').innerHTML = `<strong>${title}</strong>${msg}`;
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'), 4000);
+    }
+
+    // ===================== CHAMPION POOL =====================
+    function updateChampionPool() {
+      const start = new Date('2026-06-11');
+      const end = new Date('2026-07-19');
+      const now = new Date();
+      const pct = Math.max(0, Math.min(100, ((now-start)/(end-start))*100));
+      document.getElementById('champ-progress').style.width = pct+'%';
+      const daysLeft = Math.max(0, Math.ceil((end-now)/86400000));
+      document.getElementById('champ-days-left').textContent = now < start
+        ? 'Tournament starts in '+Math.ceil((start-now)/86400000)+' days'
+        : daysLeft+' days remaining in tournament';
+    }
+    updateChampionPool();
+
+    // ===================== REVEAL =====================
+    const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.08});
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>
