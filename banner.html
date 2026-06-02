@@ -281,14 +281,14 @@ const globalStyles = {
 };
 
 const taglines = {
-  USA:"IT'S OUR WORLD CUP. AND OUR SOL.",BRA:'THE BEAUTIFUL GAME. THE BIGGEST PRIZE.',
-  ARG:'DEFENDING CHAMPIONS. DEFENDING EVERYTHING.',ENG:"IT'S COMING HOME. AND SO IS THE SOL.",
+  USA:"OUR WORLD CUP. OUR SOL.",BRA:'THE BEAUTIFUL GAME. THE BIGGEST PRIZE.',
+  ARG:'DEFENDING CHAMPIONS. ON-CHAIN.',ENG:"IT'S COMING HOME. SO IS THE SOL.",
   AUS:'THE SOCCEROOS ARE ON-CHAIN.',MEX:'EL TRI ON THE BLOCKCHAIN.',
   FRA:'LES BLEUS. LES POOLS. LES PAYOUTS.',GER:'EFFICIENCY ON AND OFF THE PITCH.',
   ESP:'LA ROJA. BACKED ON-CHAIN.',POR:'BACK THE BEST. WIN THE REST.',
   JPN:'THE SAMURAI BLUE GO DIGITAL.',KOR:'TAEGUK WARRIORS. REAL REWARDS.',
-  NED:'TOTAL FOOTBALL. TOTAL PAYOUT.',BEL:'THE GOLDEN GENERATION. GOLDEN RETURNS.',
-  URU:'PASSION. HISTORY. SOL.',ITA:'THE AZZURRI ARE BACK. SO IS YOUR WALLET.',
+  NED:'TOTAL FOOTBALL. TOTAL PAYOUT.',BEL:'GOLDEN GENERATION. GOLDEN RETURNS.',
+  URU:'PASSION. HISTORY. SOL.',ITA:'THE AZZURRI ARE BACK.',
   DEFAULT:'BACK YOUR NATION. WIN REAL SOL.',
 };
 
@@ -496,96 +496,90 @@ async function drawBanner(canvas, code) {
     ctx.globalAlpha = 1;
 
   } else {
-    // ---- TWITTER / SQUARE LAYOUT ----
-    // Use H as scale unit so proportions hold across both formats
-    const S = H;
-    const tx = Math.round(W*0.042);
+    // ---- TWITTER / SQUARE LAYOUT (clean editorial design) ----
+    const S = H;                       // scale unit
+    const tx = Math.round(W*0.038);    // left margin
     ctx.textAlign = 'left';
 
-    // ---- TOP: MUNDIAL wordmark ----
-    const mSize = Math.round(S*0.095); // visible and clear
-    const mY = Math.round(S*0.14);
-    ctx.font = `700 ${mSize}px 'Bebas Neue',sans-serif`;
-    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.9;
-    ctx.fillText('MUNDIAL', tx, mY);
-
-    // Rule line
-    ctx.globalAlpha = 0.2; ctx.fillStyle = s.accent;
-    ctx.fillRect(tx, mY + Math.round(mSize*0.25), Math.round(W*0.28), 1);
+    // ---- TOP: single letter-spaced line + rule ----
+    const topSize = Math.round(S*0.052);
+    ctx.font = `700 ${topSize}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.85;
+    drawSpaced(ctx, 'MUNDIAL  ·  2026 WORLD CUP', tx, Math.round(S*0.16), topSize*0.32);
+    ctx.globalAlpha = 0.22;
+    ctx.fillRect(tx, Math.round(S*0.205), Math.round(W*0.26), 1);
     ctx.globalAlpha = 1;
 
-    // Sub label
-    const subSize = Math.round(S*0.058);
-    ctx.font = `600 ${subSize}px 'Barlow Condensed',sans-serif`;
-    ctx.fillStyle = 'white'; ctx.globalAlpha = 0.38;
-    ctx.fillText('2026 WORLD CUP · SOLANA', tx, mY + Math.round(mSize*0.25) + Math.round(subSize*1.2));
-    ctx.globalAlpha = 1;
-
-    // ---- CENTRE: BIG CODE ----
-    const codeSize = isSquare ? Math.round(S*0.46) : Math.round(S*0.50);
-    const codeY = Math.round(S*0.66);
-
-    // Shadow
-    ctx.font = `700 ${codeSize}px 'Bebas Neue',sans-serif`;
-    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.05;
-    ctx.fillText(code, tx+2, codeY+2);
-    ctx.globalAlpha = 1;
-    // Main
+    // ---- BIG CODE (serif, elegant) ----
+    const codeSize = Math.round(S*0.40);
+    const codeBaseline = Math.round(S*0.55);
+    ctx.font = `700 ${codeSize}px Georgia, 'DejaVu Serif', serif`;
     ctx.fillStyle = 'white';
-    ctx.fillText(code, tx, codeY);
+    ctx.fillText(code, tx, codeBaseline);
 
-    // ---- COUNTRY NAME ----
-    const nameSize = Math.round(S*0.085);
-    const nameY = codeY + Math.round(S*0.105);
-    ctx.font = `300 ${nameSize}px 'Barlow Condensed',sans-serif`;
-    ctx.fillStyle = 'white'; ctx.globalAlpha = 0.52;
-    ctx.fillText(fullName, tx+2, nameY);
+    // ---- COUNTRY NAME (letter-spaced, muted) ----
+    const nameSize = Math.round(S*0.066);
+    const nameY = codeBaseline + Math.round(S*0.105);
+    ctx.font = `400 ${nameSize}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle = '#9aa0ad'; ctx.globalAlpha = 0.9;
+    drawSpaced(ctx, fullName, tx, nameY, nameSize*0.12);
     ctx.globalAlpha = 1;
 
-    // ---- PILLS ----
-    const pillH = Math.round(S*0.095);
-    const pillY2 = nameY + Math.round(S*0.07);
-    const pillR = pillH/2;
-    const pFontSize = Math.round(S*0.065);
-    const tokenPillW = Math.round(S*0.38);
-    const groupPillW = Math.round(S*0.34);
-
-    // Token pill
-    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.15;
-    roundRect(ctx, tx, pillY2, tokenPillW, pillH, pillR); ctx.fill();
-    ctx.strokeStyle = s.accent; ctx.lineWidth = 2; ctx.globalAlpha = 0.65;
-    roundRect(ctx, tx, pillY2, tokenPillW, pillH, pillR); ctx.stroke();
+    // ---- TAGLINE (its own line, muted) ----
+    const tagSize = Math.round(S*0.05);
+    const tagY = nameY + Math.round(S*0.085);
+    ctx.font = `500 ${tagSize}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle = '#8a8f9c'; ctx.globalAlpha = 0.85;
+    // truncate to keep within left column
+    let tText = tagline;
+    const maxTagW = W*0.52;
+    while(ctx.measureText(tText).width > maxTagW && tText.length > 8){ tText = tText.slice(0,-2); }
+    if(tText !== tagline) tText = tText.trim() + '…';
+    drawSpaced(ctx, tText, tx, tagY, tagSize*0.02);
     ctx.globalAlpha = 1;
-    ctx.font = `700 ${pFontSize}px 'Bebas Neue',sans-serif`;
+
+    // ---- SINGLE PILL: $CODE (theme-accent outline) ----
+    const pillH = Math.round(S*0.085);
+    const pillY = tagY + Math.round(S*0.06);
+    const pFont = Math.round(S*0.05);
+    ctx.font = `700 ${pFont}px 'Bebas Neue',sans-serif`;
+    const pillLabel = '$' + code;
+    const pillTextW = ctx.measureText(pillLabel).width;
+    const pillW = Math.max(Math.round(S*0.26), pillTextW + Math.round(S*0.13));
+    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.10;
+    roundRect(ctx, tx, pillY, pillW, pillH, pillH/2); ctx.fill();
+    ctx.strokeStyle = s.accent; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.7;
+    roundRect(ctx, tx, pillY, pillW, pillH, pillH/2); ctx.stroke();
+    ctx.globalAlpha = 1;
     ctx.fillStyle = s.accent; ctx.textAlign = 'center';
-    ctx.fillText('$'+code, tx + tokenPillW/2, pillY2 + pillH*0.68);
-
-    // Group pill
-    const gPillX = tx + tokenPillW + Math.round(S*0.04);
-    ctx.fillStyle = 'white'; ctx.globalAlpha = 0.05;
-    roundRect(ctx, gPillX, pillY2, groupPillW, pillH, pillR); ctx.fill();
-    ctx.strokeStyle = 'white'; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.18;
-    roundRect(ctx, gPillX, pillY2, groupPillW, pillH, pillR); ctx.stroke();
-    ctx.globalAlpha = 0.55; ctx.fillStyle = 'white';
-    ctx.fillText('GROUP '+grp, gPillX + groupPillW/2, pillY2 + pillH*0.68);
-    ctx.globalAlpha = 1;
+    ctx.fillText(pillLabel, tx + pillW/2, pillY + pillH*0.68);
     ctx.textAlign = 'left';
 
     // ---- BOTTOM RIGHT: URL + handle ----
-    const urlSize = Math.round(S*0.065);
+    const urlSize = Math.round(S*0.058);
     ctx.textAlign = 'right';
     const brX = W - Math.round(W*0.03);
-
     ctx.font = `700 ${urlSize}px 'Bebas Neue',sans-serif`;
-    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.65;
-    ctx.fillText('MUNDIAL.GG', brX, Math.round(H*0.89));
-
-    ctx.font = `600 ${Math.round(urlSize*0.78)}px 'Barlow Condensed',sans-serif`;
-    ctx.fillStyle = 'white'; ctx.globalAlpha = 0.32;
-    ctx.fillText('@MUNDIAL2026_SOL  ·  BUY · HOLD · WIN SOL', brX, Math.round(H*0.97));
+    ctx.fillStyle = s.accent; ctx.globalAlpha = 0.7;
+    ctx.fillText('MUNDIAL.GG', brX, Math.round(H*0.88));
+    ctx.font = `600 ${Math.round(urlSize*0.66)}px 'Barlow Condensed',sans-serif`;
+    ctx.fillStyle = '#8a8f9c'; ctx.globalAlpha = 0.6;
+    ctx.fillText('@MUNDIAL2026_SOL  ·  BUY · HOLD · WIN SOL', brX, Math.round(H*0.955));
     ctx.globalAlpha = 1;
     ctx.textAlign = 'left';
   }
+}
+
+function drawSpaced(ctx, text, x, y, gap){
+  // draws text left-aligned with manual letter-spacing
+  const prevAlign = ctx.textAlign;
+  ctx.textAlign = 'left';
+  let cx = x;
+  for(const ch of text){
+    ctx.fillText(ch, cx, y);
+    cx += ctx.measureText(ch).width + gap;
+  }
+  ctx.textAlign = prevAlign;
 }
 
 function roundRect(ctx,x,y,w,h,r){
