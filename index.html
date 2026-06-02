@@ -346,7 +346,9 @@
   .mnav-panel a:last-child{border-bottom:0}
   .mnav-panel a.active,.mnav-panel a:hover{color:var(--gold,#f5c518)}
   @media(max-width:1024px){.mnav-btn{display:flex}}
-
+  /* prevent any horizontal scroll on mobile + hide overflowing nav items (hamburger handles nav) */
+  html,body{overflow-x:hidden;max-width:100%}
+  @media(max-width:1024px){ nav .nav-price, nav .nav-right{display:none} nav{gap:14px;justify-content:flex-start} }
 </style>
 </head>
 <body>
@@ -364,7 +366,7 @@
   </div>
 
     <div class="nav-logo" onclick="location.href='index.html'">⚽ MUNDIAL</div>
-    <div style="display:flex;align-items:center;gap:8px;background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.2);border-radius:6px;padding:5px 12px;cursor:pointer" onclick="window.open('https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump','_blank')">
+    <div class="nav-price" style="display:flex;align-items:center;gap:8px;background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.2);border-radius:6px;padding:5px 12px;cursor:pointer" onclick="window.open('https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump','_blank')">
       <div style="width:8px;height:8px;border-radius:50%;background:#00e676;animation:livePulse 2s ease-in-out infinite;flex-shrink:0"></div>
       <span style="font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.06em;color:#f5c518">$MUNDIAL</span>
       <span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted2)" id="mundial-price">LIVE</span>
