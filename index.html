@@ -341,6 +341,7 @@
       <li><a href="#matches" onclick="showPage('matches');return false;" id="nav-matches">Matches</a></li>
       <li><a href="#tokens" onclick="showPage('tokens');return false;" id="nav-tokens">Tokens</a></li>
       <li><a href="#schedule" onclick="showPage('schedule');return false;" id="nav-schedule">Schedule</a></li>
+      <li><a href="swap.html">Swap</a></li>
       <li><a href="banner.html">Banners</a></li>
       <li><a href="claim.html">Claim</a></li>
     </ul>
@@ -825,13 +826,23 @@
       currentModalCA = ca;
       document.getElementById('modal-ca').textContent = ca;
 
-      document.getElementById('modal-buy-links').innerHTML = `
-        <a href="https://pump.fun/coin/${ca}" target="_blank" rel="noopener"
+      const swapBtn = (code === 'MUNDIAL') ? `
+        <a href="swap.html" rel="noopener"
            style="display:flex;align-items:center;gap:12px;background:var(--gold);color:#000;padding:14px 18px;border-radius:8px;text-decoration:none">
+          <span style="font-size:1.2rem">🔄</span>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.06em">Swap on mundial.gg</div>
+            <div style="font-size:0.72rem;opacity:0.65;font-family:'Barlow Condensed',sans-serif">SOL → MUNDIAL pre-filled · Recommended</div>
+          </div>
+          <span style="margin-left:auto">→</span>
+        </a>` : '';
+      document.getElementById('modal-buy-links').innerHTML = swapBtn + `
+        <a href="https://pump.fun/coin/${ca}" target="_blank" rel="noopener"
+           style="display:flex;align-items:center;gap:12px;background:${code==='MUNDIAL'?'var(--surface2)':'var(--gold)'};color:${code==='MUNDIAL'?'var(--text)':'#000'};padding:14px 18px;border-radius:8px;text-decoration:none;${code==='MUNDIAL'?'border:1px solid var(--border)':''}">
           <span style="font-size:1.2rem">⚡</span>
           <div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.06em">Buy on pump.fun</div>
-            <div style="font-size:0.72rem;opacity:0.65;font-family:'Barlow Condensed',sans-serif">Most liquidity · Recommended</div>
+            <div style="font-size:0.72rem;opacity:0.65;font-family:'Barlow Condensed',sans-serif">Most liquidity</div>
           </div>
           <span style="margin-left:auto">→</span>
         </a>
