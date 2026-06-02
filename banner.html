@@ -113,11 +113,8 @@
   <a class="nav-logo" href="index.html">⚽ MUNDIAL</a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
-    <li><a href="index.html#groups">Groups</a></li>
-    <li><a href="index.html#matches">Matches</a></li>
-    <li><a href="index.html#tokens">Tokens</a></li>
-    <li><a href="index.html#schedule">Schedule</a></li>
-    <li><a href="swap.html">Swap</a></li>
+    <li><a href="nations.html">Nations</a></li>
+    <li><a href="pools.html">Pools</a></li>
     <li><a href="banner.html" class="active">Banners</a></li>
     <li><a href="claim.html">Claim</a></li>
   </ul>
@@ -201,7 +198,7 @@ const iso2 = {
   ENG:'gb-eng',NED:'nl',CRC:'cr',IRN:'ir',JPN:'jp',KOR:'kr',AUS:'au',KSA:'sa',
   BEL:'be',CRO:'hr',URU:'uy',CMR:'cm',DEN:'dk',POL:'pl',TUN:'tn',GHA:'gh',
   ITA:'it',AUT:'at',CHI:'cl',COD:'cd',SRB:'rs',CZE:'cz',PER:'pe',NGA:'ng',
-  EGY:'eg',SVK:'sk',RSA:'za',GRE:'gr',ROU:'ro',PAN:'pa',BFA:'bf'
+  EGY:'eg',SVK:'sk',RSA:'za',QAT:'qa',GRE:'gr',ROU:'ro',PAN:'pa',BFA:'bf'
 };
 const names = {
   USA:'United States',MEX:'Mexico',CAN:'Canada',NZL:'New Zealand',BRA:'Brazil',
@@ -212,7 +209,7 @@ const names = {
   CRO:'Croatia',URU:'Uruguay',CMR:'Cameroon',DEN:'Denmark',POL:'Poland',
   TUN:'Tunisia',GHA:'Ghana',ITA:'Italy',AUT:'Austria',CHI:'Chile',COD:'DR Congo',
   SRB:'Serbia',CZE:'Czech Republic',PER:'Peru',NGA:'Nigeria',EGY:'Egypt',
-  SVK:'Slovakia',RSA:'South Africa',GRE:'Greece',ROU:'Romania',PAN:'Panama',BFA:'Burkina Faso'
+  SVK:'Slovakia',RSA:'South Africa',QAT:'Qatar',GRE:'Greece',ROU:'Romania',PAN:'Panama',BFA:'Burkina Faso'
 };
 const groupMap = {
   USA:'A',MEX:'A',CAN:'A',NZL:'A',BRA:'B',ARG:'B',COL:'B',ECU:'B',
@@ -220,7 +217,7 @@ const groupMap = {
   ENG:'E',NED:'E',CRC:'E',IRN:'E',JPN:'F',KOR:'F',AUS:'F',KSA:'F',
   BEL:'G',CRO:'G',URU:'G',CMR:'G',DEN:'H',POL:'H',TUN:'H',GHA:'H',
   ITA:'I',AUT:'I',CHI:'I',COD:'I',SRB:'J',CZE:'J',PER:'J',NGA:'J',
-  EGY:'K',SVK:'K',RSA:'K',GRE:'L',ROU:'L',PAN:'L',BFA:'L'
+  EGY:'K',SVK:'K',RSA:'K',QAT:'K',GRE:'L',ROU:'L',PAN:'L',BFA:'L'
 };
 // Nation-specific colour palettes
 const nationPalette = {
@@ -267,6 +264,7 @@ const nationPalette = {
   EGY:{bg1:'#0d0000',bg2:'#1a0000',accent:'#ce1126',accent2:'#ffffff',glow:'rgba(206,17,38,0.28)'},
   SVK:{bg1:'#00000d',bg2:'#00001a',accent:'#0b4ea2',accent2:'#ee1c25',glow:'rgba(11,78,162,0.28)'},
   RSA:{bg1:'#001500',bg2:'#002200',accent:'#007a4d',accent2:'#ffb612',glow:'rgba(0,122,77,0.3)'},
+  QAT:{bg1:'#10000a',bg2:'#1a0010',accent:'#8d1b3d',accent2:'#ffffff',glow:'rgba(141,27,61,0.32)'},
   GRE:{bg1:'#00050d',bg2:'#000a1a',accent:'#0d5eaf',accent2:'#ffffff',glow:'rgba(13,94,175,0.28)'},
   ROU:{bg1:'#00000a',bg2:'#000014',accent:'#002b7f',accent2:'#fcd116',glow:'rgba(252,209,22,0.22)'},
   PAN:{bg1:'#00000d',bg2:'#00001a',accent:'#da121a',accent2:'#005293',glow:'rgba(218,18,26,0.28)'},
