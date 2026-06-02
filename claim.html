@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How You Get Paid — Claims | mundial.gg</title>
-<meta name="description" content="How Mundial prize-pool payouts work: snapshot, published Merkle root, self-claim. Honest, verifiable, no fake buttons.">
+<meta name="description" content="How Mundial prize-pool payouts work: holdings through the tournament window, published holder list + Merkle root, self-claim. Honest, verifiable.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -145,7 +145,7 @@
 <div class="page-hero">
   <div class="section-tag">Payouts · How It Works</div>
   <h1>How You<br>Get <span class="gold">Paid.</span></h1>
-  <p>No "claim now" button that quietly does nothing. When a pool settles, we publish the holder snapshot and a Merkle root on-chain — then you claim your own share against it. Here's exactly how, and exactly when.</p>
+  <p>No "claim now" button that quietly does nothing. When a pool settles, we publish the full holder list and a Merkle root on-chain — then you claim your own share against it. Here's exactly how, and exactly when.</p>
 </div>
 
 <div class="inner">
@@ -163,12 +163,12 @@
   <div class="blockhead">
     <div class="section-tag">The mechanism</div>
     <h2>Four Steps. All Verifiable.</h2>
-    <p>You never have to trust that we'll "send it." The snapshot is public, the root is on-chain, and the claim is something you trigger yourself.</p>
+    <p>You never have to trust that we'll "send it." The holder list is public, the root is on-chain, and the claim is something you trigger yourself.</p>
   </div>
   <div class="steps">
-    <div class="step"><div class="snum">01</div><h3>Snapshot</h3><p>When a pool settles, we record every holder of the qualifying nation tokens at a fixed block. The full snapshot is published so anyone can check their balance is in it.</p></div>
-    <div class="step"><div class="snum">02</div><h3>Merkle Root</h3><p>The snapshot is hashed into a Merkle tree and the root is committed on-chain. Anyone can rebuild the tree from the public snapshot and confirm the root matches.</p></div>
-    <div class="step"><div class="snum">03</div><h3>You Claim</h3><p>The pool is funded into an audited distributor. You connect your wallet here, submit your proof, and pull your share. We never push funds to you — you take them.</p></div>
+    <div class="step"><div class="snum">01</div><h3>Holdings</h3><p>Your share is based on how much of the qualifying token you held <b>while the pool was building</b> — measured across the whole window, not a single block, so there's no one moment to game. The full holder list is published so anyone can check their balance is in it.</p></div>
+    <div class="step"><div class="snum">02</div><h3>Merkle Root</h3><p>The holder list is hashed into a Merkle tree and the root is committed on-chain. Anyone can rebuild the tree from the public list and confirm the root matches.</p></div>
+    <div class="step"><div class="snum">03</div><h3>You Claim</h3><p>The pool is funded into an open-source, audited distributor contract — we publish its address and the audit before any funds go in. You connect your wallet here, submit your proof, and pull your share. We never push funds to you — you take them.</p></div>
     <div class="step"><div class="snum">04</div><h3>SOL Arrives</h3><p>Your share lands directly in the wallet that held the token. One on-chain transaction you can see on Solscan. Done.</p></div>
   </div>
 
@@ -195,13 +195,13 @@
 
   <!-- WHAT YOU NEED -->
   <div class="blockhead">
-    <div class="section-tag">Before the snapshot</div>
+    <div class="section-tag">Before the claim</div>
     <h2>What You Need To Qualify</h2>
   </div>
   <div class="need">
-    <div class="nrow"><span class="nick">✓</span><span class="ntext"><b>Hold the nation's token in a wallet you control</b> (Phantom, Solflare, etc.) through the snapshot block. Self-custody — your keys.</span></div>
-    <div class="nrow"><span class="nick">✓</span><span class="ntext"><b>Don't leave it on a centralised exchange.</b> If your tokens sit in an exchange account, the snapshot sees the exchange's wallet, not you — and you won't be able to claim.</span></div>
-    <div class="nrow"><span class="nick">✓</span><span class="ntext"><b>Watch <a href="https://x.com/Mundial2026_sol" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none">@Mundial2026_sol</a> for the exact snapshot block and the claim window.</b> Both are announced before they happen.</span></div>
+    <div class="nrow"><span class="nick">✓</span><span class="ntext"><b>Hold the nation's token in a wallet you control</b> (Phantom, Solflare, etc.) through the tournament window. Self-custody — your keys.</span></div>
+    <div class="nrow"><span class="nick">✓</span><span class="ntext"><b>Don't leave it on a centralised exchange.</b> If your tokens sit in an exchange account, the holder list sees the exchange's wallet, not you — and you won't be able to claim.</span></div>
+    <div class="nrow"><span class="nick">✓</span><span class="ntext"><b>Watch <a href="https://x.com/Mundial2026_sol" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none">@Mundial2026_sol</a> for the claim window opening.</b> It's announced before it happens.</span></div>
   </div>
 
   <!-- VERIFY -->
@@ -218,6 +218,7 @@
     <h3>⚠ Protect Yourself</h3>
     <ul>
       <li>We will <b>never DM you first</b>, and we will never ask for your seed phrase or private key. Nobody legitimate ever does.</li>
+      <li>The <b>only</b> official domain is <b>mundial.gg</b> — there is no alternate site, "claim portal," or backup domain. Other spellings or TLDs (mundial&#46;io, mundial-claim, etc.) are scams.</li>
       <li>Claims happen <b>only at mundial.gg/claim.html</b> — not via DMs, not via links in replies, not on look-alike domains. Check the URL.</li>
       <li>There is <b>no "pre-claim," no "verification fee," no "unlock payment."</b> Claiming costs only the normal Solana network fee, paid by you, to your own transaction.</li>
       <li>If a window isn't open on this page, <b>any site telling you to claim right now is a scam.</b></li>
@@ -230,8 +231,8 @@
   <a class="footer-logo" href="index.html">⚽ MUNDIAL</a>
   <ul class="footer-links">
     <li><a href="pools.html">Live Pools</a></li>
-    <li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li>
-    <li><a href="https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump" target="_blank">$MUNDIAL</a></li>
+    <li><a href="https://x.com/Mundial2026_sol" target="_blank" rel="noopener noreferrer">Twitter / X</a></li>
+    <li><a href="https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump" target="_blank" rel="noopener noreferrer">$MUNDIAL</a></li>
   </ul>
   <div class="footer-disclaimer">Payouts depend on real-world tournament outcomes and the custodial and oracle steps described on the Pools page. Informational only, not a guarantee of returns. Self-custody required to claim. Not affiliated with FIFA. DYOR.</div>
 </footer>
@@ -248,7 +249,7 @@
   document.getElementById('w2date').textContent = 'Pays at the Final · ' + fmtDate(WINDOWS.final.settle);
 
   // Honest status: a window is only "open" when we explicitly flip it true
-  // (i.e. snapshot taken + root committed + distributor funded). Dates alone
+  // (i.e. holder list finalised + root committed + distributor funded). Dates alone
   // do NOT open a claim — they just tell people roughly when to expect it.
   function renderStatus(){
     const box = document.getElementById('statusBox');
@@ -275,7 +276,7 @@
       title.textContent = 'No claim window is open yet';
       text.textContent = 'The next payout is the ' + next.label.toLowerCase()
         + ', expected around ' + fmtDate(next.settle)
-        + '. The exact snapshot block and claim link will be posted here and on @Mundial2026_sol before it opens. Anything telling you to claim before then is a scam.';
+        + '. The claim link will be posted here and on @Mundial2026_sol before it opens. Anything telling you to claim before then is a scam.';
     }else{
       title.textContent = 'No claim window is open right now';
       text.textContent = 'Watch @Mundial2026_sol for any remaining or follow-up claim windows. Claims only ever happen on this page.';
