@@ -128,6 +128,7 @@
   html,body{overflow-x:hidden;max-width:100%}
 
 </style>
+  <script src="tokens.js"></script>
 </head>
 <body>
 
@@ -193,7 +194,7 @@
   <ul class="footer-links">
     <li><a href="pools.html">Live Pools</a></li>
     <li><a href="index.html#tokens">All Tokens</a></li>
-    <li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li>
+    <li><a href="https://x.com/Mundial2026_sol" target="_blank" rel="noopener noreferrer">Twitter / X</a></li>
   </ul>
   <div class="footer-disclaimer">Ranking reflects live market cap / volume from public market data, not the prize pool — see the Pools page for the on-chain pool. Market data can lag for freshly launched tokens. Speculative assets; not affiliated with FIFA. DYOR.</div>
 </footer>
@@ -205,10 +206,7 @@
    tokenCAs. A nation joins the live ranking automatically once it has a CA
    and market data appears. Until then it shows under "Launching soon".
    ===================================================================== */
-const tokenCAs = {
-  // BRA: 'PASTE_BRA_CA_HERE',
-  // ARG: 'PASTE_ARG_CA_HERE',
-};
+const tokenCAs = window.MUNDIAL_TOKENS || {};
 
 const iso2 = {
   USA:'us',MEX:'mx',CAN:'ca',NZL:'nz',BRA:'br',ARG:'ar',COL:'co',ECU:'ec',
