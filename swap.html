@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<!-- Jupiter Plugin (RPC-less, Ultra mode) -->
+<script src="https://plugin.jup.ag/plugin-v1.js" data-preload defer></script>
 <style>
   :root {
     --bg:#060709; --surface:#0c0e12; --surface2:#12151c;
@@ -123,8 +125,8 @@
 
 <div class="wrap">
   <div class="kicker">Instant Swap</div>
-  <h1>BUY $MUNDIAL</h1>
-  <p class="sub">Swap SOL for $MUNDIAL right here. The pair is pre-set — just connect your wallet and trade.</p>
+  <h1 id="swap-title">BUY $MUNDIAL</h1>
+  <p class="sub" id="swap-sub">Swap SOL for $MUNDIAL right here. The pair is pre-set — just connect your wallet and trade.</p>
 
   <div class="pair-row">
     <div class="pair-chip">
@@ -133,12 +135,13 @@
     </div>
     <div class="pair-arrow">→</div>
     <div class="pair-chip">
-      <div class="tok-ico">M</div>
-      <span>MUNDIAL</span>
+      <div class="tok-ico" id="pair-ico">M</div>
+      <span id="pair-name">MUNDIAL</span>
     </div>
   </div>
 
   <div class="terminal-shell">
+    <div id="jupiter-plugin"></div>
     <div id="integrated-terminal">
       <div class="term-status" id="term-loading">
         <div class="spinner"></div>
@@ -146,7 +149,7 @@
       </div>
       <div class="fallback" id="term-fallback">
         <h3>Swap on a Trusted Venue</h3>
-        <p>Open the pre-filled SOL → $MUNDIAL swap on any of these. Your wallet, your keys.</p>
+        <p id="fb-sub">Open the pre-filled SOL → $MUNDIAL swap on any of these. Your wallet, your keys.</p>
         <div class="fallback-links">
           <a class="fl gold" id="fb-jup" href="#" target="_blank" rel="noopener">
             <span style="font-size:1.2rem">🪐</span>
@@ -188,64 +191,105 @@
 </footer>
 
 <script>
-  const MUNDIAL_CA = 'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump';
   const SOL_MINT = 'So11111111111111111111111111111111111111112';
 
-  // Pre-fill fallback links (these always work, pair pre-selected)
-  document.getElementById('fb-jup').href  = `https://jup.ag/swap/SOL-${MUNDIAL_CA}`;
-  document.getElementById('fb-pump').href = `https://pump.fun/coin/${MUNDIAL_CA}`;
-  document.getElementById('fb-ray').href  = `https://raydium.io/swap/?inputCurrency=sol&outputCurrency=${MUNDIAL_CA}`;
+  // ---- Token registry. Add each country's CA here as it launches on pump.fun. ----
+  // Until a token has a CA, it falls back to $MUNDIAL so the page always works.
+  const MUNDIAL_CA = 'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump';
+  const TOKENS = {
+    MUNDIAL: { ca:'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump', name:'MUNDIAL', label:'$MUNDIAL', ico:'M' },
+    // Example for when a country launches — just fill in the ca:
+    // BRA: { ca:'PASTE_BRA_CA_HERE', name:'BRAZIL', label:'$BRA', ico:'🇧🇷' },
+    // ARG: { ca:'PASTE_ARG_CA_HERE', name:'ARGENTINA', label:'$ARG', ico:'🇦🇷' },
+  };
+
+  // Resolve which token from ?token=XXX (defaults to MUNDIAL)
+  function resolveToken() {
+    const p = new URLSearchParams(window.location.search);
+    const key = (p.get('token') || 'MUNDIAL').toUpperCase();
+    const t = TOKENS[key];
+    if (t && t.ca) return { key, ...t, launched:true };
+    // Unknown or not-yet-launched token: show MUNDIAL but note it
+    return { key:'MUNDIAL', ...TOKENS.MUNDIAL, launched:true, requested:key };
+  }
+
+  const TOKEN = resolveToken();
+  const ACTIVE_CA = TOKEN.ca;
+
+  // Apply token to all dynamic page elements
+  (function applyToken(){
+    document.getElementById('swap-title').textContent = 'BUY ' + TOKEN.label;
+    document.getElementById('swap-sub').textContent =
+      `Swap SOL for ${TOKEN.label} right here. The pair is pre-set — just connect your wallet and trade.`;
+    document.getElementById('pair-name').textContent = TOKEN.name;
+    document.getElementById('pair-ico').textContent = TOKEN.ico;
+    document.getElementById('fb-sub').innerHTML =
+      `Open the pre-filled SOL → ${TOKEN.label} swap on any of these. Your wallet, your keys.`;
+    document.getElementById('ca-text').textContent = ACTIVE_CA;
+    document.title = `Swap — Buy ${TOKEN.label} with SOL | mundial.gg`;
+  })();
+
+  // Pre-fill fallback links (always work, pair pre-selected for the active token)
+  document.getElementById('fb-jup').href  = `https://jup.ag/swap/SOL-${ACTIVE_CA}`;
+  document.getElementById('fb-pump').href = `https://pump.fun/coin/${ACTIVE_CA}`;
+  document.getElementById('fb-ray').href  = `https://raydium.io/swap/?inputCurrency=sol&outputCurrency=${ACTIVE_CA}`;
 
   function copyCA(){
-    navigator.clipboard.writeText(MUNDIAL_CA).then(()=>{
+    navigator.clipboard.writeText(ACTIVE_CA).then(()=>{
       const i=document.getElementById('copy-ico');
       i.textContent='✓ Copied';
       setTimeout(()=>i.textContent='⧉ Copy',1600);
     });
   }
 
-  // Show the manual venue links (always reliable). If the embedded
-  // terminal script loads and initialises, it replaces this view.
+  // Show the manual venue links (always reliable) as fallback.
   function showFallback(){
     const l=document.getElementById('term-loading');
     const f=document.getElementById('term-fallback');
+    const p=document.getElementById('jupiter-plugin');
     if(l) l.style.display='none';
+    if(p) p.style.display='none';
     if(f) f.classList.add('show');
   }
 
-  // Attempt to load Jupiter's embeddable terminal, pre-set to SOL -> MUNDIAL.
-  (function loadTerminal(){
-    const s=document.createElement('script');
-    s.src='https://terminal.jup.ag/main-v3.js';
-    s.async=true;
-    s.onerror=showFallback;
-    s.onload=function(){
-      try{
-        if(!window.Jupiter || typeof window.Jupiter.init!=='function'){ showFallback(); return; }
-        window.Jupiter.init({
-          displayMode:'integrated',
-          integratedTargetId:'integrated-terminal',
-          formProps:{
-            initialInputMint: SOL_MINT,      // Sell = SOL
-            initialOutputMint: MUNDIAL_CA,   // Buy  = MUNDIAL
-            fixedOutputMint:false
-          },
-          // Public RPC by default. For production reliability, replace with a
-          // dedicated endpoint (e.g. Helius free key): endpoint:'https://mainnet.helius-rpc.com/?api-key=YOUR_KEY'
-        });
-        // Hide our loading placeholder once Jupiter mounts its own UI
-        const l=document.getElementById('term-loading');
-        if(l) l.style.display='none';
-      }catch(e){ showFallback(); }
-    };
-    document.head.appendChild(s);
-    // Safety net: if nothing initialised within 6s, show reliable links
-    setTimeout(function(){
-      const term=document.getElementById('integrated-terminal');
-      const mounted = term && term.querySelector('iframe, .jupiter-terminal, [class*="jupiter"]');
-      if(!mounted) showFallback();
-    },6000);
-  })();
+  // Initialise Jupiter Plugin (RPC-less Ultra mode), pre-set SOL -> MUNDIAL.
+  // The plugin-v1.js script is loaded in <head> with data-preload defer.
+  function initPlugin(){
+    try{
+      if(!window.Jupiter || typeof window.Jupiter.init!=='function'){ showFallback(); return; }
+      window.Jupiter.init({
+        displayMode:'integrated',
+        integratedTargetId:'jupiter-plugin',
+        formProps:{
+          initialInputMint: SOL_MINT,      // Sell = SOL
+          initialOutputMint: ACTIVE_CA,    // Buy  = active token
+          fixedMint: ACTIVE_CA             // keep the token locked
+        }
+      });
+      // hide our loading placeholder once the plugin mounts
+      const l=document.getElementById('term-loading');
+      if(l) l.style.display='none';
+    }catch(e){ showFallback(); }
+  }
+
+  // The script may already be loaded (defer) by the time we run.
+  if(window.Jupiter && typeof window.Jupiter.init==='function'){
+    initPlugin();
+  } else {
+    window.addEventListener('load', function(){
+      // give the deferred plugin script a moment to register window.Jupiter
+      setTimeout(function(){
+        if(window.Jupiter && typeof window.Jupiter.init==='function') initPlugin();
+        else showFallback();
+      }, 1200);
+    });
+  }
+  // Final safety net: if nothing mounted within 8s, show reliable links
+  setTimeout(function(){
+    const host=document.getElementById('jupiter-plugin');
+    const mounted = host && (host.querySelector('iframe') || host.children.length>0);
+    if(!mounted) showFallback();
+  },8000);
 </script>
 </body>
 </html>
