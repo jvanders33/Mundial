@@ -101,11 +101,36 @@
     .steps{grid-template-columns:1fr 1fr}.windows{grid-template-columns:1fr}
     footer{padding:24px;flex-direction:column;align-items:flex-start}
   }
+
+  /* --- mobile nav (injected) --- */
+  .mnav-btn{display:none;background:none;border:0;cursor:pointer;width:40px;height:40px;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:0;z-index:1002}
+  .mnav-btn span{display:block;width:22px;height:2px;background:var(--gold,#f5c518);border-radius:2px;transition:transform .25s,opacity .25s}
+  .mnav-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .mnav-btn.open span:nth-child(2){opacity:0}
+  .mnav-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .mnav-panel{display:none;position:fixed;top:64px;left:0;right:0;z-index:501;background:rgba(6,7,9,0.98);backdrop-filter:blur(24px);border-bottom:1px solid var(--border,rgba(255,255,255,0.08));flex-direction:column;padding:8px 0}
+  .mnav-panel.open{display:flex}
+  .mnav-panel a{color:var(--text,#f0f2f5);text-decoration:none;font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:1.05rem;letter-spacing:0.06em;text-transform:uppercase;padding:15px 28px;border-bottom:1px solid rgba(255,255,255,0.04)}
+  .mnav-panel a:last-child{border-bottom:0}
+  .mnav-panel a.active,.mnav-panel a:hover{color:var(--gold,#f5c518)}
+  @media(max-width:1024px){.mnav-btn{display:flex}}
+
 </style>
 </head>
 <body>
 
 <nav>
+  <button class="mnav-btn" id="mnavBtn" aria-label="Menu" onclick="(function(b){var p=document.getElementById('mnavPanel');var o=p.classList.toggle('open');b.classList.toggle('open',o);})(this)">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="mnav-panel" id="mnavPanel">
+    <a href="index.html">Home</a>
+    <a href="nations.html">Nations</a>
+    <a href="pools.html">Pools</a>
+    <a href="banner.html">Banners</a>
+    <a href="claim.html" class="active">Claim</a>
+  </div>
+
   <a class="nav-logo" href="index.html">⚽ MUNDIAL</a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
