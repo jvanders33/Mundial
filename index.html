@@ -350,6 +350,7 @@
   html,body{overflow-x:hidden;max-width:100%}
   @media(max-width:1024px){ nav .nav-price, nav .nav-right{display:none} nav{gap:14px;justify-content:flex-start} }
 </style>
+  <script src="tokens.js"></script>
 </head>
 <body>
 
@@ -447,7 +448,7 @@
         <div class="how-card"><div class="how-num">02</div><span class="how-icon">📊</span><h3>Group Stage Pools</h3><p>All 4 teams in each group share a prize pool fed by the group's half of every creator reward. 1st takes 50%, 2nd 25%, 3rd 15%. 4th place share is used to buy back &amp; burn $MUNDIAL when group standings settle (12+ burn events across the tournament).</p></div>
         <div class="how-card"><div class="how-num">03</div><span class="how-icon">🏆</span><h3>Champion Pool</h3><p>A quarter of every creator reward across all 48 tokens builds the Champion Pool across 32 days. At the final whistle it pays out — 70% to the World Cup winner holders, 20% runner-up, 10% third place.</p></div>
         
-      <div class="how-card"><div class="how-num">04</div><span class="how-icon">💸</span><h3>Get Paid in SOL</h3><p>Payouts happen at two moments: end of the group stage and the final whistle. We publish a holder snapshot and a Merkle root, then you claim your share yourself — see <a href="claim.html" style="color:var(--gold)">Claim</a>. Follow <a href="https://x.com/Mundial2026_sol" target="_blank" style="color:var(--gold)">@Mundial2026_sol</a> for timing.</p></div>
+      <div class="how-card"><div class="how-num">04</div><span class="how-icon">💸</span><h3>Get Paid in SOL</h3><p>Payouts happen at two moments: end of the group stage and the final whistle. We publish a holder snapshot and a Merkle root, then you claim your share yourself — see <a href="claim.html" style="color:var(--gold)">Claim</a>. Follow <a href="https://x.com/Mundial2026_sol" target="_blank" rel="noopener noreferrer" style="color:var(--gold)">@Mundial2026_sol</a> for timing.</p></div>
       </div>
     </div>
 
@@ -477,7 +478,7 @@
           <div class="mundial-token">
             <div class="mundial-token-header">
               <div class="mundial-logo">MUN<br>DIAL</div>
-              <div><div class="mundial-token-name">$MUNDIAL</div><div class="mundial-token-sub">Live on pump.fun · <a href="https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump" target="_blank" style="color:var(--gold);text-decoration:none">Buy now →</a></div></div>
+              <div><div class="mundial-token-name">$MUNDIAL</div><div class="mundial-token-sub">Live on pump.fun · <a href="https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump" target="_blank" rel="noopener noreferrer" style="color:var(--gold);text-decoration:none">Buy now →</a></div></div>
             </div>
             <p>The platform token. $MUNDIAL is bought and burned from the 4th place group pool shares — every group stage produces one losing nation whose pool allocation goes straight to $MUNDIAL. 12 groups = 12 burn events minimum.</p>
           </div>
@@ -539,7 +540,7 @@
         <div class="ss-divider"></div>
         <div class="ss-item"><div class="ss-num">Jun 11</div><div class="ss-label">Kickoff</div></div>
         <div class="ss-divider"></div>
-        <div class="ss-item"><div class="ss-num">10</div><div class="ss-label">Days to Kickoff</div></div>
+        <div class="ss-item"><div class="ss-num" id="ss-days-kickoff">—</div><div class="ss-label">Days to Kickoff</div></div>
       </div>
 
       <!-- MUNDIAL -->
@@ -646,7 +647,7 @@
 
     <footer>
       <div class="footer-logo" onclick="location.href='index.html'">⚽ MUNDIAL</div>
-      <ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul>
+      <ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank" rel="noopener noreferrer">Twitter / X</a></li><li><a href="https://pump.fun" target="_blank" rel="noopener noreferrer">pump.fun</a></li></ul>
       <div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Country tokens are speculative assets. Participate responsibly.</div>
     </footer>
   </div>
@@ -760,9 +761,7 @@
     let currentModalCA = MUNDIAL_CA;
 
     // Token CAs — add country token CAs here as they launch June 4-9
-    const tokenCAs = {
-      MUNDIAL: 'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump',
-    };
+    const tokenCAs = window.MUNDIAL_TOKENS || { MUNDIAL: MUNDIAL_CA };
 
     // Buy button helper — shows "Coming Soon" until token CA exists
     function buyButton(code, name, group, cls) {
@@ -928,6 +927,15 @@
 
 
     // ===================== MUNDIAL PRICE =====================
+    function fmtUsdPrice(p){
+      if(!isFinite(p) || p<=0) return '$0';
+      if(p>=1)    return '$'+p.toFixed(2);
+      if(p>=0.01) return '$'+p.toFixed(4);
+      const m = p.toFixed(20).match(/^0\.(0*)(\d{1,3})/);
+      if(!m) return '$'+p.toFixed(6);
+      const sig = m[2].replace(/0+$/,'') || '0';
+      return '$0.'+m[1]+sig;
+    }
     async function fetchMundialPrice() {
       try {
         // Jupiter Price API V3 (public lite endpoint, no API key needed)
@@ -937,9 +945,7 @@
         const price = data?.[MUNDIAL_CA]?.usdPrice;
         if(price) {
           const el = document.getElementById('mundial-price');
-          if(el) el.textContent = price < 0.001
-            ? '$'+price.toExponential(2)
-            : '$'+parseFloat(price).toFixed(6);
+          if(el) el.textContent = fmtUsdPrice(Number(price));
         }
       } catch(e) {
         // silently fail — keep showing "LIVE"
@@ -999,6 +1005,7 @@
       document.getElementById('cd-secs').textContent = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
     }
     setInterval(updateCountdown,1000); updateCountdown();
+    (function(){ var k=new Date('2026-06-11T16:00:00Z')-new Date(); var el=document.getElementById('ss-days-kickoff'); if(el) el.textContent=Math.max(0,Math.ceil(k/86400000)); })();
 
     // ===================== REVEAL =====================
     const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.08});
