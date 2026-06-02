@@ -338,20 +338,16 @@
 <body>
 
   <nav>
-    <div class="nav-logo" onclick="showPage('home')">⚽ MUNDIAL</div>
+    <div class="nav-logo" onclick="location.href='index.html'">⚽ MUNDIAL</div>
     <div style="display:flex;align-items:center;gap:8px;background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.2);border-radius:6px;padding:5px 12px;cursor:pointer" onclick="window.open('https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump','_blank')">
       <div style="width:8px;height:8px;border-radius:50%;background:#00e676;animation:livePulse 2s ease-in-out infinite;flex-shrink:0"></div>
       <span style="font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.06em;color:#f5c518">$MUNDIAL</span>
       <span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted2)" id="mundial-price">LIVE</span>
     </div>
     <ul class="nav-links">
-      <li><a href="#home" onclick="showPage('home');return false;" id="nav-home" class="active">Home</a></li>
-      <li><a href="#groups" onclick="showPage('groups');return false;" id="nav-groups">Groups</a></li>
-      <li><a href="#matches" onclick="showPage('matches');return false;" id="nav-matches">Matches</a></li>
-      <li><a href="#tokens" onclick="showPage('tokens');return false;" id="nav-tokens">Tokens</a></li>
-      <li><a href="#schedule" onclick="showPage('schedule');return false;" id="nav-schedule">Schedule</a></li>
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="nations.html">Nations</a></li>
       <li><a href="pools.html">Pools</a></li>
-      <li><a href="swap.html">Swap</a></li>
       <li><a href="banner.html">Banners</a></li>
       <li><a href="claim.html">Claim</a></li>
     </ul>
@@ -374,8 +370,8 @@
         <h1>BACK<br>YOUR<br><span class="gold">NATION.</span></h1>
         <p class="hero-tagline" style="margin-top:20px;font-size:1.15rem"><strong>48 country tokens. One tournament. Real SOL payouts.</strong><br>Buy your nation's token, hold through the groups, claim when they win — or watch the losers fund your prize pool.</p>
         <div style="display:flex;gap:12px;margin-top:28px;position:relative">
-          <button class="btn-gold-lg" onclick="showPage('tokens')" style="font-size:1rem;padding:13px 28px">Pick Your Nation →</button>
-          <button class="btn-outline-lg" onclick="showPage('groups')" style="font-size:1rem;padding:12px 24px">View Groups</button>
+          <button class="btn-gold-lg" onclick="location.href='nations.html'" style="font-size:1rem;padding:13px 28px">Pick Your Nation →</button>
+          <button class="btn-outline-lg" onclick="location.href='nations.html'" style="font-size:1rem;padding:12px 24px">View Groups</button>
         </div>
       </div>
 
@@ -409,7 +405,7 @@
               <div class="hero-card-stat-label">Days</div>
             </div>
           </div>
-          <button class="hero-card-cta" onclick="showPage('tokens')">⚡ BUY YOUR NATION NOW</button>
+          <button class="hero-card-cta" onclick="location.href='nations.html'">⚡ BUY YOUR NATION NOW</button>
         </div>
       </div>
     </section>
@@ -432,7 +428,7 @@
       <div class="groups-inner">
         <div class="groups-header">
           <div><div class="section-tag">2026 Groups</div><h2>12 Groups.<br>48 Nations.</h2></div>
-          <button class="btn-outline-lg" onclick="showPage('groups')">View All Groups →</button>
+          <button class="btn-outline-lg" onclick="location.href='nations.html'">View All Groups →</button>
         </div>
         <div class="groups-grid" id="home-groups-grid"></div>
       </div>
@@ -500,45 +496,12 @@
     </div>
 
 
-    <div class="cta-section reveal">
-      <h2>THE WORLD CUP<br>IS <span class="gold">ON-CHAIN.</span></h2>
-      <p>48 nations. One tournament. Your money where your flag is.</p>
-      <div class="cta-btns">
-        <button class="btn-gold-lg" onclick="window.open('https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump','_blank')">Buy $MUNDIAL →</button>
-        <button class="btn-outline-lg" onclick="showPage('groups')">View Groups</button>
-      </div>
-    </div>
-
-    <footer>
-      <div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div>
-      <ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul>
-      <div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Country tokens are speculative assets. Participate responsibly.</div>
-    </footer>
-  </div>
-
-  <!-- GROUPS PAGE -->
-  <div class="page" id="page-groups">
-    <div class="page-hero"><div class="section-tag">2026 World Cup</div><h1>All 12 <span style="color:var(--gold)">Groups.</span></h1><p>Each group has its own prize pool funded by the group's half of the creator rewards from its tokens. Settles by final standing: 1st 50%, 2nd 25%, 3rd 15%, 4th burns to $MUNDIAL.</p></div>
-    <div class="groups-page-inner" id="groups-full-list"></div>
-    <footer><div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div><ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul><div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div></footer>
-  </div>
-
-  <!-- MATCHES PAGE -->
-  <div class="page" id="page-matches">
-    <div class="page-hero"><div class="section-tag">Match Schedule</div><h1>Every Match.<br><span style="color:var(--gold)">Every Pool.</span></h1><p>Group pools settle at the end of each group's final game. There are no knockout-round pools — the champion pool builds across the whole tournament and pays the top 3 nations at the Final.</p></div>
-    <div class="matches-page-inner" id="matches-list"></div>
-    <footer><div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div><ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul><div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div></footer>
-  </div>
-
-
-  <!-- SCHEDULE PAGE -->
-  <div class="page" id="page-schedule">
-    <div class="page-hero">
-      <div class="section-tag">Token Launch Schedule</div>
-      <h1>The Launch <span style="color:var(--gold)">Plan.</span></h1>
-      <p class="schedule-intro">$MUNDIAL launches first as the platform backbone. 48 hours of promotion follows. Then 6 days of country token drops — two groups per day — building to the World Cup kickoff on June 11.</p>
-    </div>
-    <div class="schedule-page-inner">
+    <!-- LAUNCH SCHEDULE -->
+    <section class="section reveal" id="schedule">
+      <div class="section-tag" style="justify-content:center">Token Launch Schedule</div>
+      <h2 style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,5vw,4rem);letter-spacing:0.02em;line-height:1;margin-bottom:14px">The Launch <span style="color:var(--gold)">Plan.</span></h2>
+      <p style="text-align:center;max-width:640px;margin:0 auto 40px;color:var(--muted2);line-height:1.7">$MUNDIAL launches first as the platform backbone. 48 hours of promotion follows. Then 6 days of country token drops — two groups per day — building to the World Cup kickoff on June 11.</p>
+      <div class="schedule-page-inner">
 
       <div class="schedule-stats">
         <div class="ss-item"><div class="ss-num">48</div><div class="ss-label">Nation Tokens</div></div>
@@ -643,28 +606,22 @@
       </div>
 
     </div>
-    <footer>
-      <div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div>
-      <ul class="footer-links">
-        <li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li>
-        
-        <li><a href="https://pump.fun" target="_blank">pump.fun</a></li>
-      </ul>
-      <div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div>
-    </footer>
-  </div>
+    </section>
 
-
-  <div class="page" id="page-tokens">
-    <div class="page-hero"><div class="section-tag">All 48 Tokens</div><h1>Pick Your <span style="color:var(--gold)">Nation.</span></h1><p>Every token uses the official 3-letter FIFA code. The nation's flag is the token identity — circular, clean, on-chain. Buy through Mundial to qualify for pool payouts.</p></div>
-    <div class="token-page-inner">
-      <div class="token-search-bar">
-        <input type="text" class="token-search" placeholder="Search nation or code — AUS, BRA, ENG..." id="token-search" oninput="filterTokens()"/>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">48 Nations · Official FIFA Codes · Live on pump.fun</div>
+    <div class="cta-section reveal">
+      <h2>THE WORLD CUP<br>IS <span class="gold">ON-CHAIN.</span></h2>
+      <p>48 nations. One tournament. Your money where your flag is.</p>
+      <div class="cta-btns">
+        <button class="btn-gold-lg" onclick="window.open('https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump','_blank')">Buy $MUNDIAL →</button>
+        <button class="btn-outline-lg" onclick="location.href='nations.html'">View Groups</button>
       </div>
-      <div class="tokens-grid" id="tokens-grid"></div>
     </div>
-    <footer><div class="footer-logo" onclick="showPage('home')">⚽ MUNDIAL</div><ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul><div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Participate responsibly.</div></footer>
+
+    <footer>
+      <div class="footer-logo" onclick="location.href='index.html'">⚽ MUNDIAL</div>
+      <ul class="footer-links"><li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li><li><a href="https://pump.fun" target="_blank">pump.fun</a></li></ul>
+      <div class="footer-disclaimer">Mundial is a community-run crypto platform on Solana. Not affiliated with FIFA. Country tokens are speculative assets. Participate responsibly.</div>
+    </footer>
   </div>
 
   <!-- BUY MODAL -->
@@ -769,41 +726,6 @@
     ];
     const allTokens = groups.flatMap(g => g.teams.map(t => ({...t, group:g.letter})));
 
-    const matches = [
-      {stage:'Group Stage — Matchday 1', games:[
-        {date:'Jun 11',hCode:'USA',aCode:'MEX'},{date:'Jun 11',hCode:'CAN',aCode:'NZL'},
-        {date:'Jun 12',hCode:'BRA',aCode:'ECU'},{date:'Jun 12',hCode:'ARG',aCode:'COL'},
-        {date:'Jun 13',hCode:'FRA',aCode:'SEN'},{date:'Jun 13',hCode:'GER',aCode:'SUI'},
-        {date:'Jun 14',hCode:'ESP',aCode:'TUR'},{date:'Jun 14',hCode:'POR',aCode:'MAR'},
-        {date:'Jun 15',hCode:'ENG',aCode:'IRN'},{date:'Jun 15',hCode:'NED',aCode:'CRC'},
-        {date:'Jun 16',hCode:'JPN',aCode:'KSA'},{date:'Jun 16',hCode:'AUS',aCode:'KOR'},
-      ]},
-      {stage:'Group Stage — Matchday 2', games:[
-        {date:'Jun 17',hCode:'USA',aCode:'CAN'},{date:'Jun 17',hCode:'MEX',aCode:'NZL'},
-        {date:'Jun 18',hCode:'BRA',aCode:'ARG'},{date:'Jun 18',hCode:'COL',aCode:'ECU'},
-        {date:'Jun 19',hCode:'FRA',aCode:'GER'},{date:'Jun 19',hCode:'SUI',aCode:'SEN'},
-        {date:'Jun 20',hCode:'ESP',aCode:'POR'},{date:'Jun 20',hCode:'MAR',aCode:'TUR'},
-      ]},
-      {stage:'Group Stage — Matchday 3', games:[
-        {date:'Jun 24',hCode:'BEL',aCode:'CRO'},{date:'Jun 24',hCode:'URU',aCode:'CMR'},
-        {date:'Jun 25',hCode:'DEN',aCode:'POL'},{date:'Jun 25',hCode:'TUN',aCode:'GHA'},
-        {date:'Jun 26',hCode:'ITA',aCode:'AUT'},{date:'Jun 26',hCode:'CHI',aCode:'COD'},
-      ]},
-      {stage:'Knockouts — TBD', games:[], tbd:true, note:'Round of 32 through the Final. Brackets set once the group stage finishes on June 27. Pairings will populate here live. Note: there are no knockout-round pools — payouts are at group-stage end and the Final only.'},
-    ];
-
-    // ===================== NAV =====================
-    function showPage(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById('page-'+page).classList.add('active');
-      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-      const n = document.getElementById('nav-'+page); if(n) n.classList.add('active');
-      window.scrollTo(0,0);
-      if(page==='groups') renderGroups();
-      if(page==='schedule') renderSchedule();
-      if(page==='matches') renderMatches();
-      if(page==='tokens') renderTokens();
-    }
 
     // ===================== MODAL =====================
     // ===================== BUY MODAL =====================
@@ -933,7 +855,7 @@
       const grid = document.getElementById('home-groups-grid');
       const preview = groups.slice(0,4);
       grid.innerHTML = preview.map(g => `
-        <div class="group-card" onclick="showPage('groups')">
+        <div class="group-card" onclick="location.href='nations.html'">
           <div class="group-header-bar"><span class="group-letter">GROUP ${g.letter}</span><span class="group-pool-amt">Pool: Pre-launch</span></div>
           ${g.teams.map(t => `
             <div class="team-row">
@@ -945,7 +867,7 @@
           `).join('')}
         </div>
       `).join('') + `
-        <div class="group-card" style="display:flex;align-items:center;justify-content:center;min-height:180px" onclick="showPage('groups')">
+        <div class="group-card" style="display:flex;align-items:center;justify-content:center;min-height:180px" onclick="location.href='nations.html'">
           <div style="text-align:center">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:rgba(245,197,24,0.15);margin-bottom:10px">+8</div>
             <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;color:var(--muted2);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:14px">More Groups</div>
@@ -953,104 +875,6 @@
           </div>
         </div>`;
     }
-
-    // ===================== GROUPS PAGE =====================
-    function renderGroups() {
-      document.getElementById('groups-full-list').innerHTML = groups.map(g => `
-        <div class="group-full-card">
-          <div class="group-full-header">
-            <span class="group-full-letter">GROUP ${g.letter}</span>
-            <span class="group-full-meta">Pool: Pre-launch &nbsp;·&nbsp; 1st 50% / 2nd 25% / 3rd 15% / 4th → $MUNDIAL Burn</span>
-          </div>
-          <div class="group-full-teams">
-            ${g.teams.map(t => `
-              <div class="team-full-card">
-                <div class="team-full-flag-wrap">${flagImg(t.code,'xl')}</div>
-                <div class="team-full-name">${t.name}</div>
-                <span class="team-full-code">${t.code}</span>
-                ${tokenCAs[t.code] ? `<button class="team-buy-btn" onclick="showBuyModal('${t.code}','${t.name}','${g.letter}')">⚡ Buy $${t.code}</button>` : `<button class="team-buy-btn" style="opacity:0.45;cursor:default;background:var(--surface2);color:var(--muted2)" disabled>Coming Soon</button>`}
-              </div>
-            `).join('')}
-          </div>
-          <div class="group-payout-bar">
-            <span class="payout-pill pill-1">🥇 1st → 50%</span>
-            <span class="payout-pill pill-2">🥈 2nd → 25%</span>
-            <span class="payout-pill pill-3">🥉 3rd → 15%</span>
-            <span class="payout-pill pill-x">💀 4th → $MUNDIAL Burn</span>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // ===================== MATCHES PAGE =====================
-    function renderMatches() {
-      document.getElementById('matches-list').innerHTML = matches.map(s => {
-        if (s.tbd) {
-          return `
-            <div class="stage-section">
-              <div class="stage-title">${s.stage}</div>
-              <div class="match-card" style="justify-content:center;padding:32px;text-align:center;flex-direction:column;gap:8px">
-                <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--muted2);letter-spacing:0.04em">Bracket Locks June 27</div>
-                <div style="color:var(--muted);font-size:0.85rem;max-width:440px;line-height:1.6">${s.note}</div>
-              </div>
-            </div>`;
-        }
-        return `
-        <div class="stage-section">
-          <div class="stage-title">${s.stage}</div>
-          ${s.games.map(m => {
-            const hLive = !!tokenCAs[m.hCode];
-            const aLive = !!tokenCAs[m.aCode];
-            return `
-            <div class="match-card">
-              <div class="match-date">${m.date}</div>
-              <div class="match-teams">
-                <div class="match-team">${flagImg(m.hCode,'sm')}<span class="match-team-code">${m.hCode}</span></div>
-                <div class="match-vs">VS</div>
-                <div class="match-team"><span class="match-team-code">${m.aCode}</span>${flagImg(m.aCode,'sm')}</div>
-              </div>
-              <div class="match-actions">
-                ${hLive ? `<button class="buy-pill" onclick="showBuyModal('${m.hCode}','${m.hCode}','—')">Buy $${m.hCode}</button>` : `<button class="buy-pill" style="opacity:0.4;cursor:default" disabled>$${m.hCode} Soon</button>`}
-                ${aLive ? `<button class="buy-pill" onclick="showBuyModal('${m.aCode}','${m.aCode}','—')">Buy $${m.aCode}</button>` : `<button class="buy-pill" style="opacity:0.4;cursor:default" disabled>$${m.aCode} Soon</button>`}
-              </div>
-              <span class="match-status status-upcoming">Upcoming</span>
-            </div>
-          `;}).join('')}
-        </div>
-      `;}).join('');
-    }
-
-    // ===================== TOKENS PAGE =====================
-    function renderTokens() { displayTokens(allTokens); }
-    function displayTokens(tokens) {
-      if(!tokens || !Array.isArray(tokens)) tokens = allTokens;
-      const grid = document.getElementById('tokens-grid');
-      if(!grid) return;
-      grid.innerHTML = tokens.map(t => `
-        <div class="token-card">
-          <div class="tc-top">
-            ${flagImg(t.code,'lg')}
-            <div class="tc-meta">
-              <div class="tc-code">${t.code}</div>
-              <div class="tc-name">${t.name}</div>
-              <span class="tc-group-badge">Group ${t.group}</span>
-            </div>
-          </div>
-          <div class="tc-stats">
-            <div><div class="tc-stat-val" style="color:var(--gold)">TBA</div><div class="tc-stat-key">Launch Price</div></div>
-            <div><div class="tc-stat-val">—</div><div class="tc-stat-key">Pool Size</div></div>
-            <div><div class="tc-stat-val">pump.fun</div><div class="tc-stat-key">Platform</div></div>
-            <div><div class="tc-stat-val" style="color:${tokenCAs[t.code] ? 'var(--green)' : 'var(--muted)'}">${tokenCAs[t.code] ? 'Live' : 'Soon'}</div><div class="tc-stat-key">Status</div></div>
-          </div>
-          ${tokenCAs[t.code] ? `<button class="tc-buy-btn" onclick="showBuyModal('${t.code}','${t.name}','${t.group}')">⚡ Buy $${t.code}</button>` : `<button class="tc-buy-btn" style="opacity:0.45;cursor:default;background:var(--surface2);color:var(--muted2)" disabled>Coming Soon</button>`}
-        </div>
-      `).join('');
-    }
-    function filterTokens() {
-      const q = document.getElementById('token-search').value.toLowerCase();
-      displayTokens(allTokens.filter(t => t.name.toLowerCase().includes(q) || t.code.toLowerCase().includes(q)));
-    }
-
 
     // ===================== SCHEDULE PAGE =====================
     const scheduleGroups = {
@@ -1067,7 +891,7 @@
         const el = document.getElementById('chips-'+key);
         if(!el) return;
         el.innerHTML = codes.map(code => `
-          <span class="nation-chip" onclick="showPage('tokens')">
+          <span class="nation-chip" onclick="location.href='nations.html'">
             <img class="nc-flag" src="https://flagcdn.com/w40/${iso2[code]}.png" alt="${code}" onerror="this.style.display='none'"/>
             ${code}
           </span>
@@ -1153,19 +977,10 @@
     const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.08});
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    // ===================== HASH ROUTING =====================
-    function routeFromHash() {
-      const hash = (window.location.hash || '').replace('#','');
-      const valid = ['home','groups','matches','tokens','schedule'];
-      if (valid.includes(hash)) showPage(hash);
-      else showPage('home');
-    }
-    window.addEventListener('hashchange', routeFromHash);
-
     // ===================== INIT =====================
     buildTicker();
     buildHomeGroups();
-    routeFromHash();
+    renderSchedule();
   </script>
 </body>
 </html>
