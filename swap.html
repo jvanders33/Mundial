@@ -124,6 +124,7 @@
   html,body{overflow-x:hidden;max-width:100%}
 
 </style>
+  <script src="tokens.js"></script>
 </head>
 <body>
 <nav>
@@ -211,7 +212,7 @@
 </div>
 
 <footer>
-  <a href="index.html">mundial.gg</a> · <a href="https://x.com/Mundial2026_sol" target="_blank">@Mundial2026_sol</a><br>
+  <a href="index.html">mundial.gg</a> · <a href="https://x.com/Mundial2026_sol" target="_blank" rel="noopener noreferrer">@Mundial2026_sol</a><br>
   <span style="opacity:0.6">Community crypto platform on Solana. Not affiliated with FIFA. DYOR.</span>
 </footer>
 
@@ -221,12 +222,15 @@
   // ---- Token registry. Add each country's CA here as it launches on pump.fun. ----
   // Until a token has a CA, it falls back to $MUNDIAL so the page always works.
   const MUNDIAL_CA = 'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump';
-  const TOKENS = {
-    MUNDIAL: { ca:'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump', name:'MUNDIAL', label:'$MUNDIAL', ico:'M' },
-    // Example for when a country launches — just fill in the ca:
-    // BRA: { ca:'PASTE_BRA_CA_HERE', name:'BRAZIL', label:'$BRA', ico:'🇧🇷' },
-    // ARG: { ca:'PASTE_ARG_CA_HERE', name:'ARGENTINA', label:'$ARG', ico:'🇦🇷' },
-  };
+  // Built from the shared registry (tokens.js). Falls back to MUNDIAL if it fails to load.
+  const _SRC = window.MUNDIAL_TOKENS || { MUNDIAL: MUNDIAL_CA };
+  const TOKENS = {};
+  for (const [code, ca] of Object.entries(_SRC)) {
+    if (!ca || ca.includes('PASTE')) continue;
+    TOKENS[code] = (code === 'MUNDIAL')
+      ? { ca, name:'MUNDIAL', label:'$MUNDIAL', ico:'M' }
+      : { ca, name:code, label:'$'+code, ico:code.slice(0,1) };
+  }
 
   // Resolve which token from ?token=XXX (defaults to MUNDIAL)
   function resolveToken() {
