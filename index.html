@@ -826,19 +826,20 @@
       currentModalCA = ca;
       document.getElementById('modal-ca').textContent = ca;
 
-      const swapBtn = (code === 'MUNDIAL') ? `
-        <a href="swap.html" rel="noopener"
+      const isLive = !!tokenCAs[code];
+      const swapBtn = isLive ? `
+        <a href="swap.html?token=${code}" rel="noopener"
            style="display:flex;align-items:center;gap:12px;background:var(--gold);color:#000;padding:14px 18px;border-radius:8px;text-decoration:none">
           <span style="font-size:1.2rem">🔄</span>
           <div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.06em">Swap on mundial.gg</div>
-            <div style="font-size:0.72rem;opacity:0.65;font-family:'Barlow Condensed',sans-serif">SOL → MUNDIAL pre-filled · Recommended</div>
+            <div style="font-size:0.72rem;opacity:0.65;font-family:'Barlow Condensed',sans-serif">SOL → $${code} pre-filled · Recommended</div>
           </div>
           <span style="margin-left:auto">→</span>
         </a>` : '';
       document.getElementById('modal-buy-links').innerHTML = swapBtn + `
         <a href="https://pump.fun/coin/${ca}" target="_blank" rel="noopener"
-           style="display:flex;align-items:center;gap:12px;background:${code==='MUNDIAL'?'var(--surface2)':'var(--gold)'};color:${code==='MUNDIAL'?'var(--text)':'#000'};padding:14px 18px;border-radius:8px;text-decoration:none;${code==='MUNDIAL'?'border:1px solid var(--border)':''}">
+           style="display:flex;align-items:center;gap:12px;background:${isLive?'var(--surface2)':'var(--gold)'};color:${isLive?'var(--text)':'#000'};padding:14px 18px;border-radius:8px;text-decoration:none;${isLive?'border:1px solid var(--border)':''}">
           <span style="font-size:1.2rem">⚡</span>
           <div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.06em">Buy on pump.fun</div>
@@ -1061,17 +1062,19 @@
     // ===================== MUNDIAL PRICE =====================
     async function fetchMundialPrice() {
       try {
-        const res = await fetch(`https://price.jup.ag/v6/price?ids=${MUNDIAL_CA}`);
+        // Jupiter Price API V3 (public lite endpoint, no API key needed)
+        const res = await fetch(`https://lite-api.jup.ag/price/v3?ids=${MUNDIAL_CA}`);
+        if(!res.ok) return;
         const data = await res.json();
-        const price = data?.data?.[MUNDIAL_CA]?.price;
+        const price = data?.[MUNDIAL_CA]?.usdPrice;
         if(price) {
           const el = document.getElementById('mundial-price');
-          if(el) el.textContent = price < 0.001 
-            ? '$'+price.toExponential(2) 
+          if(el) el.textContent = price < 0.001
+            ? '$'+price.toExponential(2)
             : '$'+parseFloat(price).toFixed(6);
         }
       } catch(e) {
-        // silently fail
+        // silently fail — keep showing "LIVE"
       }
     }
     fetchMundialPrice();
