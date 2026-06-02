@@ -522,8 +522,8 @@ async function drawBanner(canvas, code) {
     ctx.globalAlpha = 1;
 
     // ---- CENTRE: BIG CODE ----
-    const codeSize = isSquare ? Math.round(S*0.52) : Math.round(S*0.56);
-    const codeY = Math.round(S*0.78);
+    const codeSize = isSquare ? Math.round(S*0.46) : Math.round(S*0.50);
+    const codeY = Math.round(S*0.66);
 
     // Shadow
     ctx.font = `700 ${codeSize}px 'Bebas Neue',sans-serif`;
@@ -535,16 +535,16 @@ async function drawBanner(canvas, code) {
     ctx.fillText(code, tx, codeY);
 
     // ---- COUNTRY NAME ----
-    const nameSize = Math.round(S*0.1);
-    const nameY = codeY + Math.round(S*0.12);
+    const nameSize = Math.round(S*0.085);
+    const nameY = codeY + Math.round(S*0.105);
     ctx.font = `300 ${nameSize}px 'Barlow Condensed',sans-serif`;
     ctx.fillStyle = 'white'; ctx.globalAlpha = 0.52;
     ctx.fillText(fullName, tx+2, nameY);
     ctx.globalAlpha = 1;
 
     // ---- PILLS ----
-    const pillH = Math.round(S*0.1);
-    const pillY2 = nameY + Math.round(S*0.1);
+    const pillH = Math.round(S*0.095);
+    const pillY2 = nameY + Math.round(S*0.07);
     const pillR = pillH/2;
     const pFontSize = Math.round(S*0.065);
     const tokenPillW = Math.round(S*0.38);
@@ -570,21 +570,6 @@ async function drawBanner(canvas, code) {
     ctx.fillText('GROUP '+grp, gPillX + groupPillW/2, pillY2 + pillH*0.68);
     ctx.globalAlpha = 1;
     ctx.textAlign = 'left';
-
-    // ---- TAGLINE — sits in bottom dark strip ----
-    const tSize = Math.round(S*0.072);
-    const tY = Math.round(H*0.91);
-    ctx.font = `500 ${tSize}px 'Barlow Condensed',sans-serif`;
-    ctx.fillStyle = 'white'; ctx.globalAlpha = 0.5;
-    // Truncate tagline to fit left column
-    const maxW = isSquare ? W*0.55 : W*0.48;
-    let tText = tagline;
-    ctx.globalAlpha = 0.5;
-    while(ctx.measureText(tText).width > maxW && tText.length > 10) {
-      tText = tText.slice(0, -4) + '…';
-    }
-    ctx.fillText(tText, tx, tY);
-    ctx.globalAlpha = 1;
 
     // ---- BOTTOM RIGHT: URL + handle ----
     const urlSize = Math.round(S*0.065);
