@@ -3,258 +3,260 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Swap — Buy $MUNDIAL with SOL | mundial.gg</title>
+<title>How You Get Paid — Claims | mundial.gg</title>
+<meta name="description" content="How Mundial prize-pool payouts work: snapshot, published Merkle root, self-claim. Honest, verifiable, no fake buttons.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet">
-<!-- Jupiter Plugin (RPC-less, Ultra mode) -->
-<script src="https://plugin.jup.ag/plugin-v1.js" data-preload defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
+  :root{
     --bg:#060709; --surface:#0c0e12; --surface2:#12151c;
     --border:rgba(255,255,255,0.06); --gold:#f5c518; --gold2:#e8a900;
-    --green:#00e676; --text:#f0f2f5; --muted:#5a6070; --muted2:#8892a4;
+    --green:#00e676; --red:#ff1744; --text:#f0f2f5; --muted:#5a6070; --muted2:#8892a4;
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:'Barlow',sans-serif; min-height:100vh; overflow-x:hidden; }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden}
+  body::after{content:'';position:fixed;inset:0;z-index:1000;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;opacity:0.4}
 
-  /* Ambient gold glow */
-  body::before {
-    content:''; position:fixed; top:-30%; left:50%; transform:translateX(-50%);
-    width:900px; height:700px; background:radial-gradient(ellipse, rgba(245,197,24,0.08), transparent 60%);
-    pointer-events:none; z-index:0;
-  }
+  nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(6,7,9,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.08em;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:10px}
+  .nav-links{display:flex;gap:28px;list-style:none}
+  .nav-links a{color:var(--muted2);text-decoration:none;font-size:0.82rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s}
+  .nav-links a:hover,.nav-links a.active{color:var(--gold)}
 
-  nav {
-    position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center;
-    justify-content:space-between; padding:0 48px; height:64px;
-    background:rgba(6,7,9,0.92); backdrop-filter:blur(24px); border-bottom:1px solid var(--border);
-  }
-  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.08em; color:var(--gold); text-decoration:none; display:flex; align-items:center; gap:10px; }
-  .nav-links { display:flex; gap:28px; list-style:none; }
-  .nav-links a { color:var(--muted2); text-decoration:none; font-size:0.82rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; transition:color 0.2s; }
-  .nav-links a:hover, .nav-links a.active { color:var(--gold); }
+  .page-hero{padding:110px 48px 30px;max-width:1080px;margin:0 auto}
+  .section-tag{font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:12px}
+  .section-tag::before{content:'';width:24px;height:1px;background:var(--gold);opacity:0.6}
+  .page-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,7vw,7rem);letter-spacing:0.03em;line-height:1;margin-bottom:14px}
+  .page-hero h1 .gold{color:var(--gold)}
+  .page-hero p{color:var(--muted2);font-size:1.05rem;max-width:560px;line-height:1.7}
 
-  .wrap { position:relative; z-index:1; max-width:520px; margin:0 auto; padding:120px 20px 80px; }
+  .inner{max-width:1080px;margin:0 auto;padding:0 48px 90px}
 
-  .kicker { font-family:'Barlow Condensed',sans-serif; font-size:0.78rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); text-align:center; margin-bottom:10px; }
-  h1 { font-family:'Bebas Neue',sans-serif; font-size:3.4rem; letter-spacing:0.04em; text-align:center; line-height:1; margin-bottom:14px; }
-  .sub { text-align:center; color:var(--muted2); font-size:1rem; max-width:400px; margin:0 auto 36px; line-height:1.6; }
+  /* status banner */
+  .status{display:flex;align-items:flex-start;gap:14px;border-radius:12px;padding:20px 24px;margin:28px 0 44px;border:1px solid}
+  .status.closed{background:rgba(255,255,255,0.02);border-color:var(--border)}
+  .status.open{background:rgba(0,230,118,0.06);border-color:rgba(0,230,118,0.3)}
+  .status .sdot{width:11px;height:11px;border-radius:50%;flex-shrink:0;margin-top:5px}
+  .status.closed .sdot{background:var(--muted)}
+  .status.open .sdot{background:var(--green);animation:livePulse 2s ease-in-out infinite}
+  @keyframes livePulse{0%,100%{opacity:1}50%{opacity:0.35}}
+  .status .stitle{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.03em;line-height:1.1}
+  .status.open .stitle{color:var(--green)}
+  .status .stext{color:var(--muted2);font-size:0.9rem;line-height:1.6;margin-top:5px}
 
-  /* Pre-fill confirmation chips */
-  .pair-row { display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:30px; }
-  .pair-chip { display:flex; align-items:center; gap:9px; background:var(--surface2); border:1px solid var(--border); border-radius:100px; padding:9px 16px; }
-  .pair-chip img, .pair-chip .tok-ico { width:26px; height:26px; border-radius:50%; }
-  .pair-chip .tok-ico { background:var(--gold); color:#000; display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:1rem; }
-  .pair-chip span { font-family:'Barlow Semi Condensed',sans-serif; font-weight:700; letter-spacing:0.04em; font-size:0.95rem; }
-  .pair-arrow { color:var(--gold); font-size:1.3rem; }
+  .blockhead{margin:0 0 22px}
+  .blockhead h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,4vw,3rem);letter-spacing:0.03em;line-height:1}
+  .blockhead p{color:var(--muted2);font-size:0.95rem;max-width:640px;margin-top:10px;line-height:1.7}
 
-  /* Terminal mount */
-  .terminal-shell {
-    background:var(--surface); border:1px solid var(--border); border-radius:18px;
-    padding:8px; box-shadow:0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(245,197,24,0.06);
-    position:relative; overflow:hidden;
-  }
-  .terminal-shell::before {
-    content:''; position:absolute; inset:0; border-radius:18px; padding:1px;
-    background:linear-gradient(160deg, rgba(245,197,24,0.25), transparent 40%);
-    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none;
-  }
-  #integrated-terminal { min-height:520px; border-radius:12px; overflow:hidden; }
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:44px}
+  .step{background:var(--surface);padding:28px 22px;transition:background 0.2s}
+  .step:hover{background:var(--surface2)}
+  .step .snum{font-family:'Bebas Neue',sans-serif;font-size:3.4rem;color:rgba(245,197,24,0.1);line-height:1;margin-bottom:10px}
+  .step h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.05rem;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:9px}
+  .step p{color:var(--muted2);font-size:0.85rem;line-height:1.65}
 
-  /* Loading + fallback states */
-  .term-status { padding:60px 24px; text-align:center; }
-  .spinner { width:36px; height:36px; border:3px solid var(--border); border-top-color:var(--gold); border-radius:50%; margin:0 auto 18px; animation:spin 0.8s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  .term-status p { color:var(--muted2); font-size:0.9rem; line-height:1.6; }
+  /* two payout windows */
+  .windows{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:44px}
+  .win{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px 26px}
+  .win .wlabel{font-family:'Barlow Condensed',sans-serif;font-size:0.66rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold)}
+  .win h3{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.03em;margin:5px 0 8px}
+  .win p{color:var(--muted2);font-size:0.87rem;line-height:1.65}
+  .win .wdate{font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);margin-top:12px}
 
-  .fallback { display:none; padding:30px 24px; text-align:center; }
-  .fallback.show { display:block; }
-  .fallback h3 { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:0.04em; margin-bottom:8px; }
-  .fallback p { color:var(--muted2); font-size:0.88rem; margin-bottom:22px; line-height:1.6; }
-  .fallback-links { display:flex; flex-direction:column; gap:12px; }
-  .fl {
-    display:flex; align-items:center; gap:12px; padding:14px 18px; border-radius:10px;
-    text-decoration:none; transition:transform 0.15s;
-  }
-  .fl:hover { transform:translateY(-2px); }
-  .fl.gold { background:var(--gold); color:#000; }
-  .fl.ghost { background:var(--surface2); color:var(--text); border:1px solid var(--border); }
-  .fl .fl-t { font-family:'Bebas Neue',sans-serif; font-size:1.05rem; letter-spacing:0.05em; }
-  .fl .fl-s { font-size:0.72rem; font-family:'Barlow Condensed',sans-serif; opacity:0.7; }
-  .fl .fl-arrow { margin-left:auto; }
+  /* need / checklist */
+  .need{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px 26px;margin-bottom:20px}
+  .need .nrow{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--border);align-items:flex-start}
+  .need .nrow:first-child{border-top:none}
+  .need .nick{color:var(--green);font-size:1.05rem;flex-shrink:0;line-height:1.4}
+  .need .ntext{font-size:0.9rem;color:var(--muted2);line-height:1.6}
+  .need .ntext b{color:var(--text);font-weight:600}
 
-  /* Reassurance footer */
-  .note { display:flex; align-items:flex-start; gap:10px; background:rgba(245,197,24,0.05); border:1px solid rgba(245,197,24,0.12); border-radius:10px; padding:16px 18px; margin-top:24px; }
-  .note-icon { font-size:1.1rem; flex-shrink:0; }
-  .note p { font-size:0.82rem; color:var(--muted2); line-height:1.6; }
-  .note strong { color:var(--gold); }
+  /* scam warning */
+  .scam{background:rgba(255,23,68,0.05);border:1px solid rgba(255,23,68,0.25);border-radius:12px;padding:22px 26px;margin-bottom:44px}
+  .scam h3{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.03em;color:var(--red);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .scam ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .scam li{font-size:0.88rem;color:var(--muted2);line-height:1.6;padding-left:22px;position:relative}
+  .scam li::before{content:'✕';position:absolute;left:0;color:var(--red);font-weight:700}
+  .scam b{color:var(--text)}
 
-  .ca-line { text-align:center; margin-top:22px; }
-  .ca-line span { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
-  .ca-copy { display:inline-flex; align-items:center; gap:7px; margin-top:6px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:8px 14px; cursor:pointer; transition:border-color 0.2s; }
-  .ca-copy:hover { border-color:rgba(245,197,24,0.4); }
-  .ca-copy code { font-family:'Barlow',monospace; font-size:0.74rem; color:var(--text); word-break:break-all; }
-  .ca-copy .copy-ico { color:var(--gold); font-size:0.85rem; flex-shrink:0; }
+  .verify-cta{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;background:rgba(245,197,24,0.05);border:1px solid rgba(245,197,24,0.18);border-radius:12px;padding:22px 26px;margin-bottom:20px}
+  .verify-cta .vt{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.03em}
+  .verify-cta .vs{color:var(--muted2);font-size:0.85rem;margin-top:4px;line-height:1.5}
+  .vbtn{background:var(--gold);color:#000;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:0.92rem;letter-spacing:0.06em;text-transform:uppercase;padding:12px 26px;border-radius:6px;transition:all 0.15s;white-space:nowrap}
+  .vbtn:hover{background:var(--gold2);transform:translateY(-1px)}
 
-  footer { text-align:center; padding:40px 20px 24px; color:var(--muted); font-size:0.78rem; position:relative; z-index:1; }
-  footer a { color:var(--muted2); text-decoration:none; }
-  footer a:hover { color:var(--gold); }
+  footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+  .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.08em;color:var(--gold);text-decoration:none}
+  .footer-links{display:flex;gap:24px;list-style:none}
+  .footer-links a{color:var(--muted);text-decoration:none;font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;transition:color 0.2s}
+  .footer-links a:hover{color:var(--text)}
+  .footer-disclaimer{font-size:0.7rem;color:var(--muted);max-width:420px;line-height:1.5}
 
-  @media (max-width:560px) {
-    nav { padding:0 20px; }
-    .nav-links { display:none; }
-    h1 { font-size:2.6rem; }
-    .wrap { padding:100px 16px 60px; }
+  @media(max-width:768px){
+    nav{padding:0 20px}.nav-links{display:none}
+    .page-hero{padding:100px 24px 24px}.inner{padding:0 24px 70px}
+    .steps{grid-template-columns:1fr 1fr}.windows{grid-template-columns:1fr}
+    footer{padding:24px;flex-direction:column;align-items:flex-start}
   }
 </style>
 </head>
 <body>
+
 <nav>
   <a class="nav-logo" href="index.html">⚽ MUNDIAL</a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="index.html#groups">Groups</a></li>
-    <li><a href="index.html#tokens">Tokens</a></li>
-    <li><a href="swap.html" class="active">Swap</a></li>
+    <li><a href="pools.html">Pools</a></li>
+    <li><a href="swap.html">Swap</a></li>
     <li><a href="banner.html">Banners</a></li>
-    <li><a href="claim.html">Claim</a></li>
+    <li><a href="claim.html" class="active">Claim</a></li>
   </ul>
 </nav>
 
-<div class="wrap">
-  <div class="kicker">Instant Swap</div>
-  <h1>BUY $MUNDIAL</h1>
-  <p class="sub">Swap SOL for $MUNDIAL right here. The pair is pre-set — just connect your wallet and trade.</p>
+<div class="page-hero">
+  <div class="section-tag">Payouts · How It Works</div>
+  <h1>How You<br>Get <span class="gold">Paid.</span></h1>
+  <p>No "claim now" button that quietly does nothing. When a pool settles, we publish the holder snapshot and a Merkle root on-chain — then you claim your own share against it. Here's exactly how, and exactly when.</p>
+</div>
 
-  <div class="pair-row">
-    <div class="pair-chip">
-      <img src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png" alt="SOL" onerror="this.style.display='none'">
-      <span>SOL</span>
-    </div>
-    <div class="pair-arrow">→</div>
-    <div class="pair-chip">
-      <div class="tok-ico">M</div>
-      <span>MUNDIAL</span>
-    </div>
-  </div>
+<div class="inner">
 
-  <div class="terminal-shell">
-    <div id="jupiter-plugin"></div>
-    <div id="integrated-terminal">
-      <div class="term-status" id="term-loading">
-        <div class="spinner"></div>
-        <p>Loading the swap terminal…</p>
-      </div>
-      <div class="fallback" id="term-fallback">
-        <h3>Swap on a Trusted Venue</h3>
-        <p>Open the pre-filled SOL → $MUNDIAL swap on any of these. Your wallet, your keys.</p>
-        <div class="fallback-links">
-          <a class="fl gold" id="fb-jup" href="#" target="_blank" rel="noopener">
-            <span style="font-size:1.2rem">🪐</span>
-            <div><div class="fl-t">Swap on Jupiter</div><div class="fl-s">Best price routing · SOL → MUNDIAL pre-filled</div></div>
-            <span class="fl-arrow">→</span>
-          </a>
-          <a class="fl ghost" id="fb-pump" href="#" target="_blank" rel="noopener">
-            <span style="font-size:1.2rem">⚡</span>
-            <div><div class="fl-t">Buy on pump.fun</div><div class="fl-s">Most liquidity · Recommended</div></div>
-            <span class="fl-arrow">→</span>
-          </a>
-          <a class="fl ghost" id="fb-ray" href="#" target="_blank" rel="noopener">
-            <span style="font-size:1.2rem">☀️</span>
-            <div><div class="fl-t">Swap on Raydium</div><div class="fl-s">AMM trading</div></div>
-            <span class="fl-arrow">→</span>
-          </a>
-        </div>
-      </div>
+  <!-- LIVE STATUS -->
+  <div class="status closed" id="statusBox">
+    <div class="sdot"></div>
+    <div>
+      <div class="stitle" id="statusTitle">Checking claim windows…</div>
+      <div class="stext" id="statusText"></div>
     </div>
   </div>
 
-  <div class="ca-line">
-    <span>Contract Address</span><br>
-    <div class="ca-copy" onclick="copyCA()">
-      <code id="ca-text">DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump</code>
-      <span class="copy-ico" id="copy-ico">⧉ Copy</span>
+  <!-- HOW CLAIMING WORKS -->
+  <div class="blockhead">
+    <div class="section-tag">The mechanism</div>
+    <h2>Four Steps. All Verifiable.</h2>
+    <p>You never have to trust that we'll "send it." The snapshot is public, the root is on-chain, and the claim is something you trigger yourself.</p>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="snum">01</div><h3>Snapshot</h3><p>When a pool settles, we record every holder of the qualifying nation tokens at a fixed block. The full snapshot is published so anyone can check their balance is in it.</p></div>
+    <div class="step"><div class="snum">02</div><h3>Merkle Root</h3><p>The snapshot is hashed into a Merkle tree and the root is committed on-chain. Anyone can rebuild the tree from the public snapshot and confirm the root matches.</p></div>
+    <div class="step"><div class="snum">03</div><h3>You Claim</h3><p>The pool is funded into an audited distributor. You connect your wallet here, submit your proof, and pull your share. We never push funds to you — you take them.</p></div>
+    <div class="step"><div class="snum">04</div><h3>SOL Arrives</h3><p>Your share lands directly in the wallet that held the token. One on-chain transaction you can see on Solscan. Done.</p></div>
+  </div>
+
+  <!-- TWO WINDOWS -->
+  <div class="blockhead">
+    <div class="section-tag">Two payout moments — that's it</div>
+    <h2>When Claims Open</h2>
+    <p>There are no knockout-round pools. Funds collect across the whole tournament and pay out at two moments only.</p>
+  </div>
+  <div class="windows">
+    <div class="win">
+      <div class="wlabel">Window 1</div>
+      <h3>Group-Stage Pools</h3>
+      <p>Each group pool pays its holders by final standing — 1st 50%, 2nd 25%, 3rd 15%, and 4th's 10% buys back and burns $MUNDIAL. Opens once the group stage settles.</p>
+      <div class="wdate" id="w1date"></div>
+    </div>
+    <div class="win">
+      <div class="wlabel">Window 2</div>
+      <h3>Champion Pool</h3>
+      <p>Built across all 48 tokens for the whole tournament, paid at the Final — 70% to winner holders, 20% runner-up, 10% third place.</p>
+      <div class="wdate" id="w2date"></div>
     </div>
   </div>
 
-  <div class="note">
-    <span class="note-icon">🔒</span>
-    <p><strong>You stay in control.</strong> The swap connects directly to your own Solana wallet — Mundial never touches your funds or keys. Always confirm the contract address matches the one above before trading.</p>
+  <!-- WHAT YOU NEED -->
+  <div class="blockhead">
+    <div class="section-tag">Before the snapshot</div>
+    <h2>What You Need To Qualify</h2>
   </div>
+  <div class="need">
+    <div class="nrow"><span class="nick">✓</span><span class="ntext"><b>Hold the nation's token in a wallet you control</b> (Phantom, Solflare, etc.) through the snapshot block. Self-custody — your keys.</span></div>
+    <div class="nrow"><span class="nick">✓</span><span class="ntext"><b>Don't leave it on a centralised exchange.</b> If your tokens sit in an exchange account, the snapshot sees the exchange's wallet, not you — and you won't be able to claim.</span></div>
+    <div class="nrow"><span class="nick">✓</span><span class="ntext"><b>Watch <a href="https://x.com/Mundial2026_sol" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none">@Mundial2026_sol</a> for the exact snapshot block and the claim window.</b> Both are announced before they happen.</span></div>
+  </div>
+
+  <!-- VERIFY -->
+  <div class="verify-cta">
+    <div>
+      <div class="vt">See the pool you're claiming from</div>
+      <div class="vs">The treasury balance is live on-chain — watch it grow and verify it on Solscan before any window opens.</div>
+    </div>
+    <a class="vbtn" href="pools.html">View Live Pools →</a>
+  </div>
+
+  <!-- SCAM WARNING -->
+  <div class="scam">
+    <h3>⚠ Protect Yourself</h3>
+    <ul>
+      <li>We will <b>never DM you first</b>, and we will never ask for your seed phrase or private key. Nobody legitimate ever does.</li>
+      <li>Claims happen <b>only at mundial.gg/claim.html</b> — not via DMs, not via links in replies, not on look-alike domains. Check the URL.</li>
+      <li>There is <b>no "pre-claim," no "verification fee," no "unlock payment."</b> Claiming costs only the normal Solana network fee, paid by you, to your own transaction.</li>
+      <li>If a window isn't open on this page, <b>any site telling you to claim right now is a scam.</b></li>
+    </ul>
+  </div>
+
 </div>
 
 <footer>
-  <a href="index.html">mundial.gg</a> · <a href="https://x.com/Mundial2026_sol" target="_blank">@Mundial2026_sol</a><br>
-  <span style="opacity:0.6">Community crypto platform on Solana. Not affiliated with FIFA. DYOR.</span>
+  <a class="footer-logo" href="index.html">⚽ MUNDIAL</a>
+  <ul class="footer-links">
+    <li><a href="pools.html">Live Pools</a></li>
+    <li><a href="https://x.com/Mundial2026_sol" target="_blank">Twitter / X</a></li>
+    <li><a href="https://pump.fun/coin/DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump" target="_blank">$MUNDIAL</a></li>
+  </ul>
+  <div class="footer-disclaimer">Payouts depend on real-world tournament outcomes and the custodial and oracle steps described on the Pools page. Informational only, not a guarantee of returns. Self-custody required to claim. Not affiliated with FIFA. DYOR.</div>
 </footer>
 
 <script>
-  const MUNDIAL_CA = 'DkVBuv16QkmALS8b4GeiiEpY7c69ECsk3GTKtXDhpump';
-  const SOL_MINT = 'So11111111111111111111111111111111111111112';
+  // Two payout moments. Set claimUrl per window once the distributor is deployed.
+  const WINDOWS = {
+    group:  { settle:'2026-06-28T00:00:00Z', label:'Group-stage', open:false, claimUrl:null },
+    final:  { settle:'2026-07-19T20:00:00Z', label:'Champion pool', open:false, claimUrl:null }
+  };
 
-  // Pre-fill fallback links (these always work, pair pre-selected)
-  document.getElementById('fb-jup').href  = `https://jup.ag/swap/SOL-${MUNDIAL_CA}`;
-  document.getElementById('fb-pump').href = `https://pump.fun/coin/${MUNDIAL_CA}`;
-  document.getElementById('fb-ray').href  = `https://raydium.io/swap/?inputCurrency=sol&outputCurrency=${MUNDIAL_CA}`;
+  function fmtDate(iso){ return new Date(iso).toUTCString().slice(5,16) + ' UTC'; }
+  document.getElementById('w1date').textContent = 'Settles ~ ' + fmtDate(WINDOWS.group.settle);
+  document.getElementById('w2date').textContent = 'Pays at the Final · ' + fmtDate(WINDOWS.final.settle);
 
-  function copyCA(){
-    navigator.clipboard.writeText(MUNDIAL_CA).then(()=>{
-      const i=document.getElementById('copy-ico');
-      i.textContent='✓ Copied';
-      setTimeout(()=>i.textContent='⧉ Copy',1600);
-    });
+  // Honest status: a window is only "open" when we explicitly flip it true
+  // (i.e. snapshot taken + root committed + distributor funded). Dates alone
+  // do NOT open a claim — they just tell people roughly when to expect it.
+  function renderStatus(){
+    const box = document.getElementById('statusBox');
+    const title = document.getElementById('statusTitle');
+    const text = document.getElementById('statusText');
+    const now = Date.now();
+
+    const openWin = Object.values(WINDOWS).find(w => w.open && w.claimUrl);
+    if(openWin){
+      box.className = 'status open';
+      title.textContent = openWin.label + ' claim window is OPEN';
+      text.innerHTML = 'Connect your wallet and claim your share. Always confirm you are on mundial.gg. '
+        + '<a href="' + openWin.claimUrl + '" style="color:var(--green);font-weight:600">Open claim →</a>';
+      return;
+    }
+
+    box.className = 'status closed';
+    // Figure out which window is next
+    let next = null;
+    if(now < new Date(WINDOWS.group.settle).getTime()) next = WINDOWS.group;
+    else if(now < new Date(WINDOWS.final.settle).getTime()) next = WINDOWS.final;
+
+    if(next){
+      title.textContent = 'No claim window is open yet';
+      text.textContent = 'The next payout is the ' + next.label.toLowerCase()
+        + ', expected around ' + fmtDate(next.settle)
+        + '. The exact snapshot block and claim link will be posted here and on @Mundial2026_sol before it opens. Anything telling you to claim before then is a scam.';
+    }else{
+      title.textContent = 'No claim window is open right now';
+      text.textContent = 'Watch @Mundial2026_sol for any remaining or follow-up claim windows. Claims only ever happen on this page.';
+    }
   }
-
-  // Show the manual venue links (always reliable) as fallback.
-  function showFallback(){
-    const l=document.getElementById('term-loading');
-    const f=document.getElementById('term-fallback');
-    const p=document.getElementById('jupiter-plugin');
-    if(l) l.style.display='none';
-    if(p) p.style.display='none';
-    if(f) f.classList.add('show');
-  }
-
-  // Initialise Jupiter Plugin (RPC-less Ultra mode), pre-set SOL -> MUNDIAL.
-  // The plugin-v1.js script is loaded in <head> with data-preload defer.
-  function initPlugin(){
-    try{
-      if(!window.Jupiter || typeof window.Jupiter.init!=='function'){ showFallback(); return; }
-      window.Jupiter.init({
-        displayMode:'integrated',
-        integratedTargetId:'jupiter-plugin',
-        formProps:{
-          initialInputMint: SOL_MINT,      // Sell = SOL
-          initialOutputMint: MUNDIAL_CA,   // Buy  = MUNDIAL
-          fixedMint: MUNDIAL_CA            // keep MUNDIAL locked as the token
-        }
-      });
-      // hide our loading placeholder once the plugin mounts
-      const l=document.getElementById('term-loading');
-      if(l) l.style.display='none';
-    }catch(e){ showFallback(); }
-  }
-
-  // The script may already be loaded (defer) by the time we run.
-  if(window.Jupiter && typeof window.Jupiter.init==='function'){
-    initPlugin();
-  } else {
-    window.addEventListener('load', function(){
-      // give the deferred plugin script a moment to register window.Jupiter
-      setTimeout(function(){
-        if(window.Jupiter && typeof window.Jupiter.init==='function') initPlugin();
-        else showFallback();
-      }, 1200);
-    });
-  }
-  // Final safety net: if nothing mounted within 8s, show reliable links
-  setTimeout(function(){
-    const host=document.getElementById('jupiter-plugin');
-    const mounted = host && (host.querySelector('iframe') || host.children.length>0);
-    if(!mounted) showFallback();
-  },8000);
+  renderStatus();
 </script>
 </body>
 </html>
